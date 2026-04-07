@@ -1,0 +1,537 @@
+Leap year C++
+
+#include<iostream>
+using namespace std;
+
+int main () {
+int year;
+cout << "Enter a year: ";
+    cin >> year;
+
+if (year%4==0 && year%100!=0 || year%400==0 ){
+cout<<year<<" is a leap year.";
+}
+else
+cout<<year<<" is not a leap year.";
+
+return 0;
+}
+
+
+fibonacci C++
+
+#include<iostream>
+using namespace std;
+int main(){
+int n, first=0, second=1, next,sum=0;
+cout<<"Enter the series limit: ";
+cin>>n;
+cout<<first<<" "<<second;
+for(int i=2; i<=n; i++){
+next =first+ second;
+cout<<" "<<next;
+first= second;
+second= next;
+sum=sum+next;
+}
+cout<<endl;
+cout<<"Sum of the series is: "<<sum;
+return 0;} 
+
+pattern c++ space 3 for loop
+#include<iostream>
+using namespace std;
+int main() {
+    int n, row, col;
+    cout<<"Enter the value of pattern: ";
+    cin>>n;
+    for(row=1; row<=n; row++)
+    {
+      for(col=1; col<=n-row; col++)
+    {
+        cout<<" ";
+    }
+    for(col=1; col<=row; col++)
+    {
+    cout<<col;
+    }
+    cout<<endl;
+    }
+    return 0;
+}
+
+pattern c++
+
+1
+1 2
+1  2 3
+1 2 3 4 
+
+#include<iostream>
+using namespace std;
+int main() {
+    int n, row, col;
+    cout<<"Enter the valu of pattern: ";
+    cin>>n;
+    for(row=1; row<=n; row++){
+    for(col=1; col<=row; col++){
+        cout<<" "<<"row";
+    }
+        cout<<" "<<endl;
+    }
+    
+    return 0;
+}
+
+
+1
+1 2
+1 2 3 
+1 2
+1
+
+#include <iostream>
+using namespace std;
+int main() {
+    int n,col,row;
+    cout<<"de n de :";
+    cin>>n;
+    for(row=1; row<=n; row++){
+    for(col=1; col<=row; col++){
+        cout<<" "<<char(col+64);
+    }
+    cout<<endl;
+    }
+    for(row=n-1; row>=1;row--){
+    for(col=1;col<=row; col++){
+        cout<<" "<<char(col+64);
+    }
+    cout<<endl;
+    }
+     return 0;
+}
+
+
+
+1
+2 3
+4 5 6 
+7 8 9 10
+
+#include<iostream>
+using namespace std;
+int main() {
+    int n, row, col, count=0;
+    cout<<"Enter the valu of pattern: ";
+    cin>>n;
+    for(row=1; row<=n; row++){
+    for(col=1; col<=row; col++){
+        cout<<" "<<++count;
+    }
+        cout<<" "<<endl;
+    }
+    
+    return 0;
+}
+
+
+
+
+1 to 10 sum or 1 to n sum C++
+
+#include<iostream>
+using namespace std;
+int main(){
+int sum=0;
+for (int i=1; i<=10; i++)
+{sum= sum+i;}
+cout<<sum;
+
+return 0;
+}
+
+with user input
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int sum = 0;
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+
+    for (int i = 1; i <= n; i++) {
+        sum = sum + i;
+    }
+
+    cout << "Sum is: " << sum << endl;
+
+    return 0;
+}
+
+
+perfect number C++
+
+#include<iostream>
+using namespace std;
+int main(){
+int n, sum=0;
+cout<<"Enter A number: ";
+cin>>n;
+for(int i=1; i<n; i++){
+ 			 if(n%i==0){
+					sum=sum+i;
+				  }
+}
+if (sum==n){
+		cout<<n<<" is a perfect number.";
+}
+else
+cout<<n<<" is not a perfect number.";
+
+return 0;
+}
+
+letter C++
+
+#include <iostream>
+using namespace std;
+int main(){
+    char ch;
+    cout<<"Enter a Character: ";
+    cin>>ch;
+    if(ch>='a' && ch<='z'){
+    cout<<ch<<" is a lowercase letter";
+    }
+    else if(ch>='A' && ch<='Z'){
+    cout<<ch<<" is an uppercase letter";
+    }
+    else 
+    cout<<ch<<" is not a letter or alphabate";
+    return 0;
+}
+
+
+for while do while loops c++
+
+
+for loop
+
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    cout<<"using for loop: ";
+    cin>>n;
+    for(int i; i<n; i++){
+        cout<<"yaa Allah amake Duet e chance diya den. ";
+     
+    }
+    return 0;
+}
+
+While loop 
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout<<"কতবার দোয়া চাও?";
+    cin>>n;
+    int i=0;
+    while(i<n){
+        cout<<"Allah amake duet e chance diye den."<<endl;
+        i++;
+    }
+    return 0;
+}
+
+   
+
+Do While loop
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout<<"কতবার দোয়া চাও?";
+    cin>>n;
+    int i=0;
+    do {
+        cout<<"Allah amake duet e chance diye den."<<endl; 
+        i++;
+        
+    }
+        while(i<n);
+    return 0;
+}
+
+   
+
+largest & smallest among 3 numbers C++
+
+#include<iostream>
+using namespace std;
+int main() {
+int a,b,c;
+cout<<"Enter three numbers: ";
+cin>>a>>b>>c;
+if(a>b && a>c){
+ cout<<a <<" is the largest number";
+}
+else if (b>c && b>a){
+ cout<<b<<" is the largest number";
+}
+else
+ cout<<c <<" is the largest number";
+    return 0;
+}
+
+
+
+
+#include<iostream>
+using namespace std;
+int main() {
+int a,b,c;
+cout<<"Enter three numbers: ";
+cin>>a>>b>>c;
+if(a<b && a<c){
+ cout<<a <<" is the smallest number";
+}
+else if (b<c && b<a){
+ cout<<b<<" is the smallest number";
+}
+else
+ cout<<c <<" is the smallest number";
+    return 0;
+}
+
+
+
+#include<iostream>
+using namespace std;
+int main() {
+double a,b,c;
+cout<<"a=";
+cin>>a;
+cout<<"b=";
+cin>>b;
+cout<<"c=";
+cin>>c;
+if(a<b && a<c){
+ cout<<a <<" which is 'a' is the putkir number";
+}
+else if (b<c && b<a){
+ cout<<b<<" which is 'b' is the putkir number";
+}
+else
+ cout<<c <<" which is 'c' is the putkir number";
+    return 0;
+}
+
+
+
+
+odd even C++
+
+
+#include<iostream>
+using namespace std;
+
+int main () {
+long long a;
+cout<< "Enter a numbers:- ";
+cin>>a;
+if (a%2==0){
+  cout<<a<<" is an Even number." ;
+  }
+else 
+ cout<<a<<" is an Odd number.";
+  
+
+return 0;
+
+}
+
+
+
+circle C++
+
+
+#include<iostream>
+using namespace std;
+int main() {
+    float r, pi, area, circ;
+	  pi=3.1416;
+cout<<"Enter the radius of the Circle in meter: "<<endl; 
+cin>> r;
+ area=pi*r*r;
+ circ= 2*pi*r;
+ cout<<" Circle Area:"<<area<<"Square Meter"<< endl; 
+ cout<<"Circle circumference:"<<circ << "Meter"<<endl;
+
+    return 0;
+}
+
+
+
+bishombamu teivuj C++
+
+
+#include<iostream>
+#include <cmath>
+using namespace std;
+int main() {
+float a,b,c,s,area;
+cout<<"Enter values of a, b & c:";
+cin>>a>>b>>c;
+if (a!=0 && b!=0 && c!=0){
+s = (a+b+c)/2;
+area=sqrt(s*(s-a)*(s-b)*(s-c));
+cout<<"The area of the Triangle is:"<<area;
+}
+else
+cout<<"The Triangle is not possible.";
+   return 0;
+}
+
+
+
+
+switch case C++
+
+
+#include <iostream>
+using namespace std;
+
+int main() {
+     char n;
+     cout<<"Enter a character: ";
+     cin>>n;
+     switch (n)
+     {
+         case 'A':
+         cout<<"Vowel";
+         break;
+         case 'E':
+         cout<<"Vowel";
+         break;
+         case 'I':
+         cout<<"Vowel";
+         break;
+         case 'O':
+         cout<<"Vowel";
+         break;
+         case 'U':
+         cout<<"Vowel";
+         break;
+         case 'a':
+         cout<<"Vowel";
+         break;
+         case 'e':
+         cout<<"Vowel";
+         break;
+         case 'i':
+         cout<<"Vowel";
+         break;
+         case 'o':
+         cout<<"Vowel";
+         break;
+         case 'u':
+         cout<<"Vowel";
+         break;
+         default:
+         cout<<"Consonant";
+     }
+    
+    return 0;
+}
+
+
+
+
+1^2 + 2^2 + 3^2 +......+ n^2 C++
+
+
+
+
+#include<iostream>
+using namespace std;
+
+int main () {
+int sum=0, n;
+cout<< "Enter number:- ";
+cin>>n;
+for(int i=1; i<=n; i++)
+{
+sum=sum+i*i;
+}
+cout<<sum;
+
+return 0;
+
+}
+
+for printing the series as well as sum.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+
+    if (n < 0) {
+        cout << "Please enter a non-negative integer for n." << endl;
+        return 1;
+    }
+
+  long long sum = 0;
+  cout << "The series is: ";
+  for (int i = 1; i <= n; ++i) {
+  long long term = static_cast<long long>(i) * i;
+        sum += term;
+        cout << i << "^2";
+        if (i < n) {
+            cout << " + ";
+        }
+    }
+    cout << endl;
+
+    cout << "The sum of the series is: " << sum << endl;
+
+    return 0;
+}
+
+
+
+jog biyog gun vag C++
+
+#include<iostream>
+using namespace std;
+
+int main () {
+float a,b;
+cout<< "Enter two numbers:- ";
+cin>>a>>b;
+cout<< "sum ="<< (a+b)<<endl;
+cout<< "substraction ="<< (a+b)<<endl;
+cout<< "multiplication ="<< (a*b)<<endl;
+if (b!=0){
+cout<<"Division ="<< (a/b);
+}
+else
+cout<< "Division = ∞";
+
+return 0;
+
+}
+
+
+
+
