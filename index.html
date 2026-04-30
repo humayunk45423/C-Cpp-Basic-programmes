@@ -1,461 +1,853 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="medium">
+<html lang="en" data-theme="dark" data-font="md">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>101 C & C++ Programs - Ultimate Edition</title>
+<title>DUET C & C++ Programs</title>
 
-<!-- Syntax Highlighting Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/c.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Syntax Highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
 
 <style>
-  /* =======================================================
-     THEME VARIABLES (LIGHT & DARK MODE)
-     ======================================================= */
-  :root {
-    --bg-main: #f0f4f8;
-    --card-bg: #ffffff;
-    --card-header: #f8fafc;
-    --text-main: #0f172a;
-    --text-muted: #475569;
-    --border-color: #cbd5e1;
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
-    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.15);
-    --code-bg: #f8fafc;
-    --code-text: #1e293b;
-    --pat-bg: #e2e8f0;
-    
-    --hl-keyword: #d73a49;
-    --hl-string: #032f62;
-    --hl-number: #005cc5;
-    --hl-meta: #6a737d;
-    --hl-func: #6f42c1;
-    
-    --fab-bg: #1e293b;
-    --fab-text: #ffffff;
-    --btn-primary: #007acc;
-  }
+/* ===================== RESET & PRO-LEVEL OPTIMIZATION ===================== */
+*, *::before, *::after { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+  -webkit-tap-highlight-color: transparent; 
+}
+html { text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
 
-  [data-theme="dark"] {
-    --bg-main: #0f172a;
-    --card-bg: #1e293b;
-    --card-header: #162032;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border-color: #334155;
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
-    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.6);
-    --code-bg: #0f172a;
-    --code-text: #e2e8f0;
-    --pat-bg: #111827;
-    
-    --hl-keyword: #ff7b72;
-    --hl-string: #a5d6ff;
-    --hl-number: #79c0ff;
-    --hl-meta: #8b949e;
-    --hl-func: #d2a8ff;
-    
-    --fab-bg: #38bdf8;
-    --fab-text: #0f172a;
-    --btn-primary: #38bdf8;
-  }
-
-  /* =======================================================
-     DYNAMIC FONT SCALING (Smart Clamp Function)
-     ======================================================= */
-  [data-font="small"] { --code-font-size: clamp(10px, min(3vw, 1.6vh), 14px); --pat-font-size: clamp(10px, 1.5vh, 14px); }[data-font="medium"] { --code-font-size: clamp(13px, min(3.5vw, 2vh), 18px); --pat-font-size: clamp(12px, 1.8vh, 16px); }
-  [data-font="large"] { --code-font-size: clamp(16px, min(4.5vw, 2.5vh), 26px); --pat-font-size: clamp(14px, 2.2vh, 20px); }
-
-  /* =======================================================
-     CORE LAYOUT
-     ======================================================= */
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/* ===================== THEME TOKENS (CSS VARIABLES) ===================== */
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #21262d;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --accent: #58a6ff;
+  --accent2: #3fb950;
+  --accent4: #d2a8ff;
+  --code-bg: #010409;
   
-  html, body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg-main); color: var(--text-main);
-    width: 100vw; height: 100dvh;
-    overflow: hidden; /* App-like constraints */
-    transition: background-color 0.3s, color 0.3s;
-  }
+  /* Syntax Highlighting Tokens - Dark Mode */
+  --syn-kw: #ff7b72;
+  --syn-str: #a5d6ff;
+  --syn-num: #79c0ff;
+  --syn-cmt: #8b949e;
+  --syn-title: #d2a8ff;
+  --syn-op: #ff7b72;
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+  --font-code: 'JetBrains Mono', monospace;
+  --font-ui: 'Space Grotesk', sans-serif;
+  --shadow: 0 8px 24px rgba(0,0,0,0.4);
+  --radius: 16px; /* Beautiful borders restored */
+  --code-size: 14px; /* Default */
+}
 
-  /* =======================================================
-     HOME SCREEN (3 BUTTONS)
-     ======================================================= */
-  #home-screen {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    height: 100dvh; width: 100vw; padding: 20px;
-    background: var(--bg-main); position: absolute; top: 0; left: 0; z-index: 50;
-  }
+[data-theme="light"] {
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --surface2: #e1e4e8;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --muted: #636c76;
+  --accent: #0969da;
+  --accent2: #1a7f37;
+  --accent4: #8250df;
+  --code-bg: #f6f8fa;
   
-  .home-title { font-size: clamp(28px, 6vw, 48px); font-weight: 800; margin-bottom: 5px; text-align: center; }
-  .home-subtitle { font-size: clamp(16px, 3vw, 20px); color: var(--text-muted); margin-bottom: 40px; text-align: center; }
+  /* Syntax Highlighting Tokens - Light Mode */
+  --syn-kw: #cf222e;
+  --syn-str: #0a3069;
+  --syn-num: #0550ae;
+  --syn-cmt: #6e7781;
+  --syn-title: #8250df;
+  --syn-op: #cf222e;
 
-  .btn-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-    width: 100%; max-width: 500px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* Dynamic Font Sizing via Variables */
+[data-font="sm"] { --code-size: 11.5px; }
+[data-font="md"] { --code-size: 14px; }
+[data-font="lg"] { --code-size: 16.5px; }
+
+/* ===================== THEME FLASH OVERLAY ===================== */
+/*
+  The correct way to do instant theme switching:
+  A full-screen overlay flashes over the page for ~180ms, hiding the
+  variable swap entirely. Zero elements animate individually — the whole
+  page just "appears" in the new theme. Fast, clean, zero lag.
+*/
+#theme-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--bg);
+  transition: opacity 0.18s ease;
+  will-change: opacity;
+}
+#theme-flash.active { opacity: 1; }
+
+/* ===================== INTERACTIVE ELEMENT TRANSITIONS ===================== */
+/* Only elements the user actually hovers/taps get transitions — not the whole DOM */
+.mode-card {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.18s ease,
+              box-shadow 0.18s ease;
+}
+.fab, .pdf-btn, .copy-btn, .theme-toggle-btn, .sheet-close, .sheet-list li {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              color 0.15s ease,
+              opacity 0.15s ease;
+}
+.home-footer a { transition: color 0.15s ease; }
+::-webkit-scrollbar-thumb { transition: background 0.2s; }
+
+/* Navigation/screen transitions */
+#home, #app, .fabs {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ===================== BASE ===================== */
+body {
+  font-family: var(--font-ui); background-color: var(--bg); color: var(--text);
+  width: 100vw; height: 100dvh; overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; transition: background 0.2s; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ===================== HOME SCREEN ===================== */
+#home {
+  position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding: 0 20px 40px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  z-index: 50; opacity: 1; transform: translateY(0);
+  /* !important ensures this isn't overridden by other rules */
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+#home.hidden { opacity: 0; transform: translateY(-15px); pointer-events: none; }
+
+.home-topbar { width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: space-between; padding: 20px 0 24px; flex-shrink: 0; }
+.topbar-label { font-size: 15px; font-weight: 800; font-family: var(--font-code); letter-spacing: 0.5px; }
+.theme-toggle-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--text);
+  width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); background-color: var(--surface2); }
+.theme-toggle-btn:active { transform: scale(0.9); }
+
+.hero { width: 100%; max-width: 600px; margin-bottom: 32px; flex-shrink: 0; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background-color: var(--surface2); border: 1px solid var(--border); color: var(--accent); 
+  font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; 
+  padding: 8px 14px; border-radius: 8px; margin-bottom: 20px;
+}
+.hero-title { font-size: clamp(28px, 6vw, 42px); font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
+.hero-title span { color: var(--accent); }
+.hero-sub { font-size: 15px; color: var(--muted); line-height: 1.6; font-weight: 500; }
+
+.mode-grid { width: 100%; max-width: 600px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; flex-shrink: 0; }
+.mode-card {
+  background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 22px 18px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+  box-shadow: var(--shadow); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.mode-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.mode-card:active { transform: scale(0.97); }
+.mode-card.full { grid-column: span 2; flex-direction: row; align-items: center; }
+.card-icon { color: var(--accent); display: flex; align-items: center; }
+.card-label { font-size: 16px; font-weight: 800; color: var(--text); }
+.card-desc { font-size: 13px; color: var(--muted); font-family: var(--font-code); margin-top: 2px; }
+
+.pdf-box { width: 100%; max-width: 600px; background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; flex-shrink: 0; box-shadow: var(--shadow); }
+.pdf-box-title { font-size: 13px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.pdf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Direct File Download Buttons - Single Line Forced */
+.pdf-btn { 
+  background-color: var(--surface2); border: 1px solid var(--border); color: var(--text); 
+  border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer; 
+  display: flex; align-items: center; justify-content: center; gap: 8px; 
+  text-decoration: none; white-space: nowrap; overflow: hidden;
+  transition: all 0.2s ease;
+}
+.pdf-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.pdf-btn:active { transform: scale(0.95); }
+
+.home-footer { font-size: 14px; color: var(--muted); text-align: center; flex-shrink: 0; padding-top: 10px; font-weight: 500; }
+.home-footer a { color: var(--accent); text-decoration: none; font-weight: 800; transition: color 0.2s; }
+.home-footer a:hover { text-decoration: underline; color: var(--text); }
+
+/* ===================== APP SCREEN ===================== */
+#app {
+  position: fixed; inset: 0; overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth;
+  opacity: 0; pointer-events: none; transform: translateX(30px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; 
+  z-index: 40;
+  /* Prevent scroll snap from fighting momentum on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+#app.show { opacity: 1; pointer-events: auto; transform: translateX(0); }
+
+/* ===================== SNAP CARDS ===================== */
+.snap { 
+  width: 100vw; 
+  height: 100dvh; 
+  height: calc(var(--vh, 1vh) * 100);
+  scroll-snap-align: start; 
+  scroll-snap-stop: always; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 10px; 
+  overflow: hidden;
+}
+@media(min-width: 600px) { .snap { padding: 18px; } }
+
+.card {
+  flex: 1; display: flex; flex-direction: column; 
+  background-color: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); 
+  /* min-height:0 here ensures the card itself doesn't overflow the snap container */
+  min-height: 0; 
+  max-width: 1400px; width: 100%; margin: 0 auto;
+}
+
+.card-topbar { display: flex; align-items: center; justify-content: space-between; background-color: var(--surface); border-bottom: 1px solid var(--border); padding: 13px 18px; flex-shrink: 0; gap: 12px; min-width: 0; }
+.card-title { font-size: clamp(13px, 1.8vw, 15px); font-weight: 800; line-height: 1.3; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-prog { font-size: 11px; color: var(--muted); font-family: var(--font-code); font-weight: 700; white-space: nowrap; flex-shrink: 0; background-color: var(--surface2); padding: 5px 11px; border-radius: 20px; }
+
+.pattern { 
+  background-color: var(--code-bg); 
+  border-bottom: 1px dashed var(--border); 
+  font-family: var(--font-code); 
+  font-size: clamp(11px, 1.3vw, 13px); 
+  color: var(--muted); 
+  padding: 10px 16px; 
+  text-align: center; 
+  white-space: pre; 
+  line-height: 1.4; 
+  flex-shrink: 0; 
+  /* Prevent very long patterns from overflowing the card horizontally */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dynamic Layout Logic */
+.panes { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+
+/* ── Row Layout (Side by Side) ── */
+.panes.layout-row { flex-direction: row; }
+.panes.layout-row .pane { border-right: 1px solid var(--border); border-bottom: none; }
+.panes.layout-row .pane:last-child { border-right: none; }
+
+/* ── Col Layout (Stacked Up & Down) ── */
+/* THE KEY FIX: In column flex, each pane must have min-height:0 so flex
+   doesn't size them by their intrinsic content height (which causes the
+   bottom pane to overflow and get "swallowed"). flex:1 + min-height:0
+   forces both panes to split the available space equally and clip. */
+.panes.layout-col { flex-direction: column; }
+.panes.layout-col .pane { border-right: none; border-bottom: 1px solid var(--border); min-height: 0; }
+.panes.layout-col .pane:last-child { border-bottom: none; }
+
+/* ── Pane itself ── */
+/* min-width:0 prevents row overflow; min-height:0 is the column fix */
+.pane { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
+
+.pane-hdr { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  background-color: var(--surface2); 
+  border-bottom: 1px solid var(--border); 
+  padding: 9px 14px; 
+  flex-shrink: 0; 
+  gap: 10px;
+  /* Critical: without min-width:0 the flex children can't shrink below their content size */
+  min-width: 0;
+  /* NO overflow:hidden — it clips the lang-dot box-shadow glow. Flex naturally contains children. */
+}
+
+/* Lang label container: flex row, no clipping — dot glow must not be cut */
+.pane-lang { 
+  font-size: 11px; 
+  font-weight: 800; 
+  color: var(--muted); 
+  text-transform: uppercase; 
+  letter-spacing: 0.8px; 
+  display: flex; 
+  align-items: center; 
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+  overflow: visible; /* Must stay visible — overflow:hidden clips filter:drop-shadow on the dot */
+}
+
+/* Text-only span: THIS is where clipping lives — completely separate from the dot */
+.lang-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* Dot must NEVER shrink — it's a fixed circle.
+   Use filter:drop-shadow instead of box-shadow — filter is GPU-composited AFTER
+   overflow clipping, so it renders fully even inside overflow:hidden ancestors. */
+.lang-dot { 
+  width: 10px; 
+  height: 10px; 
+  border-radius: 50%; 
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.lang-dot.c   { background-color: var(--accent);  filter: drop-shadow(0 0 4px var(--accent)); }
+.lang-dot.cpp { background-color: var(--accent4); filter: drop-shadow(0 0 4px var(--accent4)); }
+
+/* Copy button: always fixed size, never wraps, never gets pushed off */
+.copy-btn { 
+  background: transparent; 
+  border: 1px solid var(--border); 
+  color: var(--muted); 
+  font-size: 11px; 
+  font-weight: 700; 
+  font-family: var(--font-ui); 
+  padding: 5px 10px; 
+  border-radius: 7px; 
+  cursor: pointer; 
+  flex-shrink: 0;   /* KEY FIX: never shrinks or disappears */
+  flex-grow: 0;
+  display: flex; 
+  align-items: center; 
+  gap: 5px;
+  white-space: nowrap;  /* KEY FIX: never wraps to next line */
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); background-color: rgba(88,166,255,0.08); transform: translateY(-1px); }
+.copy-btn:active { transform: scale(0.94); }
+.copy-btn.ok { border-color: var(--accent2); color: var(--accent2); background-color: rgba(63,185,80,0.08); }
+
+.code-scroll { 
+  flex: 1; 
+  overflow: auto; 
+  background-color: var(--code-bg); 
+  padding: 14px 16px; 
+  min-height: 0;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+@media(min-width: 600px) { .code-scroll { padding: 16px 20px; } }
+.code-scroll pre { margin: 0; }
+.code-scroll code {
+  font-family: var(--font-code) !important;
+  font-size: var(--code-size) !important;
+  line-height: 1.65 !important; 
+  white-space: pre !important; 
+  display: block;
+  background: transparent !important;
+}
+
+/* ===================== CSS VARIABLE SYNTAX HIGHLIGHTING (O(1) PERFORMANCE) ===================== */
+.hljs-keyword, .hljs-type, .hljs-literal { color: var(--syn-kw); font-weight: 700; }
+.hljs-string { color: var(--syn-str); }
+.hljs-number { color: var(--syn-num); }
+.hljs-comment { color: var(--syn-cmt); font-style: italic; }
+.hljs-meta { color: var(--syn-cmt); font-weight: 700; }
+.hljs-built_in, .hljs-title { color: var(--syn-title); }
+.hljs-operator { color: var(--syn-op); }
+
+/* ===================== FABs ===================== */
+.fabs { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 9999; opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1) !important; }
+.fabs.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.fab { width: 50px; height: 50px; border-radius: 50%; border: none; background-color: var(--surface); border: 1px solid var(--border); color: var(--text); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; }
+.fab:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+.fab:active { transform: scale(0.85); }
+
+/* ===================== BOTTOM SHEET ===================== */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9997; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1) !important; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+.overlay.show { opacity: 1; pointer-events: auto; }
+
+.sheet { position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 80dvh; background-color: var(--surface); border-top: 1px solid var(--border); border-radius: 24px 24px 0 0; transition: bottom 0.35s cubic-bezier(0.2,0.8,0.2,1), background-color 0.32s cubic-bezier(0.4,0,0.2,1), border-color 0.32s cubic-bezier(0.4,0,0.2,1) !important; z-index: 9998; display: flex; flex-direction: column; box-shadow: 0 -12px 32px rgba(0,0,0,0.5); }
+@media(min-width: 640px) { .sheet { width: 440px; left: 50%; margin-left: -220px; border: 1px solid var(--border); border-radius: 16px; } .sheet.show { bottom: 24px; } }
+.sheet.show { bottom: 0; }
+.sheet-hdr { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sheet-hdr h3 { font-size: 18px; font-weight: 800; }
+.sheet-close { background-color: var(--surface2); border: 1px solid var(--border); color: var(--muted); width: 34px; height: 34px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.sheet-close:hover { color: var(--text); border-color: var(--muted); transform: rotate(90deg); }
+.sheet-list { flex: 1; overflow-y: auto; list-style: none; padding: 8px 0; margin: 0; }
+.sheet-list li { padding: 14px 24px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 0.2s, padding-left 0.2s; }
+.sheet-list li:hover { background-color: rgba(88,166,255,0.08); color: var(--accent); padding-left: 32px; }
+
+/* ===================== TOAST ===================== */
+#toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-60px); background-color: var(--text); color: var(--bg); padding: 12px 28px; border-radius: 30px; font-weight: 800; font-size: 14px; z-index: 99999; opacity: 0; transition: transform 0.3s cubic-bezier(0.2,0.8,0.2,1), opacity 0.3s cubic-bezier(0.2,0.8,0.2,1), background-color 0.32s cubic-bezier(0.4,0,0.2,1), color 0.32s cubic-bezier(0.4,0,0.2,1) !important; white-space: nowrap; box-shadow: var(--shadow); }
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* ===================== PERFORMANCE HINTS ===================== */
+/* Tell the browser which elements will animate so it can pre-composite them */
+#home, #app { will-change: opacity, transform; }
+.fabs { will-change: opacity, transform; }
+.sheet { will-change: bottom; }
+.overlay { will-change: opacity; }
+
+/* ===================== REDUCED MOTION ===================== */
+/* Respect user accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
-
-  .main-btn {
-    background: var(--card-bg); color: var(--text-main);
-    border: 2px solid var(--border-color); border-radius: 16px;
-    padding: 25px 10px; font-size: clamp(18px, 4vw, 24px); font-weight: 800;
-    cursor: pointer; box-shadow: var(--shadow-soft); transition: all 0.2s;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-  }
-  
-  .main-btn.full-width { grid-column: span 2; background: var(--btn-primary); color: #fff; border: none; }
-  .main-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--btn-primary); }
-  .main-btn:active { transform: translateY(2px) scale(0.98); }
-  .main-btn .icon { font-size: 32px; }
-
-  /* =======================================================
-     IDE APP SCREEN & SNAP SCROLLING
-     ======================================================= */
-  #app-screen {
-    display: none; height: 100dvh; width: 100vw;
-    overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth;
-  }
-
-  .snap-section {
-    width: 100vw; height: 100dvh;
-    scroll-snap-align: start; scroll-snap-stop: always;
-    display: flex; flex-direction: column; padding: 3vh 4vw;
-  }
-
-  @media (min-width: 768px) { .snap-section { padding: 4vh 5vw; } }
-
-  .card {
-    flex-grow: 1; display: flex; flex-direction: column;
-    background: var(--card-bg); border: 1px solid var(--border-color);
-    border-radius: 12px; box-shadow: var(--shadow-soft); overflow: hidden;
-    max-height: 100%; width: 100%; max-width: 1400px; margin: 0 auto;
-  }
-
-  header {
-    display: flex; justify-content: space-between; align-items: center;
-    background: var(--card-header); border-bottom: 1px solid var(--border-color);
-    padding: 1.5vh 20px; flex-shrink: 0;
-  }
-
-  .title { font-size: clamp(15px, 2.2vh, 20px); font-weight: 800; color: var(--text-main); }
-
-  /* Pattern Box */
-  .pattern-box {
-    background: var(--pat-bg); color: var(--text-muted);
-    font-family: "JetBrains Mono", Consolas, monospace; font-size: var(--pat-font-size);
-    padding: 1.5vh 0; text-align: center; border-bottom: 1px dashed var(--border-color);
-    white-space: pre; line-height: 1.2; flex-shrink: 0; transition: font-size 0.3s;
-  }
-
-  /* =======================================================
-     CODE VIEWS (SINGLE & SIDE-BY-SIDE)
-     ======================================================= */
-  .view-container { display: flex; flex-direction: row; flex-grow: 1; overflow: hidden; }
-  
-  .code-pane {
-    flex: 1 1 100%; display: flex; flex-direction: column; min-width: 0;
-    border-right: 1px solid var(--border-color);
-  }
-  .code-pane:last-child { border-right: none; }
-
-  .pane-header {
-    display: flex; justify-content: space-between; align-items: center;
-    background: var(--pat-bg); padding: 6px 15px; border-bottom: 1px solid var(--border-color);
-    font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
-  }
-
-  .code-area {
-    flex-grow: 1; overflow: auto; background: var(--code-bg); padding: 2vh 3vw;
-  }
-
-  code {
-    font-family: "JetBrains Mono", Consolas, monospace; font-size: var(--code-font-size) !important;
-    line-height: 1.5; color: var(--code-text); white-space: pre; transition: font-size 0.3s;
-  }
-
-  /* Highlight.js Mappings */
-  .hljs { background: transparent; }
-  .hljs-keyword, .hljs-type, .hljs-literal { color: var(--hl-keyword); font-weight: bold; }
-  .hljs-string { color: var(--hl-string); }
-  .hljs-number { color: var(--hl-number); }
-  .hljs-comment { color: var(--hl-meta); font-style: italic; }
-  .hljs-meta { color: var(--hl-meta); font-weight: bold; }
-  .hljs-built_in, .hljs-title { color: var(--hl-func); }
-
-  /* =======================================================
-     COPY BUTTON
-     ======================================================= */
-  .copy-btn {
-    background-color: #10b981; color: white; font-weight: 700; font-size: 12px;
-    padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: all 0.2s;
-  }
-  .copy-btn:hover { background-color: #059669; transform: translateY(-2px); }
-  .copy-btn.success { background-color: #3b82f6; }
-
-  /* =======================================================
-     FLOATING ACTIONS & MENU
-     ======================================================= */
-  .fab-container { position: fixed; bottom: 4vh; right: 4vw; display: flex; flex-direction: column; gap: 12px; z-index: 100; }
-  .fab {
-    width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--fab-bg); color: var(--fab-text);
-    font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.2s;
-  }
-  .fab:active { transform: scale(0.9); }
-  
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 98; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
-  .overlay.show { opacity: 1; pointer-events: auto; }
-
-  .sheet {
-    position: fixed; bottom: -100%; left: 0; width: 100vw; height: 80dvh;
-    background: var(--card-bg); border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
-    transition: bottom 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 101; display: flex; flex-direction: column;
-  }
-  @media (min-width: 768px) { .sheet { width: 50vw; left: 25vw; height: 70vh; border-radius: 24px; bottom: -100%; top: 15vh; transform: translateY(150%); transition: transform 0.4s; } .sheet.show { transform: translateY(0); } }
-  .sheet.show { bottom: 0; }
-  
-  .s-head { display: flex; justify-content: space-between; padding: 20px; border-bottom: 1px solid var(--border-color); }
-  .s-head h3 { font-size: 20px; color: var(--text-main); font-weight: 700; }
-  .s-close { background: transparent; border: none; font-size: 28px; color: var(--text-muted); cursor: pointer; }
-  
-  .s-list { flex-grow: 1; overflow-y: auto; list-style: none; }
-  .s-list li { padding: 15px 25px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; cursor: pointer; }
-  .s-list li:active { background: var(--pat-bg); }
-
-  .intro { align-items: center; justify-content: center; text-align: center; }
-  .intro h1 { font-size: clamp(30px, 8vw, 60px); color: var(--text-main); margin-bottom: 10px; }
-  .bounce { margin-top: 30px; font-size: 40px; animation: bounce 2s infinite; }
-  @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
+}
 </style>
 </head>
 <body>
 
-<!-- HOME SCREEN -->
-<div id="home-screen">
-  <div class="home-title">Programming Collection</div>
-  <div class="home-subtitle">101 Essential Algorithms & Patterns</div>
-  
-  <div class="btn-grid">
-    <button class="main-btn" onclick="openMode('C')">
-      <span class="icon">📘</span> C Programs
-    </button>
-    <button class="main-btn" onclick="openMode('CPP')">
-      <span class="icon">📙</span> C++ Programs
-    </button>
-    <button class="main-btn full-width" onclick="openMode('BOTH')">
-      <span class="icon">⚖️</span> Both Side-by-Side
-    </button>
+<!-- SVG Icons -->
+<!-- Theme flash overlay: covers page during theme swap so no elements visibly animate one-by-one -->
+<div id="theme-flash" aria-hidden="true"></div>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></symbol>
+  <symbol id="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="ic-book-c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="ic-book-cpp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="ic-compare" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/><polyline points="15 9 18 6 21 9"/><polyline points="9 15 6 18 3 15"/></symbol>
+  <symbol id="ic-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+  <symbol id="ic-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="ic-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+  <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="ic-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="ic-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="ic-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="3" x2="12" y2="21"/></symbol>
+  <symbol id="ic-stacked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="12" x2="21" y2="12"/></symbol>
+</svg>
+
+<div id="toast"></div>
+
+<!-- ==================== HOME ==================== -->
+<div id="home">
+  <div class="home-topbar">
+    <div class="topbar-label">duet-programs.sh</div>
+    <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><svg width="22px" height="22px"><use href="#ic-moon"/></svg></button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge"><svg width="14px" height="14px" style="margin-bottom:1px"><use href="#ic-layers"/></svg> DUET Admission Syllabus</div>
+    <h1 class="hero-title">Fundamental <span>C & C++</span> Programs</h1>
+    <p class="hero-sub">101 cleanly formatted programs with ultra-fast syntax highlighting, flexible layouts & direct PDF downloads.</p>
+  </div>
+
+  <div class="mode-grid">
+    <div class="mode-card" onclick="openMode('C')">
+      <div class="card-icon"><svg width="32px" height="32px"><use href="#ic-book-c"/></svg></div>
+      <div>
+        <div class="card-label">C Code</div>
+        <div class="card-desc">language-c</div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="openMode('CPP')">
+      <div class="card-icon"><svg width="32px" height="32px"><use href="#ic-book-cpp"/></svg></div>
+      <div>
+        <div class="card-label">C++ Code</div>
+        <div class="card-desc">language-cpp</div>
+      </div>
+    </div>
+    <div class="mode-card full" onclick="openMode('BOTH')">
+      <div class="card-icon"><svg width="32px" height="32px"><use href="#ic-compare"/></svg></div>
+      <div>
+        <div class="card-label">Compare Side-by-Side</div>
+        <div class="card-desc">C vs C++ — logic perfectly side-by-side or stacked</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdf-box">
+    <div class="pdf-box-title">Physical PDF Download</div>
+    <div class="pdf-grid">
+      <a href="duet-admission-c-programs.pdf" download="duet-admission-c-programs.pdf" class="pdf-btn">
+        <svg width="18px" height="18px"><use href="#ic-download"/></svg> Download C
+      </a>
+      <a href="duet-admission-cpp-programs.pdf" download="duet-admission-cpp-programs.pdf" class="pdf-btn">
+        <svg width="18px" height="18px"><use href="#ic-download"/></svg> Download C++
+      </a>
+    </div>
+  </div>
+
+  <div class="home-footer">
+    Made by <a href="https://humayounkobir.vercel.app" target="_blank" rel="noopener">Humayoun</a>
   </div>
 </div>
 
-<!-- IDE APP SCREEN -->
-<div id="app-screen">
-  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<!-- ==================== APP ==================== -->
+<div id="app">
+  <div id="prog-container"></div>
+</div>
 
-  <div class="fab-container">
-    <button class="fab" onclick="goHome()" title="Home">🏠</button>
-    <button class="fab" id="fontBtn" onclick="toggleFontSize()" title="Change Font Size">Aa</button>
-    <button class="fab" id="themeBtn" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
-    <button class="fab" onclick="toggleMenu()" title="Quick Navigation">☰</button>
+<!-- ==================== FABs ==================== -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="fabs" id="fabs">
+  <button class="fab" onclick="goHome()" title="Home" aria-label="Home"><svg width="22px" height="22px"><use href="#ic-home"/></svg></button>
+  
+  <button class="fab" id="layoutFab" onclick="toggleLayout()" title="Change Layout" aria-label="Toggle Layout" style="display: none;">
+    <svg id="layoutIcon" width="22px" height="22px"><use href="#ic-split"/></svg>
+  </button>
+  
+  <button class="fab" onclick="cycleFont()" title="Font size" aria-label="Font size" style="font-weight: 800; font-size: 16px;">Aa</button>
+  <button class="fab" id="themeFab" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme"><svg width="22px" height="22px"><use href="#ic-moon"/></svg></button>
+  <button class="fab" onclick="toggleMenu()" title="Jump to program" aria-label="Quick jump"><svg width="22px" height="22px"><use href="#ic-menu"/></svg></button>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-hdr">
+    <h3 id="sheetTitle">Quick Jump</h3>
+    <button class="sheet-close" onclick="closeMenu()" aria-label="Close"><svg width="20px" height="20px"><use href="#ic-x"/></svg></button>
   </div>
-
-  <div class="sheet" id="sheet">
-    <div class="s-head">
-      <h3 id="sheetTitle">Quick Jump</h3>
-      <button class="s-close" onclick="toggleMenu()">&times;</button>
-    </div>
-    <ul class="s-list" id="menuList"></ul>
-  </div>
-
-  <div id="programs-container"></div>
+  <ul class="sheet-list" id="menuList"></ul>
 </div>
 
 <script>
-// =======================================================
-// MASTER DATA ARRAY
-// Format: [ "Title", "Pattern", "C_Code", "CPP_Code" ]
-// =======================================================
-const data = [["1. CALCULATOR - SUM SUB MUL DIV", "", `#include <stdio.h>\nint main() {\n    float a, b;\n    printf("Enter two numbers: ");\n    scanf("%f %f", &a, &b);\n    printf("Sum            = %.2f\\n", a + b);\n    printf("Subtraction    = %.2f\\n", a - b);\n    printf("Multiplication = %.2f\\n", a * b);\n    if (b != 0)\n        printf("Division       = %.2f\\n", a / b);\n    else\n        printf("Division       = Infinity\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    cout << "Sum            = " << a + b << endl;\n    cout << "Subtraction    = " << a - b << endl;\n    cout << "Multiplication = " << a * b << endl;\n    if (b != 0)\n        cout << "Division       = " << a / b << endl;\n    else\n        cout << "Division       = Infinity" << endl;\n    return 0;\n}`],["2a. LARGEST AMONG 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a > b && a > c) printf("%d is the largest.\\n", a);\n    else if (b > c) printf("%d is the largest.\\n", b);\n    else printf("%d is the largest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a > b && a > c) cout << a << " is the largest." << endl;\n    else if (b > c) cout << b << " is the largest." << endl;\n    else cout << c << " is the largest." << endl;\n    return 0;\n}`],["2b. SMALLEST AMONG 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a < b && a < c) printf("%d is the smallest.\\n", a);\n    else if (b < c) printf("%d is the smallest.\\n", b);\n    else printf("%d is the smallest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a < b && a < c) cout << a << " is the smallest." << endl;\n    else if (b < c) cout << b << " is the smallest." << endl;\n    else cout << c << " is the smallest." << endl;\n    return 0;\n}`],["2c. LARGEST & SMALLEST (BOTH)", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a > b && a > c) printf("%d is the largest.\\n", a);\n    else if (b > c) printf("%d is the largest.\\n", b);\n    else printf("%d is the largest.\\n", c);\n    if (a < b && a < c) printf("%d is the smallest.\\n", a);\n    else if (b < c) printf("%d is the smallest.\\n", b);\n    else printf("%d is the smallest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a > b && a > c) cout << a << " is the largest." << endl;\n    else if (b > c) cout << b << " is the largest." << endl;\n    else cout << c << " is the largest." << endl;\n    if (a < b && a < c) cout << a << " is the smallest." << endl;\n    else if (b < c) cout << b << " is the smallest." << endl;\n    else cout << c << " is the smallest." << endl;\n    return 0;\n}`],["3. AVERAGE OF 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    float a, b, c, avg;\n    printf("Enter three numbers: ");\n    scanf("%f %f %f", &a, &b, &c);\n    avg = (a + b + c) / 3;\n    printf("Average = %.2f\\n", avg);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b, c, avg;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    avg = (a + b + c) / 3;\n    cout << "Average = " << avg << endl;\n    return 0;\n}`],["4a. RIGHT ANGLE TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float base, height, area;\n    printf("Enter base and height: ");\n    scanf("%f %f", &base, &height);\n    area = (base * height) / 2;\n    printf("Right Angle Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float base, height, area;\n    cout << "Enter base and height: ";\n    cin >> base >> height;\n    area = (base * height) / 2;\n    cout << "Right Angle Triangle Area = " << area << endl;\n    return 0;\n}`],["4b. EQUILATERAL TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float a, area;\n    printf("Enter side length: ");\n    scanf("%f", &a);\n    area = (1.7320508f / 4) * a * a;\n    printf("Equilateral Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, area;\n    cout << "Enter side length: ";\n    cin >> a;\n    area = (1.7320508f / 4) * a * a;\n    cout << "Equilateral Triangle Area = " << area << endl;\n    return 0;\n}`],["4c. SCALENE TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float a, b, c, s, x, area;\n    printf("Enter sides a, b, c: ");\n    scanf("%f %f %f", &a, &b, &c);\n    s = (a + b + c) / 2;\n    x = s * (s - a) * (s - b) * (s - c);\n    float guess = x / 2;\n    for (int i = 0; i < 20; i++) guess = (guess + x / guess) / 2;\n    area = guess;\n    printf("Scalene Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b, c, s, x, area;\n    cout << "Enter sides a, b, c: ";\n    cin >> a >> b >> c;\n    s = (a + b + c) / 2;\n    x = s * (s - a) * (s - b) * (s - c);\n    float guess = x / 2;\n    for (int i = 0; i < 20; i++) guess = (guess + x / guess) / 2;\n    area = guess;\n    cout << "Scalene Triangle Area = " << area << endl;\n    return 0;\n}`],["5. CIRCLE AREA & CIRCUMFERENCE", "", `#include <stdio.h>\nint main() {\n    float r, pi = 3.1416f, area, circ;\n    printf("Enter radius: ");\n    scanf("%f", &r);\n    area = pi * r * r;\n    circ = 2 * pi * r;\n    printf("Area          = %.4f Sq M\\n", area);\n    printf("Circumference = %.4f M\\n", circ);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float r, pi = 3.1416f, area, circ;\n    cout << "Enter radius: ";\n    cin >> r;\n    area = pi * r * r;\n    circ = 2 * pi * r;\n    cout << "Area          = " << area << " Square Meter" << endl;\n    cout << "Circumference = " << circ << " Meter" << endl;\n    return 0;\n}`],["6. POSITIVE OR NEGATIVE NUMBER", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n > 0) printf("%d is Positive.\\n", n);\n    else if (n < 0) printf("%d is Negative.\\n", n);\n    else printf("The number is Zero.\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n > 0) cout << n << " is Positive." << endl;\n    else if (n < 0) cout << n << " is Negative." << endl;\n    else cout << "The number is Zero." << endl;\n    return 0;\n}`],["7. ODD OR EVEN", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n % 2 == 0) printf("%d is Even.\\n", n);\n    else printf("%d is Odd.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n % 2 == 0) cout << n << " is Even." << endl;\n    else cout << n << " is Odd." << endl;\n    return 0;\n}`],["8. LEAP YEAR", "", `#include <stdio.h>\nint main() {\n    int year;\n    printf("Enter a year: ");\n    scanf("%d", &year);\n    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)\n        printf("%d is a Leap Year.\\n", year);\n    else\n        printf("%d is not a Leap Year.\\n", year);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int year;\n    cout << "Enter a year: ";\n    cin >> year;\n    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)\n        cout << year << " is a Leap Year." << endl;\n    else\n        cout << year << " is not a Leap Year." << endl;\n    return 0;\n}`],["9a. CELSIUS TO FAHRENHEIT", "", `#include <stdio.h>\nint main() {\n    float c, f;\n    printf("Enter temperature in Celsius: ");\n    scanf("%f", &c);\n    f = (c * 9 / 5) + 32;\n    printf("%.2f C = %.2f F\\n", c, f);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float c, f;\n    cout << "Enter temperature in Celsius: ";\n    cin >> c;\n    f = (c * 9 / 5) + 32;\n    cout << c << " C = " << f << " F" << endl;\n    return 0;\n}`],["9b. FAHRENHEIT TO CELSIUS", "", `#include <stdio.h>\nint main() {\n    float f, c;\n    printf("Enter temperature in Fahrenheit: ");\n    scanf("%f", &f);\n    c = (f - 32) * 5 / 9;\n    printf("%.2f F = %.2f C\\n", f, c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float f, c;\n    cout << "Enter temperature in Fahrenheit: ";\n    cin >> f;\n    c = (f - 32) * 5 / 9;\n    cout << f << " F = " << c << " C" << endl;\n    return 0;\n}`],["10a. UPPERCASE OR LOWERCASE (RANGE)", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a letter: ");\n    scanf(" %c", &ch);\n    if (ch >= 'a' && ch <= 'z') printf("%c is Lowercase.\\n", ch);\n    else if (ch >= 'A' && ch <= 'Z') printf("%c is Uppercase.\\n", ch);\n    else printf("%c is not a letter.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a letter: ";\n    cin >> ch;\n    if (ch >= 'a' && ch <= 'z') cout << ch << " is Lowercase." << endl;\n    else if (ch >= 'A' && ch <= 'Z') cout << ch << " is Uppercase." << endl;\n    else cout << ch << " is not a letter." << endl;\n    return 0;\n}`],["10b. UPPERCASE OR LOWERCASE (ASCII)", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a letter: ");\n    scanf(" %c", &ch);\n    if (ch >= 65 && ch <= 90) printf("%c is Uppercase. ASCII = %d\\n", ch, ch);\n    else if (ch >= 97 && ch <= 122) printf("%c is Lowercase. ASCII = %d\\n", ch, ch);\n    else printf("%c is not a letter.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a letter: ";\n    cin >> ch;\n    if (ch >= 65 && ch <= 90) cout << ch << " is Uppercase. ASCII = " << (int)ch << endl;\n    else if (ch >= 97 && ch <= 122) cout << ch << " is Lowercase. ASCII = " << (int)ch << endl;\n    else cout << ch << " is not a letter." << endl;\n    return 0;\n}`],["11a. VOWEL OR CONSONANT - IF", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a character: ");\n    scanf(" %c", &ch);\n    if (ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u'||ch=='A'||ch=='E'||ch=='I'||ch=='O'||ch=='U')\n        printf("%c is a Vowel.\\n", ch);\n    else\n        printf("%c is a Consonant.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a character: ";\n    cin >> ch;\n    if (ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u'||ch=='A'||ch=='E'||ch=='I'||ch=='O'||ch=='U')\n        cout << ch << " is a Vowel." << endl;\n    else\n        cout << ch << " is a Consonant." << endl;\n    return 0;\n}`],["11b. VOWEL OR CONSONANT - SWITCH", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a character: ");\n    scanf(" %c", &ch);\n    switch (ch) {\n        case 'a': case 'e': case 'i': case 'o': case 'u':\n        case 'A': case 'E': case 'I': case 'O': case 'U':\n            printf("%c is a Vowel.\\n", ch);\n            break;\n        default:\n            printf("%c is a Consonant.\\n", ch);\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a character: ";\n    cin >> ch;\n    switch (ch) {\n        case 'a': case 'e': case 'i': case 'o': case 'u':\n        case 'A': case 'E': case 'I': case 'O': case 'U':\n            cout << ch << " is a Vowel." << endl;\n            break;\n        default:\n            cout << ch << " is a Consonant." << endl;\n    }\n    return 0;\n}`],["12a. PRINT 10 TIMES - FOR LOOP", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) printf("Bangladesh\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) cout << "Bangladesh" << endl;\n    return 0;\n}`],["12b. PRINT 10 TIMES - WHILE LOOP", "", `#include <stdio.h>\nint main() {\n    int i = 1;\n    while (i <= 10) { printf("Bangladesh\\n"); i++; }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int i = 1;\n    while (i <= 10) { cout << "Bangladesh" << endl; i++; }\n    return 0;\n}`],["12c. PRINT 10 TIMES - DO-WHILE", "", `#include <stdio.h>\nint main() {\n    int i = 1;\n    do { printf("Bangladesh\\n"); i++; } while (i <= 10);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int i = 1;\n    do { cout << "Bangladesh" << endl; i++; } while (i <= 10);\n    return 0;\n}`],["12d. PRINT TEXT N TIMES - FOR", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) printf("%s\\n", text);\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n;\n    cout << "Enter text: ";\n    cin.ignore(); getline(cin, text);\n    cout << "How many times? ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) cout << text << endl;\n    return 0;\n}`],["12e. PRINT TEXT N TIMES - WHILE", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n, i = 1;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    while (i <= n) { printf("%s\\n", text); i++; }\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n, i = 1;\n    cout << "Enter text: ";\n    cin.ignore(); getline(cin, text);\n    cout << "How many times? ";\n    cin >> n;\n    while (i <= n) { cout << text << endl; i++; }\n    return 0;\n}`],["12f. PRINT TEXT N TIMES - DO-WHILE", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n, i = 1;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    do { printf("%s\\n", text); i++; } while (i <= n);\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n, i = 1;\n    cout << "Enter text: ";\n    cin.ignore(); getline(cin, text);\n    cout << "How many times? ";\n    cin >> n;\n    do { cout << text << endl; i++; } while (i <= n);\n    return 0;\n}`],["13a. PRINT 1 TO 10", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) printf("%d ", i);\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) cout << i << " ";\n    cout << endl;\n    return 0;\n}`],["13b. PRINT 1 TO N", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) printf("%d ", i);\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) cout << i << " ";\n    cout << endl;\n    return 0;\n}`],["14a. SUM OF 1 TO 10", "", `#include <stdio.h>\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) sum += i;\n    printf("Sum = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["14b. SUM OF 1 TO N", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += i;\n    printf("Sum = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["15. PRIME NUMBER CHECK", "", `#include <stdio.h>\nint main() {\n    int n, isPrime = 1;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n < 2) isPrime = 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) { isPrime = 0; break; }\n    }\n    if (isPrime) printf("%d is a Prime number.\\n", n);\n    else printf("%d is not a Prime number.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, isPrime = 1;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n < 2) isPrime = 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) { isPrime = 0; break; }\n    }\n    if (isPrime) cout << n << " is a Prime number." << endl;\n    else cout << n << " is not a Prime number." << endl;\n    return 0;\n}`],["16. PERFECT NUMBER CHECK", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    for (int i = 1; i < n; i++)\n        if (n % i == 0) sum += i;\n    if (sum == n) printf("%d is a Perfect number.\\n", n);\n    else printf("%d is not a Perfect number.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0;\n    cout << "Enter a number: ";\n    cin >> n;\n    for (int i = 1; i < n; i++)\n        if (n % i == 0) sum += i;\n    if (sum == n) cout << n << " is a Perfect number." << endl;\n    else cout << n << " is not a Perfect number." << endl;\n    return 0;\n}`],["17. SUM OF DIGITS", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0, temp;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        sum += temp % 10;\n        temp /= 10;\n    }\n    printf("Sum of digits = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0, temp;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        sum += temp % 10;\n        temp /= 10;\n    }\n    cout << "Sum of digits of " << n << " = " << sum << endl;\n    return 0;\n}`],["18. REVERSE A NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, rev = 0;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    while (n != 0) {\n        rev = rev * 10 + n % 10;\n        n /= 10;\n    }\n    printf("Reversed number = %d\\n", rev);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, rev = 0;\n    cout << "Enter a number: ";\n    cin >> n;\n    while (n != 0) {\n        rev = rev * 10 + n % 10;\n        n /= 10;\n    }\n    cout << "Reversed number = " << rev << endl;\n    return 0;\n}`],["19. PALINDROME NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, rev = 0, temp;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        rev = rev * 10 + temp % 10;\n        temp /= 10;\n    }\n    if (rev == n) printf("%d is a Palindrome.\\n", n);\n    else printf("%d is not a Palindrome.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, rev = 0, temp;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        rev = rev * 10 + temp % 10;\n        temp /= 10;\n    }\n    if (rev == n) cout << n << " is a Palindrome." << endl;\n    else cout << n << " is not a Palindrome." << endl;\n    return 0;\n}`],["20. ARMSTRONG NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, temp, digits = 0, sum = 0, t;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) { digits++; temp /= 10; }\n    temp = n;\n    while (temp != 0) {\n        t = temp % 10;\n        int p = 1;\n        for (int i = 0; i < digits; i++) p *= t;\n        sum += p;\n        temp /= 10;\n    }\n    if (sum == n) printf("%d is Armstrong.\\n", n);\n    else printf("%d is not Armstrong.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, temp, digits = 0, sum = 0, t;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) { digits++; temp /= 10; }\n    temp = n;\n    while (temp != 0) {\n        t = temp % 10;\n        int p = 1;\n        for (int i = 0; i < digits; i++) p *= t;\n        sum += p;\n        temp /= 10;\n    }\n    if (sum == n) cout << n << " is an Armstrong number." << endl;\n    else cout << n << " is not an Armstrong number." << endl;\n    return 0;\n}`],["21. STRONG NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, temp, sum = 0, digit, fact;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        digit = temp % 10;\n        fact = 1;\n        for (int i = 1; i <= digit; i++) fact *= i;\n        sum += fact;\n        temp /= 10;\n    }\n    if (sum == n) printf("%d is Strong.\\n", n);\n    else printf("%d is not Strong.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, temp, sum = 0, digit, fact;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        digit = temp % 10;\n        fact = 1;\n        for (int i = 1; i <= digit; i++) fact *= i;\n        sum += fact;\n        temp /= 10;\n    }\n    if (sum == n) cout << n << " is a Strong number." << endl;\n    else cout << n << " is not a Strong number." << endl;\n    return 0;\n}`],["22. GCD AND LCM", "", `#include <stdio.h>\nint main() {\n    int a, b, x, y, gcd, lcm;\n    printf("Enter two numbers: ");\n    scanf("%d %d", &a, &b);\n    x = a; y = b;\n    while (y != 0) { int t = y; y = x % y; x = t; }\n    gcd = x;\n    lcm = (a * b) / gcd;\n    printf("GCD = %d\\nLCM = %d\\n", gcd, lcm);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, x, y, gcd, lcm;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    x = a; y = b;\n    while (y != 0) { int t = y; y = x % y; x = t; }\n    gcd = x;\n    lcm = (a * b) / gcd;\n    cout << "GCD = " << gcd << endl;\n    cout << "LCM = " << lcm << endl;\n    return 0;\n}`],["23. FACTORIAL", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long fact = 1;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) fact *= i;\n    printf("%d! = %lld\\n", n, fact);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long fact = 1;\n    cout << "Enter a number: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) fact *= i;\n    cout << n << "! = " << fact << endl;\n    return 0;\n}`],["24. SERIES: 1! + 2! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact = 1;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) {\n        fact *= i;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact = 1;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) {\n        fact *= i;\n        sum += fact;\n    }\n    cout << "1! + 2! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["25. SERIES: 2! + 4! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact;\n    cout << "Enter n (even number): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    cout << "2! + 4! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["26. SERIES: 1! + 3! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact;\n    cout << "Enter n (odd number): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    cout << "1! + 3! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["27a. FIBONACCI - PRINT TERMS", "", `#include <stdio.h>\nint main() {\n    int n, a = 0, b = 1, c;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: %d %d", a, b);\n    for (int i = 3; i <= n; i++) {\n        c = a + b; printf(" %d", c); a = b; b = c;\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, a = 0, b = 1, c;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: " << a << " " << b;\n    for (int i = 3; i <= n; i++) {\n        c = a + b; cout << " " << c; a = b; b = c;\n    }\n    cout << endl;\n    return 0;\n}`],["27b. FIBONACCI - PRINT & SUM", "", `#include <stdio.h>\nint main() {\n    int n, a = 0, b = 1, c;\n    long long sum = a + b;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: %d %d", a, b);\n    for (int i = 3; i <= n; i++) {\n        c = a + b; printf(" %d", c);\n        sum += c; a = b; b = c;\n    }\n    printf("\\nSum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, a = 0, b = 1, c;\n    long long sum = a + b;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: " << a << " " << b;\n    for (int i = 3; i <= n; i++) {\n        c = a + b; cout << " " << c;\n        sum += c; a = b; b = c;\n    }\n    cout << "\\nSum = " << sum << endl;\n    return 0;\n}`],["28. SERIES: 1 + 2 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["29. SERIES: 1 + 3 + 5 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (odd): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["30. SERIES: 2 + 4 + 6 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (even): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["31. SERIES: 1^1 + 2^2 + ... + n^n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) {\n        long long p = 1;\n        for (int j = 0; j < i; j++) p *= i;\n        sum += p;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) {\n        long long p = 1;\n        for (int j = 0; j < i; j++) p *= i;\n        sum += p;\n    }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["32. SERIES: 1^2 + 2^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["33. SERIES: 1^2 + 3^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (odd): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["34. SERIES: 2^2 + 4^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (even): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["35. SERIES: 1 + 2 + 4 + 8 + ...", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0, term = 1;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) { sum += term; term *= 2; }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0, term = 1;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) { sum += term; term *= 2; }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["36. SERIES: 1 + 3 + 9 + 27 + ...", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0, term = 1;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) { sum += term; term *= 3; }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0, term = 1;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) { sum += term; term *= 3; }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["37. SERIES: 1/1 + 1/2 + ... + 1/n", "", `#include <stdio.h>\nint main() {\n    int n; float sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += 1.0f / i;\n    printf("Sum = %.4f\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; float sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += 1.0f / i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["38. SERIES: 1/1^2 + 1/2^2 + ...", "", `#include <stdio.h>\nint main() {\n    int n; float sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += 1.0f / ((float)i * i);\n    printf("Sum = %.4f\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; float sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += 1.0f / ((float)i * i);\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["39. PATTERN - STARS INCREASING", "*\n**\n***\n****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["40. PATTERN - NUMBERS INCREASING", "1\n12\n123\n1234\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["41. PATTERN - REPEATED ROW NUM", "1\n22\n333\n4444\n55555", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["42. PATTERN - 1 0 ALT START 1", "1\n10\n101\n1010\n10101", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["43. PATTERN - 1 0 ALT ODD=1 EVEN=0", "1\n00\n111\n0000\n11111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["44. PATTERN - REPEATED ALPHABET", "A\nBB\nCCC\nDDDD\nEEEEE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["45. PATTERN - ALPHABETS INC", "A\nAB\nABC\nABCD\nABCDE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["46. PATTERN - STARS DECREASING", "*****\n****\n***\n**\n*", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["47. PATTERN - NUMBERS DECREASING", "12345\n1234\n123\n12\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["48. PATTERN - REP ROW DECREASING", "55555\n4444\n333\n22\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["49. PATTERN - 1 0 ALT DECREASING", "10101\n1010\n101\n10\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["50. PATTERN - ROW 1/0 DECREASING", "11111\n0000\n111\n00\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["51. PATTERN - ALPHABETS DEC", "ABCDE\nABCD\nABC\nAB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["52. PATTERN - REP ALPHABET DEC", "EEEEE\nDDDD\nCCC\nBB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["53. PATTERN - STARS DIAMOND", "*\n**\n***\n**\n*", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["54. PATTERN - NUMBERS DIAMOND", "1\n12\n123\n12\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["55. PATTERN - REP ROW NUM DIAMOND", "1\n22\n333\n22\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["56. PATTERN - 1/0 START 1 DIAMOND", "1\n10\n101\n10\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["57. PATTERN - ROW 1/0 DIAMOND", "1\n00\n111\n00\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["58. PATTERN - REP ALPHABET DIAMOND", "A\nBB\nCCC\nBB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["59. PATTERN - ALPHABET SEQ DIAMOND", "A\nAB\nABC\nAB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["60. PATTERN - ALPHABET SEQ DIAMOND", "/* Same as 59 */", `/* See program 59 above */`, `// See program 59 above`],["61. PATTERN - RIGHT-ALIGNED STARS", "    *\n   **\n  ***\n ****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["62. PATTERN - RIGHT-ALIGNED NUMBERS", "    1\n   12\n  123\n 1234\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["63. PATTERN - RIGHT-ALIGNED REP ROW", "    1\n   22\n  333\n 4444\n55555", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["64. PATTERN - RIGHT-ALIGNED 1/0 START 1", "    1\n   10\n  101\n 1010\n10101", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["65. PATTERN - RIGHT-ALIGNED ROW 1/0", "    1\n   00\n  111\n 0000\n11111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["66. PATTERN - RIGHT-ALIGNED REP ALPHA", "    A\n   BB\n  CCC\n DDDD\nEEEEE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["67. PATTERN - RIGHT-ALIGNED ALPHA SEQ", "    A\n   AB\n  ABC\n ABCD\nABCDE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["68. PATTERN - LEFT-INDENT STARS DEC", "****\n ***\n  **\n   *", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["69. PATTERN - LEFT-INDENT NUMBERS DEC", "12345\n 1234\n  123\n   12\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["70. PATTERN - LEFT-INDENT REP ROW DEC", "55555\n 4444\n  333\n   22\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["71. PATTERN - LEFT-INDENT 1/0 DEC", "10101\n 1010\n  101\n   10\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["72. PATTERN - LEFT-INDENT ROW 1/0 DEC", "11111\n 0000\n  111\n   00\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["73. PATTERN - LEFT-INDENT REP ALPHA DEC", "EEEEE\n DDDD\n  CCC\n   BB\n    A", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["74. PATTERN - LEFT-INDENT ALPHA SEQ DEC", "ABCDE\n ABCD\n  ABC\n   AB\n    A", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["75. PATTERN - SOLID STAR SQUARE", "*****\n*****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["76. PATTERN - NUMBER SEQUENCE SQUARE", "12345\n12345\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["77. PATTERN - ROW NUMBER SQUARE", "1111\n2222\n3333", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["78. PATTERN - 1010 COL ALT SQUARE", "1010\n1010\n1010", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["79. PATTERN - 1111/0000 ROW ALT SQUARE", "1111\n0000\n1111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= n; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= n; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["80. PATTERN - REPEATED ALPHABET SQUARE", "AAAA\nBBBB\nCCCC", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["90. PATTERN - ALPHABET SEQ SQUARE", "ABCD\nABCD\nABCD", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["91. PATTERN - SEQUENTIAL NUMS TRIANGLE", "1\n2 3\n4 5 6", `#include <stdio.h>\nint main() {\n    int n, count = 1;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", count++);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, count = 1;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << count++ << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["92. PATTERN - SEQUENTIAL FROM 0", "0\n1 2\n3 4 5", `#include <stdio.h>\nint main() {\n    int n, count = 0;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", count++);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, count = 0;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << count++ << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["93. PATTERN - MULTIPLICATION TRIANGLE", "1\n2 4\n4 6 9", `#include <stdio.h>\nint main() {\n    int n;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", r * c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row * col << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["94. PATTERN - PYRAMID OF STARS", "   *\n  ***\n *****", `#include <stdio.h>\nint main() {\n    int n;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= (2 * r - 1); c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= (2 * row - 1); col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["95. FACTORIAL USING RECURSION", "", `#include <stdio.h>\nlong long fact(int n) {\n    if (n == 0 || n == 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    printf("%d! = %lld\\n", n, fact(n));\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nlong long fact(int n) {\n    if (n == 0 || n == 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    cout << n << "! = " << fact(n) << endl;\n    return 0;\n}`],["96. FIBONACCI USING RECURSION", "", `#include <stdio.h>\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nint main() {\n    int n;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: ");\n    for (int i = 0; i < n; i++) printf("%d ", fib(i));\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nint main() {\n    int n;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: ";\n    for (int i = 0; i < n; i++) cout << fib(i) << " ";\n    cout << endl;\n    return 0;\n}`],["97. CALCULATE POWER USING RECURSION", "", `#include <stdio.h>\nlong long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\nint main() {\n    int base, exp;\n    printf("Enter base and exponent: ");\n    scanf("%d %d", &base, &exp);\n    printf("%d^%d = %lld\\n", base, exp, power(base, exp));\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nlong long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\nint main() {\n    int base, exp;\n    cout << "Enter base and exponent: ";\n    cin >> base >> exp;\n    cout << base << "^" << exp << " = " << power(base, exp) << endl;\n    return 0;\n}`],["98a. ARRAY - FIND MAXIMUM", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int max = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] > max) max = arr[i];\n    printf("Maximum = %d\\n", max);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int max = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] > max) max = arr[i];\n    cout << "Maximum = " << max << endl;\n    return 0;\n}`],["98b. ARRAY - FIND MINIMUM", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int min = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] < min) min = arr[i];\n    printf("Minimum = %d\\n", min);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int min = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] < min) min = arr[i];\n    cout << "Minimum = " << min << endl;\n    return 0;\n}`],["99. ARRAY - FIND BOTH MAX AND MIN", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int max = arr[0], min = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > max) max = arr[i];\n        if (arr[i] < min) min = arr[i];\n    }\n    printf("Maximum = %d\\nMinimum = %d\\n", max, min);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int max = arr[0], min = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > max) max = arr[i];\n        if (arr[i] < min) min = arr[i];\n    }\n    cout << "Maximum = " << max << endl;\n    cout << "Minimum = " << min << endl;\n    return 0;\n}`],["100. SWAP TWO NUMBERS WITHOUT TEMP", "", `#include <stdio.h>\nint main() {\n    int a, b;\n    printf("Enter two numbers: ");\n    scanf("%d %d", &a, &b);\n    printf("Before: a = %d, b = %d\\n", a, b);\n    a = a + b;\n    b = a - b;\n    a = a - b;\n    printf("After : a = %d, b = %d\\n", a, b);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    cout << "Before: a = " << a << ", b = " << b << endl;\n    a = a + b;\n    b = a - b;\n    a = a - b;\n    cout << "After : a = " << a << ", b = " << b << endl;\n    return 0;\n}`],["101a. CONTINUE EXAMPLE", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i % 3 == 0) continue;\n        printf("%d ", i);\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i % 3 == 0) continue;\n        cout << i << " ";\n    }\n    cout << endl;\n    return 0;\n}`],["101b. BREAK EXAMPLE", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i == 6) break;\n        printf("%d ", i);\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i == 6) break;\n        cout << i << " ";\n    }\n    cout << endl;\n    return 0;\n}`]
+// ================================================
+// DATA ARRAY (All 101 Programs)
+// ================================================
+const data = [["1. CALCULATOR - SUM SUB MUL DIV", "", `#include <stdio.h>\nint main() {\n    float a, b;\n    printf("Enter two numbers: ");\n    scanf("%f %f", &a, &b);\n    printf("Sum            = %.2f\\n", a + b);\n    printf("Subtraction    = %.2f\\n", a - b);\n    printf("Multiplication = %.2f\\n", a * b);\n    if (b != 0)\n        printf("Division       = %.2f\\n", a / b);\n    else\n        printf("Division       = Infinity\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    cout << "Sum            = " << a + b << endl;\n    cout << "Subtraction    = " << a - b << endl;\n    cout << "Multiplication = " << a * b << endl;\n    if (b != 0)\n        cout << "Division       = " << a / b << endl;\n    else\n        cout << "Division       = Infinity" << endl;\n    return 0;\n}`],["2a. LARGEST AMONG 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a > b && a > c) printf("%d is the largest.\\n", a);\n    else if (b > c) printf("%d is the largest.\\n", b);\n    else printf("%d is the largest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a > b && a > c) cout << a << " is the largest." << endl;\n    else if (b > c) cout << b << " is the largest." << endl;\n    else cout << c << " is the largest." << endl;\n    return 0;\n}`],["2b. SMALLEST AMONG 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a < b && a < c) printf("%d is the smallest.\\n", a);\n    else if (b < c) printf("%d is the smallest.\\n", b);\n    else printf("%d is the smallest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a < b && a < c) cout << a << " is the smallest." << endl;\n    else if (b < c) cout << b << " is the smallest." << endl;\n    else cout << c << " is the smallest." << endl;\n    return 0;\n}`],["2c. LARGEST & SMALLEST (BOTH)", "", `#include <stdio.h>\nint main() {\n    int a, b, c;\n    printf("Enter three numbers: ");\n    scanf("%d %d %d", &a, &b, &c);\n    if (a > b && a > c) printf("%d is the largest.\\n", a);\n    else if (b > c) printf("%d is the largest.\\n", b);\n    else printf("%d is the largest.\\n", c);\n\n    if (a < b && a < c) printf("%d is the smallest.\\n", a);\n    else if (b < c) printf("%d is the smallest.\\n", b);\n    else printf("%d is the smallest.\\n", c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, c;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    if (a > b && a > c) cout << a << " is the largest." << endl;\n    else if (b > c) cout << b << " is the largest." << endl;\n    else cout << c << " is the largest." << endl;\n    if (a < b && a < c) cout << a << " is the smallest." << endl;\n    else if (b < c) cout << b << " is the smallest." << endl;\n    else cout << c << " is the smallest." << endl;\n    return 0;\n}`],["3. AVERAGE OF 3 NUMBERS", "", `#include <stdio.h>\nint main() {\n    float a, b, c, avg;\n    printf("Enter three numbers: ");\n    scanf("%f %f %f", &a, &b, &c);\n    avg = (a + b + c) / 3;\n    printf("Average = %.2f\\n", avg);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b, c, avg;\n    cout << "Enter three numbers: ";\n    cin >> a >> b >> c;\n    avg = (a + b + c) / 3;\n    cout << "Average = " << avg << endl;\n    return 0;\n}`],["4a. RIGHT ANGLE TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float base, height, area;\n    printf("Enter base and height: ");\n    scanf("%f %f", &base, &height);\n    area = (base * height) / 2;\n    printf("Right Angle Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float base, height, area;\n    cout << "Enter base and height: ";\n    cin >> base >> height;\n    area = (base * height) / 2;\n    cout << "Right Angle Triangle Area = " << area << endl;\n    return 0;\n}`],["4b. EQUILATERAL TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float a, area;\n    printf("Enter side length: ");\n    scanf("%f", &a);\n    area = (1.7320508f / 4) * a * a;\n    printf("Equilateral Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, area;\n    cout << "Enter side length: ";\n    cin >> a;\n    area = (1.7320508f / 4) * a * a;\n    cout << "Equilateral Triangle Area = " << area << endl;\n    return 0;\n}`],["4c. SCALENE TRIANGLE AREA", "", `#include <stdio.h>\nint main() {\n    float a, b, c, s, x, area;\n    printf("Enter sides a, b, c: ");\n    scanf("%f %f %f", &a, &b, &c);\n    s = (a + b + c) / 2;\n    x = s * (s - a) * (s - b) * (s - c);\n    float guess = x / 2;\n    for (int i = 0; i < 20; i++) guess = (guess + x / guess) / 2;\n    area = guess;\n    printf("Scalene Triangle Area = %.2f\\n", area);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float a, b, c, s, x, area;\n    cout << "Enter sides a, b, c: ";\n    cin >> a >> b >> c;\n    s = (a + b + c) / 2;\n    x = s * (s - a) * (s - b) * (s - c);\n    float guess = x / 2;\n    for (int i = 0; i < 20; i++) guess = (guess + x / guess) / 2;\n    area = guess;\n    cout << "Scalene Triangle Area = " << area << endl;\n    return 0;\n}`],["5. CIRCLE AREA & CIRCUMFERENCE", "", `#include <stdio.h>\nint main() {\n    float r, pi = 3.1416f, area, circ;\n    printf("Enter radius: ");\n    scanf("%f", &r);\n    area = pi * r * r;\n    circ = 2 * pi * r;\n    printf("Area          = %.4f Sq M\\n", area);\n    printf("Circumference = %.4f M\\n", circ);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float r, pi = 3.1416f, area, circ;\n    cout << "Enter radius: ";\n    cin >> r;\n    area = pi * r * r;\n    circ = 2 * pi * r;\n    cout << "Area          = " << area << " Square Meter" << endl;\n    cout << "Circumference = " << circ << " Meter" << endl;\n    return 0;\n}`],["6. POSITIVE OR NEGATIVE NUMBER", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n > 0) printf("%d is Positive.\\n", n);\n    else if (n < 0) printf("%d is Negative.\\n", n);\n    else printf("The number is Zero.\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n > 0) cout << n << " is Positive." << endl;\n    else if (n < 0) cout << n << " is Negative." << endl;\n    else cout << "The number is Zero." << endl;\n    return 0;\n}`],["7. ODD OR EVEN", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n % 2 == 0) printf("%d is Even.\\n", n);\n    else printf("%d is Odd.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n % 2 == 0) cout << n << " is Even." << endl;\n    else cout << n << " is Odd." << endl;\n    return 0;\n}`],["8. LEAP YEAR", "", `#include <stdio.h>\nint main() {\n    int year;\n    printf("Enter a year: ");\n    scanf("%d", &year);\n    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)\n        printf("%d is a Leap Year.\\n", year);\n    else\n        printf("%d is not a Leap Year.\\n", year);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int year;\n    cout << "Enter a year: ";\n    cin >> year;\n    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)\n        cout << year << " is a Leap Year." << endl;\n    else\n        cout << year << " is not a Leap Year." << endl;\n    return 0;\n}`],["9a. CELSIUS TO FAHRENHEIT", "", `#include <stdio.h>\nint main() {\n    float c, f;\n    printf("Enter temperature in Celsius: ");\n    scanf("%f", &c);\n    f = (c * 9 / 5) + 32;\n    printf("%.2f C = %.2f F\\n", c, f);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float c, f;\n    cout << "Enter temperature in Celsius: ";\n    cin >> c;\n    f = (c * 9 / 5) + 32;\n    cout << c << " C = " << f << " F" << endl;\n    return 0;\n}`],["9b. FAHRENHEIT TO CELSIUS", "", `#include <stdio.h>\nint main() {\n    float f, c;\n    printf("Enter temperature in Fahrenheit: ");\n    scanf("%f", &f);\n    c = (f - 32) * 5 / 9;\n    printf("%.2f F = %.2f C\\n", f, c);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    float f, c;\n    cout << "Enter temperature in Fahrenheit: ";\n    cin >> f;\n    c = (f - 32) * 5 / 9;\n    cout << f << " F = " << c << " C" << endl;\n    return 0;\n}`],["10a. UPPERCASE OR LOWERCASE (RANGE)", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a letter: ");\n    scanf(" %c", &ch);\n    if (ch >= 'a' && ch <= 'z') printf("%c is Lowercase.\\n", ch);\n    else if (ch >= 'A' && ch <= 'Z') printf("%c is Uppercase.\\n", ch);\n    else printf("%c is not a letter.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a letter: ";\n    cin >> ch;\n    if (ch >= 'a' && ch <= 'z') cout << ch << " is Lowercase." << endl;\n    else if (ch >= 'A' && ch <= 'Z') cout << ch << " is Uppercase." << endl;\n    else cout << ch << " is not a letter." << endl;\n    return 0;\n}`],["10b. UPPERCASE OR LOWERCASE (ASCII)", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a letter: ");\n    scanf(" %c", &ch);\n    if (ch >= 65 && ch <= 90) printf("%c is Uppercase. ASCII = %d\\n", ch, ch);\n    else if (ch >= 97 && ch <= 122) printf("%c is Lowercase. ASCII = %d\\n", ch, ch);\n    else printf("%c is not a letter.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a letter: ";\n    cin >> ch;\n    if (ch >= 65 && ch <= 90) cout << ch << " is Uppercase. ASCII = " << (int)ch << endl;\n    else if (ch >= 97 && ch <= 122) cout << ch << " is Lowercase. ASCII = " << (int)ch << endl;\n    else cout << ch << " is not a letter." << endl;\n    return 0;\n}`],["11a. VOWEL OR CONSONANT - IF", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a character: ");\n    scanf(" %c", &ch);\n    if (ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u'||ch=='A'||ch=='E'||ch=='I'||ch=='O'||ch=='U')\n        printf("%c is a Vowel.\\n", ch);\n    else\n        printf("%c is a Consonant.\\n", ch);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a character: ";\n    cin >> ch;\n    if (ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u'||ch=='A'||ch=='E'||ch=='I'||ch=='O'||ch=='U')\n        cout << ch << " is a Vowel." << endl;\n    else\n        cout << ch << " is a Consonant." << endl;\n    return 0;\n}`],["11b. VOWEL OR CONSONANT - SWITCH", "", `#include <stdio.h>\nint main() {\n    char ch;\n    printf("Enter a character: ");\n    scanf(" %c", &ch);\n    switch (ch) {\n        case 'a': case 'e': case 'i': case 'o': case 'u':\n        case 'A': case 'E': case 'I': case 'O': case 'U':\n            printf("%c is a Vowel.\\n", ch);\n            break;\n        default:\n            printf("%c is a Consonant.\\n", ch);\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    char ch;\n    cout << "Enter a character: ";\n    cin >> ch;\n    switch (ch) {\n        case 'a': case 'e': case 'i': case 'o': case 'u':\n        case 'A': case 'E': case 'I': case 'O': case 'U':\n            cout << ch << " is a Vowel." << endl;\n            break;\n        default:\n            cout << ch << " is a Consonant." << endl;\n    }\n    return 0;\n}`],["12a. PRINT 10 TIMES - FOR LOOP", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) printf("Bangladesh\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) cout << "Bangladesh" << endl;\n    return 0;\n}`],["12b. PRINT 10 TIMES - WHILE LOOP", "", `#include <stdio.h>\nint main() {\n    int i = 1;\n    while (i <= 10) { printf("Bangladesh\\n"); i++; }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int i = 1;\n    while (i <= 10) { cout << "Bangladesh" << endl; i++; }\n    return 0;\n}`],["12c. PRINT 10 TIMES - DO-WHILE", "", `#include <stdio.h>\nint main() {\n    int i = 1;\n    do { printf("Bangladesh\\n"); i++; } while (i <= 10);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int i = 1;\n    do { cout << "Bangladesh" << endl; i++; } while (i <= 10);\n    return 0;\n}`],["12d. PRINT TEXT N TIMES - FOR", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) printf("%s\\n", text);\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n;\n    cout << "Enter text: ";\n    getline(cin >> ws, text);\n    cout << "How many times? ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) cout << text << endl;\n    return 0;\n}`],["12e. PRINT TEXT N TIMES - WHILE", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n, i = 1;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    while (i <= n) { printf("%s\\n", text); i++; }\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n, i = 1;\n    cout << "Enter text: ";\n    getline(cin >> ws, text);\n    cout << "How many times? ";\n    cin >> n;\n    while (i <= n) { cout << text << endl; i++; }\n    return 0;\n}`],["12f. PRINT TEXT N TIMES - DO-WHILE", "", `#include <stdio.h>\nint main() {\n    char text[100];\n    int n, i = 1;\n    printf("Enter text: ");\n    scanf(" %[^\\n]", text);\n    printf("How many times? ");\n    scanf("%d", &n);\n    do { printf("%s\\n", text); i++; } while (i <= n);\n    return 0;\n}`, `#include<iostream>\n#include<string>\nusing namespace std;\nint main() {\n    string text;\n    int n, i = 1;\n    cout << "Enter text: ";\n    getline(cin >> ws, text);\n    cout << "How many times? ";\n    cin >> n;\n    do { cout << text << endl; i++; } while (i <= n);\n    return 0;\n}`],["13a. PRINT 1 TO 10", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) printf("%d ", i);\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) cout << i << " ";\n    cout << endl;\n    return 0;\n}`],["13b. PRINT 1 TO N", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) printf("%d ", i);\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) cout << i << " ";\n    cout << endl;\n    return 0;\n}`],["14a. SUM OF 1 TO 10", "", `#include <stdio.h>\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) sum += i;\n    printf("Sum = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 10; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["14b. SUM OF 1 TO N", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += i;\n    printf("Sum = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["15. PRIME NUMBER CHECK", "", `#include <stdio.h>\nint main() {\n    int n, isPrime = 1;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    if (n < 2) isPrime = 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) { isPrime = 0; break; }\n    }\n    if (isPrime) printf("%d is a Prime number.\\n", n);\n    else printf("%d is not a Prime number.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, isPrime = 1;\n    cout << "Enter a number: ";\n    cin >> n;\n    if (n < 2) isPrime = 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) { isPrime = 0; break; }\n    }\n    if (isPrime) cout << n << " is a Prime number." << endl;\n    else cout << n << " is not a Prime number." << endl;\n    return 0;\n}`],["16. PERFECT NUMBER CHECK", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    for (int i = 1; i < n; i++)\n        if (n % i == 0) sum += i;\n    if (sum == n) printf("%d is a Perfect number.\\n", n);\n    else printf("%d is not a Perfect number.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0;\n    cout << "Enter a number: ";\n    cin >> n;\n    for (int i = 1; i < n; i++)\n        if (n % i == 0) sum += i;\n    if (sum == n) cout << n << " is a Perfect number." << endl;\n    else cout << n << " is not a Perfect number." << endl;\n    return 0;\n}`],["17. SUM OF DIGITS", "", `#include <stdio.h>\nint main() {\n    int n, sum = 0, temp;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        sum += temp % 10;\n        temp /= 10;\n    }\n    printf("Sum of digits = %d\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, sum = 0, temp;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        sum += temp % 10;\n        temp /= 10;\n    }\n    cout << "Sum of digits of " << n << " = " << sum << endl;\n    return 0;\n}`],["18. REVERSE A NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, rev = 0;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    while (n != 0) {\n        rev = rev * 10 + n % 10;\n        n /= 10;\n    }\n    printf("Reversed number = %d\\n", rev);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, rev = 0;\n    cout << "Enter a number: ";\n    cin >> n;\n    while (n != 0) {\n        rev = rev * 10 + n % 10;\n        n /= 10;\n    }\n    cout << "Reversed number = " << rev << endl;\n    return 0;\n}`],["19. PALINDROME NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, rev = 0, temp;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        rev = rev * 10 + temp % 10;\n        temp /= 10;\n    }\n    if (rev == n) printf("%d is a Palindrome.\\n", n);\n    else printf("%d is not a Palindrome.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, rev = 0, temp;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        rev = rev * 10 + temp % 10;\n        temp /= 10;\n    }\n    if (rev == n) cout << n << " is a Palindrome." << endl;\n    else cout << n << " is not a Palindrome." << endl;\n    return 0;\n}`],["20. ARMSTRONG NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, temp, digits = 0, sum = 0, t;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) { digits++; temp /= 10; }\n    temp = n;\n    while (temp != 0) {\n        t = temp % 10;\n        int p = 1;\n        for (int i = 0; i < digits; i++) p *= t;\n        sum += p;\n        temp /= 10;\n    }\n    if (sum == n) printf("%d is Armstrong.\\n", n);\n    else printf("%d is not Armstrong.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, temp, digits = 0, sum = 0, t;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) { digits++; temp /= 10; }\n    temp = n;\n    while (temp != 0) {\n        t = temp % 10;\n        int p = 1;\n        for (int i = 0; i < digits; i++) p *= t;\n        sum += p;\n        temp /= 10;\n    }\n    if (sum == n) cout << n << " is an Armstrong number." << endl;\n    else cout << n << " is not an Armstrong number." << endl;\n    return 0;\n}`],["21. STRONG NUMBER", "", `#include <stdio.h>\nint main() {\n    int n, temp, sum = 0, digit, fact;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    temp = n;\n    while (temp != 0) {\n        digit = temp % 10;\n        fact = 1;\n        for (int i = 1; i <= digit; i++) fact *= i;\n        sum += fact;\n        temp /= 10;\n    }\n    if (sum == n) printf("%d is Strong.\\n", n);\n    else printf("%d is not Strong.\\n", n);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, temp, sum = 0, digit, fact;\n    cout << "Enter a number: ";\n    cin >> n;\n    temp = n;\n    while (temp != 0) {\n        digit = temp % 10;\n        fact = 1;\n        for (int i = 1; i <= digit; i++) fact *= i;\n        sum += fact;\n        temp /= 10;\n    }\n    if (sum == n) cout << n << " is a Strong number." << endl;\n    else cout << n << " is not a Strong number." << endl;\n    return 0;\n}`],["22. GCD AND LCM", "", `#include <stdio.h>\nint main() {\n    int a, b, x, y, gcd, lcm;\n    printf("Enter two numbers: ");\n    scanf("%d %d", &a, &b);\n    x = a; y = b;\n    while (y != 0) { int t = y; y = x % y; x = t; }\n    gcd = x;\n    lcm = (a * b) / gcd;\n    printf("GCD = %d\\nLCM = %d\\n", gcd, lcm);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b, x, y, gcd, lcm;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    x = a; y = b;\n    while (y != 0) { int t = y; y = x % y; x = t; }\n    gcd = x;\n    lcm = (a * b) / gcd;\n    cout << "GCD = " << gcd << endl;\n    cout << "LCM = " << lcm << endl;\n    return 0;\n}`],["23. FACTORIAL", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long fact = 1;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) fact *= i;\n    printf("%d! = %lld\\n", n, fact);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long fact = 1;\n    cout << "Enter a number: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) fact *= i;\n    cout << n << "! = " << fact << endl;\n    return 0;\n}`],["24. SERIES: 1! + 2! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact = 1;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) {\n        fact *= i;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact = 1;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) {\n        fact *= i;\n        sum += fact;\n    }\n    cout << "1! + 2! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["25. SERIES: 2! + 4! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact;\n    cout << "Enter n (even number): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    cout << "2! + 4! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["26. SERIES: 1! + 3! + ... + n!", "", `#include <stdio.h>\nint main() {\n    int n;\n    long long sum = 0, fact;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0, fact;\n    cout << "Enter n (odd number): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) {\n        fact = 1;\n        for (int j = 1; j <= i; j++) fact *= j;\n        sum += fact;\n    }\n    cout << "1! + 3! + ... + " << n << "! = " << sum << endl;\n    return 0;\n}`],["27a. FIBONACCI - PRINT TERMS", "", `#include <stdio.h>\nint main() {\n    int n, a = 0, b = 1, c;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: %d %d", a, b);\n    for (int i = 3; i <= n; i++) {\n        c = a + b; printf(" %d", c); a = b; b = c;\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, a = 0, b = 1, c;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: " << a << " " << b;\n    for (int i = 3; i <= n; i++) {\n        c = a + b; cout << " " << c; a = b; b = c;\n    }\n    cout << endl;\n    return 0;\n}`],["27b. FIBONACCI - PRINT & SUM", "", `#include <stdio.h>\nint main() {\n    int n, a = 0, b = 1, c;\n    long long sum = a + b;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: %d %d", a, b);\n    for (int i = 3; i <= n; i++) {\n        c = a + b; printf(" %d", c);\n        sum += c; a = b; b = c;\n    }\n    printf("\\nSum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, a = 0, b = 1, c;\n    long long sum = a + b;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: " << a << " " << b;\n    for (int i = 3; i <= n; i++) {\n        c = a + b; cout << " " << c;\n        sum += c; a = b; b = c;\n    }\n    cout << "\\nSum = " << sum << endl;\n    return 0;\n}`],["28. SERIES: 1 + 2 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["29. SERIES: 1 + 3 + 5 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (odd): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["30. SERIES: 2 + 4 + 6 + ... + n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) sum += i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (even): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) sum += i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["31. SERIES: 1^1 + 2^2 + ... + n^n", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) {\n        long long p = 1;\n        for (int j = 0; j < i; j++) p *= i;\n        sum += p;\n    }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) {\n        long long p = 1;\n        for (int j = 0; j < i; j++) p *= i;\n        sum += p;\n    }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["32. SERIES: 1^2 + 2^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["33. SERIES: 1^2 + 3^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (odd): ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i += 2) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (odd): ";\n    cin >> n;\n    for (int i = 1; i <= n; i += 2) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["34. SERIES: 2^2 + 4^2 + ... + n^2", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0;\n    printf("Enter n (even): ");\n    scanf("%d", &n);\n    for (int i = 2; i <= n; i += 2) sum += (long long)i * i;\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0;\n    cout << "Enter n (even): ";\n    cin >> n;\n    for (int i = 2; i <= n; i += 2) sum += (long long)i * i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["35. SERIES: 1 + 2 + 4 + 8 + ...", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0, term = 1;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) { sum += term; term *= 2; }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0, term = 1;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) { sum += term; term *= 2; }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["36. SERIES: 1 + 3 + 9 + 27 + ...", "", `#include <stdio.h>\nint main() {\n    int n; long long sum = 0, term = 1;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) { sum += term; term *= 3; }\n    printf("Sum = %lld\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; long long sum = 0, term = 1;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) { sum += term; term *= 3; }\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["37. SERIES: 1/1 + 1/2 + ... + 1/n", "", `#include <stdio.h>\nint main() {\n    int n; float sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += 1.0f / i;\n    printf("Sum = %.4f\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; float sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += 1.0f / i;\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["38. SERIES: 1/1^2 + 1/2^2 + ...", "", `#include <stdio.h>\nint main() {\n    int n; float sum = 0;\n    printf("Enter n: ");\n    scanf("%d", &n);\n    for (int i = 1; i <= n; i++) sum += 1.0f / ((float)i * i);\n    printf("Sum = %.4f\\n", sum);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; float sum = 0;\n    cout << "Enter n: ";\n    cin >> n;\n    for (int i = 1; i <= n; i++) sum += 1.0f / ((float)i * i);\n    cout << "Sum = " << sum << endl;\n    return 0;\n}`],["39. PATTERN - STARS INCREASING", "*\n**\n***\n****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["40. PATTERN - NUMBERS INCREASING", "1\n12\n123\n1234\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["41. PATTERN - REPEATED ROW NUM", "1\n22\n333\n4444\n55555", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["42. PATTERN - 1 0 ALT START 1", "1\n10\n101\n1010\n10101", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["43. PATTERN - 1 0 ALT ODD=1 EVEN=0", "1\n00\n111\n0000\n11111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["44. PATTERN - REPEATED ALPHABET", "A\nBB\nCCC\nDDDD\nEEEEE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["45. PATTERN - ALPHABETS INC", "A\nAB\nABC\nABCD\nABCDE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["46. PATTERN - STARS DECREASING", "*****\n****\n***\n**\n*", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["47. PATTERN - NUMBERS DECREASING", "12345\n1234\n123\n12\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["48. PATTERN - REP ROW DECREASING", "55555\n4444\n333\n22\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["49. PATTERN - 1 0 ALT DECREASING", "10101\n1010\n101\n10\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["50. PATTERN - ROW 1/0 DECREASING", "11111\n0000\n111\n00\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["51. PATTERN - ALPHABETS DEC", "ABCDE\nABCD\nABC\nAB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["52. PATTERN - REP ALPHABET DEC", "EEEEE\nDDDD\nCCC\nBB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["53. PATTERN - STARS DIAMOND", "*\n**\n***\n**\n*", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["54. PATTERN - NUMBERS DIAMOND", "1\n12\n123\n12\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["55. PATTERN - REP ROW NUM DIAMOND", "1\n22\n333\n22\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["56. PATTERN - 1/0 START 1 DIAMOND", "1\n10\n101\n10\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["57. PATTERN - ROW 1/0 DIAMOND", "1\n00\n111\n00\n1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["58. PATTERN - REP ALPHABET DIAMOND", "A\nBB\nCCC\nBB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["59. PATTERN - ALPHABET SEQ DIAMOND", "A\nAB\nABC\nAB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["60. PATTERN - ALPHABET SEQ DIAMOND 2", "A\nAB\nABC\nAB\nA", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    for (int r = n - 1; r >= 1; r--) {\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    for (int row = n - 1; row >= 1; row--) {\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["61. PATTERN - RIGHT-ALIGNED STARS", "    *\n   **\n  ***\n ****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["62. PATTERN - RIGHT-ALIGNED NUMBERS", "    1\n   12\n  123\n 1234\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["63. PATTERN - RIGHT-ALIGNED REP ROW", "    1\n   22\n  333\n 4444\n55555", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["64. PATTERN - RIGHT-ALIGNED 1/0 START 1", "    1\n   10\n  101\n 1010\n10101", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["65. PATTERN - RIGHT-ALIGNED ROW 1/0", "    1\n   00\n  111\n 0000\n11111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["66. PATTERN - RIGHT-ALIGNED REP ALPHA", "    A\n   BB\n  CCC\n DDDD\nEEEEE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["67. PATTERN - RIGHT-ALIGNED ALPHA SEQ", "    A\n   AB\n  ABC\n ABCD\nABCDE", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["68. PATTERN - LEFT-INDENT STARS DEC", "****\n ***\n  **\n   *", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["69. PATTERN - LEFT-INDENT NUMBERS DEC", "12345\n 1234\n  123\n   12\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["70. PATTERN - LEFT-INDENT REP ROW DEC", "55555\n 4444\n  333\n   22\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["71. PATTERN - LEFT-INDENT 1/0 DEC", "10101\n 1010\n  101\n   10\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["72. PATTERN - LEFT-INDENT ROW 1/0 DEC", "11111\n 0000\n  111\n   00\n    1", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["73. PATTERN - LEFT-INDENT REP ALPHA DEC", "EEEEE\n DDDD\n  CCC\n   BB\n    A", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["74. PATTERN - LEFT-INDENT ALPHA SEQ DEC", "ABCDE\n ABCD\n  ABC\n   AB\n    A", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = n; r >= 1; r--) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= r; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = n; row >= 1; row--) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= row; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["75. PATTERN - SOLID STAR SQUARE", "*****\n*****\n*****", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["76. PATTERN - NUMBER SEQUENCE SQUARE", "12345\n12345\n12345", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << col;\n        cout << endl;\n    }\n    return 0;\n}`],["77. PATTERN - ROW NUMBER SQUARE", "1111\n2222\n3333", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", r);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << row;\n        cout << endl;\n    }\n    return 0;\n}`],["78. PATTERN - 1010 COL ALT SQUARE", "1010\n1010\n1010", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%d", (c % 2 == 1) ? 1 : 0);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (col % 2 == 1 ? 1 : 0);\n        cout << endl;\n    }\n    return 0;\n}`],["79. PATTERN - 1111/0000 ROW ALT SQUARE", "1111\n0000\n1111", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        int v = (r % 2 == 1) ? 1 : 0;\n        for (int c = 1; c <= n; c++) printf("%d", v);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        int val = (row % 2 == 1) ? 1 : 0;\n        for (int col = 1; col <= n; col++) cout << val;\n        cout << endl;\n    }\n    return 0;\n}`],["80. PATTERN - REPEATED ALPHABET SQUARE", "AAAA\nBBBB\nCCCC", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%c", 'A' + r - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (char)('A' + row - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["90. PATTERN - ALPHABET SEQ SQUARE", "ABCD\nABCD\nABCD", `#include <stdio.h>\nint main() {\n    int n; scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= n; c++) printf("%c", 'A' + c - 1);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n; cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= n; col++) cout << (char)('A' + col - 1);\n        cout << endl;\n    }\n    return 0;\n}`],["91. PATTERN - SEQUENTIAL NUMS TRIANGLE", "1\n2 3\n4 5 6", `#include <stdio.h>\nint main() {\n    int n, count = 1;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", count++);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, count = 1;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << count++ << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["92. PATTERN - SEQUENTIAL FROM 0", "0\n1 2\n3 4 5", `#include <stdio.h>\nint main() {\n    int n, count = 0;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", count++);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n, count = 0;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << count++ << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["93. PATTERN - MULTIPLICATION TRIANGLE", "1\n2 4\n4 6 9", `#include <stdio.h>\nint main() {\n    int n;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int c = 1; c <= r; c++) printf("%d ", r * c);\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int col = 1; col <= row; col++) cout << row * col << " ";\n        cout << endl;\n    }\n    return 0;\n}`],["94. PATTERN - PYRAMID OF STARS", "   *\n  ***\n *****", `#include <stdio.h>\nint main() {\n    int n;\n    scanf("%d", &n);\n    for (int r = 1; r <= n; r++) {\n        for (int s = 1; s <= n - r; s++) printf(" ");\n        for (int c = 1; c <= (2 * r - 1); c++) printf("*");\n        printf("\\n");\n    }\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "Enter n: "; cin >> n;\n    for (int row = 1; row <= n; row++) {\n        for (int sp = 1; sp <= n - row; sp++) cout << " ";\n        for (int col = 1; col <= (2 * row - 1); col++) cout << "*";\n        cout << endl;\n    }\n    return 0;\n}`],["95. FACTORIAL USING RECURSION", "", `#include <stdio.h>\nlong long fact(int n) {\n    if (n == 0 || n == 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    printf("%d! = %lld\\n", n, fact(n));\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nlong long fact(int n) {\n    if (n == 0 || n == 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    int n;\n    cout << "Enter a number: ";\n    cin >> n;\n    cout << n << "! = " << fact(n) << endl;\n    return 0;\n}`],["96. FIBONACCI USING RECURSION", "", `#include <stdio.h>\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nint main() {\n    int n;\n    printf("Enter number of terms: ");\n    scanf("%d", &n);\n    printf("Series: ");\n    for (int i = 0; i < n; i++) printf("%d ", fib(i));\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nint main() {\n    int n;\n    cout << "Enter number of terms: ";\n    cin >> n;\n    cout << "Series: ";\n    for (int i = 0; i < n; i++) cout << fib(i) << " ";\n    cout << endl;\n    return 0;\n}`],["97. CALCULATE POWER USING RECURSION", "", `#include <stdio.h>\nlong long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\nint main() {\n    int base, exp;\n    printf("Enter base and exponent: ");\n    scanf("%d %d", &base, &exp);\n    printf("%d^%d = %lld\\n", base, exp, power(base, exp));\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nlong long power(int base, int exp) {\n    if (exp == 0) return 1;\n    return base * power(base, exp - 1);\n}\nint main() {\n    int base, exp;\n    cout << "Enter base and exponent: ";\n    cin >> base >> exp;\n    cout << base << "^" << exp << " = " << power(base, exp) << endl;\n    return 0;\n}`],["98a. ARRAY - FIND MAXIMUM", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int max = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] > max) max = arr[i];\n    printf("Maximum = %d\\n", max);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int max = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] > max) max = arr[i];\n    cout << "Maximum = " << max << endl;\n    return 0;\n}`],["98b. ARRAY - FIND MINIMUM", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int min = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] < min) min = arr[i];\n    printf("Minimum = %d\\n", min);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int min = arr[0];\n    for (int i = 1; i < n; i++)\n        if (arr[i] < min) min = arr[i];\n    cout << "Minimum = " << min << endl;\n    return 0;\n}`],["99. ARRAY - FIND BOTH MAX AND MIN", "", `#include <stdio.h>\nint main() {\n    int n;\n    printf("How many numbers? ");\n    scanf("%d", &n);\n    int arr[n];\n    printf("Enter %d numbers: ", n);\n    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);\n    int max = arr[0], min = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > max) max = arr[i];\n        if (arr[i] < min) min = arr[i];\n    }\n    printf("Maximum = %d\\nMinimum = %d\\n", max, min);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int n;\n    cout << "How many numbers? ";\n    cin >> n;\n    int arr[n];\n    cout << "Enter " << n << " numbers: ";\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int max = arr[0], min = arr[0];\n    for (int i = 1; i < n; i++) {\n        if (arr[i] > max) max = arr[i];\n        if (arr[i] < min) min = arr[i];\n    }\n    cout << "Maximum = " << max << endl;\n    cout << "Minimum = " << min << endl;\n    return 0;\n}`],["100. SWAP TWO NUMBERS WITHOUT TEMP", "", `#include <stdio.h>\nint main() {\n    int a, b;\n    printf("Enter two numbers: ");\n    scanf("%d %d", &a, &b);\n    printf("Before: a = %d, b = %d\\n", a, b);\n    a = a + b;\n    b = a - b;\n    a = a - b;\n    printf("After : a = %d, b = %d\\n", a, b);\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    int a, b;\n    cout << "Enter two numbers: ";\n    cin >> a >> b;\n    cout << "Before: a = " << a << ", b = " << b << endl;\n    a = a + b;\n    b = a - b;\n    a = a - b;\n    cout << "After : a = " << a << ", b = " << b << endl;\n    return 0;\n}`],["101a. CONTINUE EXAMPLE", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i % 3 == 0) continue;\n        printf("%d ", i);\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i % 3 == 0) continue;\n        cout << i << " ";\n    }\n    cout << endl;\n    return 0;\n}`],["101b. BREAK EXAMPLE", "", `#include <stdio.h>\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i == 6) break;\n        printf("%d ", i);\n    }\n    printf("\\n");\n    return 0;\n}`, `#include<iostream>\nusing namespace std;\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        if (i == 6) break;\n        cout << i << " ";\n    }\n    cout << endl;\n    return 0;\n}`]
 ];
 
-// =======================================
-// UI RENDERING LOGIC
-// =======================================
-const container = document.getElementById('programs-container');
-const menuList = document.getElementById('menuList');
-let currentMode = '';
+// ================================================
+// THEME LOGIC
+// ================================================
+const ICON_SUN = '<svg width="22px" height="22px"><use href="#ic-sun"/></svg>';
+const ICON_MOON = '<svg width="22px" height="22px"><use href="#ic-moon"/></svg>';
 
-function goHome() {
-  document.getElementById('app-screen').style.display = 'none';
-  document.getElementById('home-screen').style.display = 'flex';
-  container.innerHTML = ''; // Clear memory
-  menuList.innerHTML = '';
-}
-
-function openMode(mode) {
-  currentMode = mode;
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('app-screen').style.display = 'block';
-  
-  let headerLabel = mode === 'C' ? 'C Programs' : (mode === 'CPP' ? 'C++ Programs' : 'C & C++ Side-by-Side');
-  document.getElementById('sheetTitle').innerText = headerLabel;
-
-  renderCards();
-  document.getElementById('app-screen').scrollTo(0,0);
-}
-
-function renderCards() {
-  container.innerHTML = '';
-  menuList.innerHTML = '';
-
-  data.forEach((prog, i) => {
-    const hasPat = prog[1] !== "";
-    const progId = `prog-${i}`;
-    let cardContent = '';
-
-    if (currentMode === 'C' || currentMode === 'CPP') {
-      const codeIndex = currentMode === 'C' ? 2 : 3;
-      const langClass = currentMode === 'C' ? 'language-c' : 'language-cpp';
-      const safeCode = prog[codeIndex].replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-      cardContent = `
-        <header>
-          <div class="title">${prog[0]}</div>
-          <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-        </header>
-        ${hasPat ? `<div class="pattern-box">${prog[1]}</div>` : ''}
-        <div class="code-area">
-          <pre><code class="${langClass}">${safeCode}</code></pre>
-        </div>
-      `;
-    } 
-    else if (currentMode === 'BOTH') {
-      const safeC = prog[2].replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      const safeCPP = prog[3].replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      
-      cardContent = `
-        <header>
-          <div class="title">${prog[0]}</div>
-        </header>
-        ${hasPat ? `<div class="pattern-box">${prog[1]}</div>` : ''}
-        <div class="view-container">
-          <div class="code-pane">
-            <div class="pane-header">C Code <button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
-            <div class="code-area"><pre><code class="language-c">${safeC}</code></pre></div>
-          </div>
-          <div class="code-pane">
-            <div class="pane-header">C++ Code <button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
-            <div class="code-area"><pre><code class="language-cpp">${safeCPP}</code></pre></div>
-          </div>
-        </div>
-      `;
-    }
-
-    const html = `<div class="snap-section" id="${progId}"><div class="card">${cardContent}</div></div>`;
-    container.insertAdjacentHTML('beforeend', html);
-
-    // Populate Navigation Menu
-    const li = document.createElement('li');
-    li.innerText = prog[0];
-    li.onclick = () => { document.getElementById(progId).scrollIntoView(); toggleMenu(); };
-    menuList.appendChild(li);
-  });
-
-  const completeHtml = `
-    <div class="snap-section intro">
-      <h1 style="color: #10b981;">COMPLETE!</h1>
-      <p>End of ${currentMode} collection.</p>
-    </div>`;
-  container.insertAdjacentHTML('beforeend', completeHtml);
-
-  hljs.highlightAll();
-}
-
-// =======================================
-// FONT SIZE ENGINE
-// =======================================
-const fontSizes =['small', 'medium', 'large'];
-const fontLabels = { 'small': 'A-', 'medium': 'Aa', 'large': 'A+' };
-let currentFontIndex = 1;
-
-function toggleFontSize() {
-  currentFontIndex = (currentFontIndex + 1) % fontSizes.length;
-  const newSize = fontSizes[currentFontIndex];
-  document.documentElement.setAttribute('data-font', newSize);
-  localStorage.setItem('fontSize', newSize);
-  document.getElementById('fontBtn').innerText = fontLabels[newSize];
-}
-
-(function initFont() {
-  const savedSize = localStorage.getItem('fontSize') || 'medium';
-  currentFontIndex = fontSizes.indexOf(savedSize) > -1 ? fontSizes.indexOf(savedSize) : 1;
-  document.documentElement.setAttribute('data-font', savedSize);
-  document.getElementById('fontBtn').innerText = fontLabels[savedSize];
-})();
-
-
-// =======================================
-// THEME ENGINE
-// =======================================
 function toggleTheme() {
   const root = document.documentElement;
-  const newTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  root.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  document.getElementById('themeBtn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
+  const flash = document.getElementById('theme-flash');
+  const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+
+  // Step 1: Fade the overlay IN (covers the entire page)
+  flash.classList.add('active');
+
+  // Step 2: After overlay is fully opaque, swap theme instantly (nobody sees it)
+  setTimeout(() => {
+    root.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('duet-theme', nextTheme);
+    const icon = nextTheme === 'dark' ? ICON_MOON : ICON_SUN;
+    document.getElementById('themeBtn').innerHTML = icon;
+    document.getElementById('themeFab').innerHTML = icon;
+
+    // Step 3: Let browser paint the new theme colors, then fade overlay OUT
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        flash.classList.remove('active');
+      });
+    });
+  }, 180); // matches CSS transition duration of 0.18s
 }
 
 (function initTheme() {
-  const savedTheme = localStorage.getItem('theme');
+  const saved = localStorage.getItem('duet-theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
+  const theme = saved || (prefersDark ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', theme);
-  document.getElementById('themeBtn').innerText = theme === 'dark' ? '☀️' : '🌙';
+  const icon = theme === 'dark' ? ICON_MOON : ICON_SUN;
+  document.getElementById('themeBtn').innerHTML = icon;
+  document.getElementById('themeFab').innerHTML = icon;
 })();
 
-// =======================================
-// UTILS
-// =======================================
-function toggleMenu() {
-  document.getElementById('sheet').classList.toggle('show');
-  document.getElementById('overlay').classList.toggle('show');
+// ================================================
+// FONT SIZE SCALES
+// ================================================
+const FONTS = ['sm','md','lg'];
+let fontIdx = 1;
+
+function cycleFont() {
+  fontIdx = (fontIdx + 1) % FONTS.length;
+  const f = FONTS[fontIdx];
+  document.documentElement.setAttribute('data-font', f);
+  localStorage.setItem('duet-font', f);
 }
 
-function copyCode(btn) {
-  const code = btn.closest('.code-pane') 
-      ? btn.closest('.code-pane').querySelector('code').innerText 
-      : btn.closest('.card').querySelector('code').innerText;
-  
-  const showSuccess = () => {
-    btn.innerText = 'COPIED!'; btn.classList.add('success');
-    setTimeout(() => { btn.innerText = 'COPY'; btn.classList.remove('success'); }, 2000);
-  };
-  const showError = () => {
-    btn.innerText = 'FAILED'; btn.style.backgroundColor = '#dc2626';
-    setTimeout(() => { btn.innerText = 'COPY'; btn.style.backgroundColor = ''; }, 2000);
-  };
+(function initFont() {
+  const saved = localStorage.getItem('duet-font') || 'md';
+  fontIdx = FONTS.indexOf(saved) >= 0 ? FONTS.indexOf(saved) : 1;
+  document.documentElement.setAttribute('data-font', saved);
+})();
 
-  const fallbackCopy = () => {
-    const ta = document.createElement("textarea");
-    ta.value = code; ta.style.position = "fixed"; ta.style.opacity = "0";
-    document.body.appendChild(ta); ta.focus(); ta.select();
-    try { document.execCommand('copy') ? showSuccess() : showError(); } catch(e) { showError(); }
-    document.body.removeChild(ta);
+// ================================================
+// LAYOUT TOGGLE (Compare Mode Only)
+// ================================================
+let currentLayout = 'row'; // Default is Side-by-Side
+
+function toggleLayout() {
+  currentLayout = currentLayout === 'row' ? 'col' : 'row';
+  
+  // Update class on all panes containers
+  document.querySelectorAll('.panes').forEach(el => {
+    el.className = `panes layout-${currentLayout}`;
+  });
+
+  // Icon: show the icon of what clicking AGAIN will do
+  const iconId = currentLayout === 'row' ? '#ic-stacked' : '#ic-split';
+  document.getElementById('layoutIcon').innerHTML = `<use href="${iconId}"/>`;
+
+  // Show a brief toast to confirm the change
+  const label = currentLayout === 'row' ? 'Side by Side' : 'Stacked';
+  showToast(label);
+}
+
+// ================================================
+// NAVIGATION & INTERSECTION OBSERVER (FLAWLESS PERF)
+// ================================================
+let codeObserver = null;
+
+function openMode(mode) {
+  // Reset layout to row (side-by-side) each time a mode is opened
+  currentLayout = 'row';
+  document.getElementById('layoutIcon').innerHTML = `<use href="#ic-stacked"/>`;
+
+  buildPrograms(mode);
+  document.getElementById('home').classList.add('hidden');
+  const app = document.getElementById('app');
+  // Use instant scroll reset — scrollTo with no behavior to avoid snap fighting
+  app.scrollTop = 0;
+  app.classList.add('show');
+  document.getElementById('fabs').classList.add('show');
+  
+  // Show layout toggle only if comparing BOTH
+  document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
+}
+
+function goHome() {
+  document.getElementById('home').classList.remove('hidden');
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('fabs').classList.remove('show');
+  closeMenu();
+}
+
+function buildPrograms(mode) {
+  const container = document.getElementById('prog-container');
+  const menuList = document.getElementById('menuList');
+  
+  container.innerHTML = '';
+  menuList.innerHTML = '';
+
+  const sheetTitles = {C:'C Programs',CPP:'C++ Programs',BOTH:'C & C++ Comparison'};
+  document.getElementById('sheetTitle').textContent = sheetTitles[mode];
+
+  // Disconnect observer if changing modes
+  if (codeObserver) codeObserver.disconnect();
+
+  // Highlight dynamically ONLY when code block enters the screen (Zero Lag)
+  codeObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (typeof hljs !== 'undefined') {
+          const blocks = entry.target.querySelectorAll('code:not(.hljs)');
+          blocks.forEach(el => hljs.highlightElement(el));
+        }
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { root: document.getElementById('app'), rootMargin: '150% 0px' });
+
+  // Use Document Fragment to build DOM instantly with 0 reflows
+  const fragment = document.createDocumentFragment();
+  const menuFrag = document.createDocumentFragment();
+
+  data.forEach((prog, i) => {
+    const[title, pattern, cCode, cppCode] = prog;
+
+    // Menu Item
+    const li = document.createElement('li');
+    li.textContent = title;
+    li.onclick = () => {
+      closeMenu();
+      const el = document.getElementById('s' + i);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+    menuFrag.appendChild(li);
+
+    // Main Card
+    const snap = document.createElement('div');
+    snap.className = 'snap';
+    snap.id = 's' + i;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const topbar = document.createElement('div');
+    topbar.className = 'card-topbar';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'card-title';
+    titleEl.textContent = title;
+    const progNum = document.createElement('div');
+    progNum.className = 'card-prog';
+    progNum.textContent = `${i + 1} / ${data.length}`;
+    topbar.appendChild(titleEl);
+    topbar.appendChild(progNum);
+    card.appendChild(topbar);
+
+    if (pattern && pattern.trim()) {
+      const pat = document.createElement('div');
+      pat.className = 'pattern';
+      pat.textContent = pattern;
+      card.appendChild(pat);
+    }
+
+    const panes = document.createElement('div');
+    panes.className = `panes layout-${currentLayout}`;
+
+    if (mode === 'C' || mode === 'BOTH') panes.appendChild(makePane('C', cCode));
+    if (mode === 'CPP' || mode === 'BOTH') panes.appendChild(makePane('CPP', cppCode));
+
+    card.appendChild(panes);
+    snap.appendChild(card);
+    fragment.appendChild(snap);
+
+    // Tell the observer to watch this card
+    codeObserver.observe(snap);
+  });
+
+  // Inject once perfectly
+  container.appendChild(fragment);
+  menuList.appendChild(menuFrag);
+}
+
+function makePane(lang, code) {
+  const pane = document.createElement('div');
+  pane.className = 'pane';
+
+  const hdr = document.createElement('div');
+  hdr.className = 'pane-hdr';
+
+  const langLabel = document.createElement('div');
+  langLabel.className = 'pane-lang';
+  const dot = document.createElement('span');
+  dot.className = 'lang-dot ' + (lang === 'C' ? 'c' : 'cpp');
+  const langText = document.createElement('span');
+  langText.className = 'lang-text';
+  langText.textContent = lang === 'C' ? 'C Language' : 'C++ Language';
+  langLabel.appendChild(dot);
+  langLabel.appendChild(langText);
+
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.innerHTML = '<svg width="13px" height="13px"><use href="#ic-copy"/></svg>Copy';
+  btn.onclick = () => copyCode(code, btn);
+
+  hdr.appendChild(langLabel);
+  hdr.appendChild(btn);
+  pane.appendChild(hdr);
+
+  const scroll = document.createElement('div');
+  scroll.className = 'code-scroll';
+  const pre = document.createElement('pre');
+  const codeEl = document.createElement('code');
+  codeEl.className = lang === 'C' ? 'language-c' : 'language-cpp';
+  codeEl.textContent = code;
+  
+  pre.appendChild(codeEl);
+  scroll.appendChild(pre);
+  pane.appendChild(scroll);
+
+  return pane;
+}
+
+// ================================================
+// COPY UTILITY (KEYBOARD FIXED)
+// ================================================
+function copyCode(code, btn) {
+  const CHECK = '<svg width="13px" height="13px"><use href="#ic-check"/></svg>Copied!';
+  const COPY = '<svg width="13px" height="13px"><use href="#ic-copy"/></svg>Copy';
+  
+  const succeed = () => {
+    btn.innerHTML = CHECK;
+    btn.classList.add('ok');
+    setTimeout(() => { btn.innerHTML = COPY; btn.classList.remove('ok'); }, 2000);
   };
 
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(code).then(showSuccess).catch(fallbackCopy);
-  } else fallbackCopy();
+    navigator.clipboard.writeText(code).then(succeed).catch(() => fallbackCopy(code, succeed));
+  } else {
+    fallbackCopy(code, succeed);
+  }
 }
-</script>
 
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', ''); // Crucial fix: stops virtual keyboard
+  ta.style.position = 'absolute';
+  ta.style.left = '-9999px';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e){}
+  ta.blur(); // Crucial fix: unfocus
+  document.body.removeChild(ta);
+}
+
+// ================================================
+// BOTTOM SHEET MENU
+// ================================================
+function toggleMenu() {
+  const sheet = document.getElementById('sheet');
+  sheet.classList.contains('show') ? closeMenu() : openMenuSheet();
+}
+function openMenuSheet() {
+  document.getElementById('sheet').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeMenu() {
+  document.getElementById('sheet').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ================================================
+// TOAST UTILITY
+// ================================================
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ================================================
+// VIEWPORT HEIGHT FIX (iOS Safari dvh workaround)
+// ================================================
+function setVH() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH, { passive: true });
+
+// ================================================
+// KEYBOARD NAVIGATION (Arrows / Esc)
+// ================================================
+document.addEventListener('keydown', e => {
+  const app = document.getElementById('app');
+  if (!app.classList.contains('show')) return;
+  if (e.key === 'Escape') {
+    document.getElementById('sheet').classList.contains('show') ? closeMenu() : goHome();
+  }
+  if (e.key === 'ArrowDown') { e.preventDefault(); app.scrollBy({ top: window.innerHeight, behavior: 'smooth' }); }
+  if (e.key === 'ArrowUp')   { e.preventDefault(); app.scrollBy({ top: -window.innerHeight, behavior: 'smooth' }); }
+});
+</script>
 </body>
 </html>
