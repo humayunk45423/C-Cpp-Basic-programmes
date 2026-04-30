@@ -332,8 +332,16 @@ body {
   white-space: pre !important; 
   display: block;
   background: transparent !important;
-  font-variant-ligatures: none !important;         /* Disables standard ligatures */
-  font-feature-settings: "calt" 0 !important;      /* Disables contextual alternates (the specific feature JetBrains uses) */
+  font-variant-ligatures: none !important;
+  font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0 !important;
+}
+
+/* Also target after highlight.js adds its classes */
+.code-scroll code.hljs,
+.code-scroll pre code,
+.code-scroll .hljs {
+  font-variant-ligatures: none !important;
+  font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0 !important;
 }
 
 /* ===================== CSS VARIABLE SYNTAX HIGHLIGHTING ===================== */
