@@ -6115,9 +6115,8 @@ window.homeSearchOpen = function(idx) {
   const results = document.getElementById('home-search-results');
   if (input) input.value = '';
   if (results) results.classList.remove('open');
-  // Open in current mode if already in app, otherwise default to BOTH (compare) from home
-  const mode = currentMode || 'BOTH';
-  openMode(mode);
+  // Always open in BOTH (compare) mode from home search — user hasn't chosen a mode yet
+  openMode('BOTH');
   setTimeout(() => {
     const el = document.getElementById('s' + idx);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
