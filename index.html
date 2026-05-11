@@ -8135,19 +8135,23 @@ int main() {
       const openIconId = currentLayout === 'row' ? '#ic-split' : '#ic-stacked';
       document.getElementById('layoutIcon').innerHTML = `<use href="${openIconId}"/>`;
 
-      // Lazy-load only the language(s) needed for this mode
-      window._loadHljs(mode, () => buildPrograms(mode));
-      buildPrograms(mode);
-
+      // Start the screen transition FIRST — so the animation begins before any heavy DOM work
       showAppUI();
-
-      const app = document.getElementById('app');
-      app.scrollTop = 0; // scroll to top when opening
-
+      document.getElementById('app').scrollTop = 0;
       document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
-
-      // Push state to browser history stack (no hash — avoids scroll-to-top and double-back issues)
       history.pushState({ screen: 'app', mode: mode }, '', window.location.pathname + window.location.search);
+
+      // Yield the current frame (transition paint) THEN build the card list
+      requestAnimationFrame(() => {
+        if (typeof hljs !== 'undefined') {
+          // hljs already loaded — one build with full highlighting
+          buildPrograms(mode);
+        } else {
+          // Build immediately so the user sees content, then rebuild with highlights once hljs arrives
+          buildPrograms(mode);
+          window._loadHljs(mode, () => buildPrograms(mode));
+        }
+      });
     }
 
     function goHome() {
@@ -8172,7 +8176,15 @@ int main() {
     }
 
     // Generating DOM content
+    // Guard against concurrent builds (e.g. double-call from hljs callback + openMode)
+    let _buildInProgress = false;
+    let _pendingBuildMode = null;
     function buildPrograms(mode) {
+      // If a build is already in progress for the same mode, skip this call.
+      if (_buildInProgress && _pendingBuildMode === mode) return;
+      _buildInProgress = true;
+      _pendingBuildMode = mode;
+
       const container = document.getElementById('prog-container');
       const menuList = document.getElementById('menuList');
 
@@ -8184,28 +8196,31 @@ int main() {
 
       if (codeObserver) codeObserver.disconnect();
 
+      // Use a rootMargin of 200% so cards just off-screen still get highlighted quickly
       codeObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           const target = entry.target;
           if (entry.isIntersecting) {
             if (target._hlTimer) return;
+            // Small delay so multiple cards entering viewport at once are batched
             target._hlTimer = setTimeout(() => {
               target._hlTimer = null;
               const blocks = target.querySelectorAll('code:not(.hljs)');
               if (blocks.length) {
                 if (typeof hljs !== 'undefined') {
                   blocks.forEach((el, index) => {
+                    // Stagger by 16ms (1 frame) per block to avoid long tasks
                     setTimeout(() => {
                       delete el.dataset.highlighted;
                       hljs.highlightElement(el);
-                    }, index * 20);
+                    }, index * 16);
                   });
                   obs.unobserve(target);
                 }
               } else {
                 obs.unobserve(target);
               }
-            }, 150);
+            }, 80); // reduced from 150ms — snappier first highlight
           } else {
             if (target._hlTimer) {
               clearTimeout(target._hlTimer);
@@ -8213,8 +8228,9 @@ int main() {
             }
           }
         });
-      }, { root: document.getElementById('app'), rootMargin: '100% 0px' });
+      }, { root: document.getElementById('app'), rootMargin: '200% 0px' });
 
+      // Build both fragments off-DOM (no layout thrash)
       const fragment = document.createDocumentFragment();
       const menuFrag = document.createDocumentFragment();
 
@@ -8222,9 +8238,11 @@ int main() {
       data.forEach((prog, i) => {
         const [title, pattern, cCode, cppCode] = prog;
 
+        // ── Side menu list item ──
         const li = document.createElement('li');
         li.dataset.idx = i;
-        if (bm.includes(i)) li.classList.add('bookmarked');
+        const bmEntry = bm.find(b => b.idx === i);
+        if (bmEntry) li.classList.add('bookmarked');
         const numSpan = document.createElement('span');
         numSpan.className = 'prog-num';
         numSpan.textContent = i + 1;
@@ -8232,8 +8250,9 @@ int main() {
         titleSpan.className = 'prog-title';
         titleSpan.textContent = title;
         const starSpan = document.createElement('span');
-        starSpan.className = 'prog-star' + (bm.includes(i) ? ' starred' : '');
-        starSpan.innerHTML = bm.includes(i)
+        const isStarred = !!bmEntry;
+        starSpan.className = 'prog-star' + (isStarred ? ' starred' : '');
+        starSpan.innerHTML = isStarred
           ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>'
           : '<svg width="14" height="14"><use href="#ic-star"/></svg>';
         starSpan.onclick = (e) => { e.stopPropagation(); toggleBookmark(i); };
@@ -8241,18 +8260,19 @@ int main() {
         li.appendChild(titleSpan);
         li.appendChild(starSpan);
         li.onclick = () => {
-          const idx = i; // capture for async use
-          closeMenu();
+          const idx = i;
+          // Use closeMenuUI (sync) instead of closeMenu (async history.back)
+          // to avoid popstate race that snaps user back to home
+          closeMenuUI();
           clearMenuSearch();
-          // scrollIntoView must fire after popstate resolves (history.back is async)
-          // 350ms covers the sheet close animation + popstate + showAppUI transition
           setTimeout(() => {
             const el = document.getElementById('s' + idx);
             if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }, 350);
+          }, 50); // only need to wait for CSS transition to commit
         };
         menuFrag.appendChild(li);
 
+        // ── Program snap card ──
         const snap = document.createElement('div');
         snap.className = 'snap';
         snap.id = 's' + i;
@@ -8292,20 +8312,23 @@ int main() {
         codeObserver.observe(snap);
       });
 
+      // Append both fragments in one go — single reflow
       container.appendChild(fragment);
       menuList.appendChild(menuFrag);
 
-      // Highlight first visible card immediately if hljs is already loaded
-      function highlightFirst() {
-        if (typeof hljs === 'undefined') return; // lazy loader will re-trigger buildPrograms when ready
+      // Highlight only the first card immediately; the rest are handled by IntersectionObserver
+      if (typeof hljs !== 'undefined') {
         const firstSnap = container.querySelector('.snap');
-        if (!firstSnap) return;
-        firstSnap.querySelectorAll('code:not(.hljs)').forEach(el => {
-          delete el.dataset.highlighted;
-          hljs.highlightElement(el);
-        });
+        if (firstSnap) {
+          firstSnap.querySelectorAll('code:not(.hljs)').forEach(el => {
+            delete el.dataset.highlighted;
+            hljs.highlightElement(el);
+          });
+        }
       }
-      highlightFirst();
+
+      // Release build lock after this tick
+      _buildInProgress = false;
     }
 
     function makePane(lang, code) {
@@ -8885,17 +8908,24 @@ int main() {
           // Navigate on row click (except remove button)
           li.onclick = (e) => {
             if (e.target.closest('.bm-remove-btn')) return;
-            // FIX: closeMenuUI()+replaceState is SYNC — no async popstate race condition.
+            // closeMenuUI is SYNC — removes .show class immediately, CSS transition handles the rest.
+            // We then yield the frame so the browser can paint the sheet-close animation
+            // BEFORE openMode triggers the heavy buildPrograms DOM work.
             closeMenuUI();
             clearMenuSearch();
+            // Replace state so pressing back from code view goes Home (not back into sheet)
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
-            setTimeout(() => {
-              openMode(mode);
-              setTimeout(() => {
-                const el = document.getElementById('s' + idx);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 350);
-            }, 60); // 60ms lets sheet-close animation settle before building programs
+            // rAF ensures current frame (sheet removal) is committed before we do work
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                openMode(mode);
+                // Scroll after buildPrograms has populated the DOM (openMode uses its own rAF)
+                setTimeout(() => {
+                  const el = document.getElementById('s' + idx);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 420);
+              });
+            });
           };
 
           const modeLabel = mode === 'C' ? 'C' : mode === 'CPP' ? 'C++' : 'C&C++';
@@ -9011,74 +9041,78 @@ int main() {
     buildPrograms = function (mode) {
       _origBuildPrograms(mode);
 
-      // ── Fix 4: Add back button to every card topbar ──
-      document.querySelectorAll('.card-topbar').forEach((topbar) => {
-        // Avoid duplicates if buildPrograms is called multiple times
-        if (topbar.querySelector('.card-back-btn')) return;
-        const backBtn = document.createElement('button');
-        backBtn.className = 'card-back-btn';
-        backBtn.title = 'Back to home';
-        backBtn.setAttribute('aria-label', 'Back to home');
-        backBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
-        backBtn.onclick = (e) => { e.stopPropagation(); goHome(); };
-        topbar.insertBefore(backBtn, topbar.firstChild);
-      });
-      // Add bookmark button to each card topbar using snap's data index for correctness
-      document.querySelectorAll('.snap').forEach((snap) => {
-        const snapIdx = parseInt(snap.id.replace('s', ''));
-        if (isNaN(snapIdx)) return;
-        const topbar = snap.querySelector('.card-topbar');
-        if (!topbar || topbar.querySelector('.card-bookmark-btn')) return;
-        const bm = isBookmarked(snapIdx);
-        const btn = document.createElement('button');
-        btn.className = 'card-bookmark-btn' + (bm ? ' starred' : '');
-        btn.id = 'bm-btn-' + snapIdx;
-        btn.title = bm ? 'Remove bookmark' : 'Bookmark';
-        btn.innerHTML = bm
-          ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
-          : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
-        btn.onclick = (e) => { e.stopPropagation(); toggleBookmark(snapIdx); };
-        const progBadge = topbar.querySelector('.card-prog');
-        topbar.insertBefore(btn, progBadge || null);
-      });
+      // ── Defer ALL post-build DOM work into rAF so first paint is never blocked ──
+      requestAnimationFrame(() => {
+        // Add back + bookmark buttons to every card topbar
+        document.querySelectorAll('.card-topbar').forEach((topbar) => {
+          // Back button
+          if (!topbar.querySelector('.card-back-btn')) {
+            const backBtn = document.createElement('button');
+            backBtn.className = 'card-back-btn';
+            backBtn.title = 'Back to home';
+            backBtn.setAttribute('aria-label', 'Back to home');
+            backBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+            backBtn.onclick = (e) => { e.stopPropagation(); goHome(); };
+            topbar.insertBefore(backBtn, topbar.firstChild);
+          }
 
-      // Add line numbers to each code pane
-      document.querySelectorAll('.code-scroll pre').forEach(pre => {
-        const code = pre.querySelector('code');
-        if (!code) return;
-        const lineCount = (code.dataset.original || code.textContent).split('\n').length;
-        let nums = '';
-        for (let i = 1; i <= lineCount; i++) nums += i + '\n';
-        const lineNumEl = document.createElement('div');
-        lineNumEl.className = 'line-nums';
-        lineNumEl.textContent = nums;
-        pre.insertBefore(lineNumEl, code);
-      });
+          // Bookmark buttons
+          const snap = topbar.closest('.snap');
+          if (snap) {
+            const snapIdx = parseInt(snap.id.replace('s', ''));
+            if (!isNaN(snapIdx) && !topbar.querySelector('.card-bookmark-btn')) {
+              const bm = isBookmarked(snapIdx);
+              const btn = document.createElement('button');
+              btn.className = 'card-bookmark-btn' + (bm ? ' starred' : '');
+              btn.id = 'bm-btn-' + snapIdx;
+              btn.title = bm ? 'Remove bookmark' : 'Bookmark';
+              btn.innerHTML = bm
+                ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
+                : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
+              btn.onclick = (e) => { e.stopPropagation(); toggleBookmark(snapIdx); };
+              const progBadge = topbar.querySelector('.card-prog');
+              topbar.insertBefore(btn, progBadge || null);
+            }
+          }
+        });
 
-      // Bookmark stars are already injected in buildPrograms — no duplicate needed here
-
-      // Track last viewed as user scrolls
-      // Remove previous listener to prevent accumulation across mode switches
-      const appEl = document.getElementById('app');
-      if (_lastScrollTracker) appEl.removeEventListener('scroll', _lastScrollTracker);
-      const snapEls = document.querySelectorAll('.snap');
-      let lvTimer = null;
-      const trackLV = () => {
-        clearTimeout(lvTimer);
-        lvTimer = setTimeout(() => {
-          let best = null, bestTop = Infinity;
-          snapEls.forEach((s, i) => {
-            const top = Math.abs(s.getBoundingClientRect().top);
-            if (top < bestTop) { bestTop = top; best = i; }
+        // Line numbers — second rAF so buttons render first
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.code-scroll pre').forEach(pre => {
+            if (pre.querySelector('.line-nums')) return; // skip if already added
+            const code = pre.querySelector('code');
+            if (!code) return;
+            const lineCount = (code.dataset.original || code.textContent).split('\n').length;
+            // Use an array join instead of string concat — avoids O(n²) string copies
+            const nums = Array.from({ length: lineCount }, (_, i) => i + 1).join('\n');
+            const lineNumEl = document.createElement('div');
+            lineNumEl.className = 'line-nums';
+            lineNumEl.textContent = nums;
+            pre.insertBefore(lineNumEl, code);
           });
-          if (best !== null) saveLastViewed(mode, best);
-        }, 400);
-      };
-      _lastScrollTracker = trackLV;
-      appEl.addEventListener('scroll', trackLV, { passive: true });
+          // Track last viewed — set up once after DOM is stable
+          const appEl = document.getElementById('app');
+          if (_lastScrollTracker) appEl.removeEventListener('scroll', _lastScrollTracker);
+          const snapEls = document.querySelectorAll('.snap');
+          let lvTimer = null;
+          const trackLV = () => {
+            clearTimeout(lvTimer);
+            lvTimer = setTimeout(() => {
+              let best = null, bestTop = Infinity;
+              snapEls.forEach((s, i) => {
+                const top = Math.abs(s.getBoundingClientRect().top);
+                if (top < bestTop) { bestTop = top; best = i; }
+              });
+              if (best !== null) saveLastViewed(mode, best);
+            }, 400);
+          };
+          _lastScrollTracker = trackLV;
+          appEl.addEventListener('scroll', trackLV, { passive: true });
 
-      // Show swipe hint on first visit
-      showSwipeHintOnce();
+          // Show swipe hint on first visit
+          showSwipeHintOnce();
+        }); // end second rAF
+      }); // end first rAF
     };
 
     function setVH() {
