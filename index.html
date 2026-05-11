@@ -137,7 +137,7 @@
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       --radius: 16px;
       --code-size: 14px;
-      --gold: #f0b72f;
+      --star: #a78bfa;
     }
 
     [data-theme="light"] {
@@ -163,7 +163,7 @@
       --syn-op: #cf222e;
 
       --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      --gold: #f0b72f;
+      --star: #8250df;
     }
 
     /* Dynamic Font Sizing via Variables */
@@ -1436,6 +1436,68 @@
       background-color: var(--surface2);
       padding: 5px 11px;
       border-radius: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .bm-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color 0.15s ease, color 0.15s ease,
+        background-color 0.15s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      will-change: transform;
+    }
+
+    .bm-btn:hover {
+      border-color: #a78bfa;
+      color: #a78bfa;
+      background: rgba(167, 139, 250, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .bm-btn:active {
+      transform: scale(0.85);
+      transition-duration: 0.08s;
+    }
+
+    .bm-btn.starred {
+      color: #a78bfa;
+      border-color: rgba(167, 139, 250, 0.5);
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .bm-btn.starred:hover {
+      color: #c4b5fd;
+      border-color: #c4b5fd;
+      background: rgba(196, 181, 253, 0.15);
+    }
+
+    [data-theme="light"] .bm-btn:hover {
+      border-color: #8250df;
+      color: #8250df;
+      background: rgba(130, 80, 223, 0.08);
+    }
+
+    [data-theme="light"] .bm-btn.starred {
+      color: #8250df;
+      border-color: rgba(130, 80, 223, 0.45);
+      background: rgba(130, 80, 223, 0.08);
     }
 
     .pattern {
@@ -8358,7 +8420,8 @@ int main() {
           card.className = 'card';
           const topbar = document.createElement('div');
           topbar.className = 'card-topbar';
-          topbar.innerHTML = `<div class="card-title">${title}</div><div class="card-prog">${i + 1} / ${data.length}</div>`;
+          const isStarred = !!bmEntry;
+          topbar.innerHTML = `<div class="card-title">${title}</div><div class="card-actions"><div class="card-prog">${i + 1} / ${data.length}</div><button class="bm-btn${isStarred ? ' starred' : ''}" id="bm-btn-${i}" title="${isStarred ? 'Remove bookmark' : 'Bookmark'}" onclick="toggleBookmark(${i})">${isStarred ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>' : '<svg width="16" height="16"><use href="#ic-star"/></svg>'}</button></div>`;
           card.appendChild(topbar);
 
           if (pattern && pattern.trim() && title.toUpperCase().includes('PATTERN')) {
