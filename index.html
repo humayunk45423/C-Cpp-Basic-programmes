@@ -8137,10 +8137,6 @@ int main() {
       document.getElementById('sheet').classList.add('show');
       document.getElementById('overlay').classList.add('show');
       document.body.classList.add('sheet-open');
-      setTimeout(() => {
-        const search = document.getElementById('menuSearch');
-        if (search) search.focus();
-      }, 300);
     }
 
     function closeMenuUI() {
@@ -9013,7 +9009,8 @@ int main() {
       tabAll.setAttribute('aria-selected', tab === 'all' ? 'true' : 'false');
       tabBm.setAttribute('aria-selected', tab === 'bookmarks' ? 'true' : 'false');
       const items = document.querySelectorAll('#menuList li');
-      const bm = getBookmarks();
+      // Reverse bookmarks so the newest one appears at the top
+      const bm = getBookmarks().slice().reverse();
       const searchEl = document.getElementById('menuSearch');
       const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
       let visible = 0;
