@@ -1515,6 +1515,18 @@
       text-align: left;
     }
 
+    /* Elite Search Highlight */
+    .search-hl {
+      background-color: rgba(var(--star-rgb), 0.25);
+      color: var(--star);
+      border-radius: 2px;
+      padding: 0 1px;
+      font-weight: 800;
+    }
+    [data-theme="light"] .search-hl {
+      background-color: rgba(var(--star-rgb), 0.15);
+    }
+
 
 
 
@@ -8914,6 +8926,14 @@ int main() {
       requestAnimationFrame(() => switchSheetTab('bookmarks'));
     }
 
+    window.exportBookmarks = function() {
+      const bm = getBookmarks();
+      if (!bm.length) return;
+      const list = bm.map((b, i) => `${i+1}. ${data[b.idx][0]} (${b.mode})`).join('\n');
+      const text = `DUET Code Study List:\n${list}\n\nGenerated via DUET Code App.`;
+      copyCode(text, document.querySelector('#menuList .copy-btn'));
+    };
+
     // ================================================
     // LAST VIEWED — remember which program + mode was last open
     // ================================================
@@ -9111,6 +9131,13 @@ int main() {
       return score;
     }
 
+    // Elite: Visual Search Highlighting
+    function highlightMatch(text, q) {
+      if (!q) return text;
+      const regex = new RegExp(`(${q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
+      return text.replace(regex, '<mark class="search-hl">$1</mark>');
+    }
+
     // ================================================
     // HOME SEARCH
     // ================================================
@@ -9131,7 +9158,7 @@ int main() {
           results.innerHTML = matches.map(m =>
             `<div class="hsr-item" onclick="homeSearchOpen(${m.i})">
           <span class="hsr-num">${m.i + 1}</span>
-          <span>${m.title}</span>
+          <span>${highlightMatch(m.title, q)}</span>
           <span class="hsr-mode">Open →</span>
         </div>`
           ).join('');
@@ -9196,6 +9223,16 @@ int main() {
         const listEl = document.getElementById('menuList');
         // Remove old bm-extra entries
         listEl.querySelectorAll('[data-bm-extra]').forEach(el => el.remove());
+
+        // Header for bookmark tab with Export button
+        const hdr = document.createElement('li');
+        hdr.dataset.bmExtra = '1';
+        hdr.style.cssText = 'padding:12px 16px 8px;display:flex;justify-content:space-between;align-items:center;background:var(--surface);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border)';
+        hdr.innerHTML = `<span style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${bm.length} Saved</span>
+          <button class="copy-btn" style="padding:4px 8px;font-size:10px" onclick="exportBookmarks()">
+            <svg width="11" height="11" style="vertical-align:-1px;margin-right:4px"><use href="#ic-copy"/></svg>Copy Study List
+          </button>`;
+        listEl.appendChild(hdr);
 
         bm.forEach((entry, bmEntryIndex) => {
           const { idx, mode } = entry;
@@ -9265,7 +9302,7 @@ int main() {
 
           li.innerHTML = `
             <span class="prog-num" style="flex-shrink:0">${idx + 1}</span>
-            <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${title}</span>
+            <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${highlightMatch(title, q)}</span>
             <span class="bm-mode-badge">${modeLabel}</span>`;
           li.appendChild(removeBtn);
           listEl.appendChild(li);
@@ -9275,13 +9312,18 @@ int main() {
         // IMPORTANT: remove bm-extra entries FIRST so they don't pollute the query
         document.querySelectorAll('#menuList [data-bm-extra]').forEach(el => el.remove());
         // Now query only the real program items using Elite fuzzy search
-        document.querySelectorAll('#menuList li').forEach(li => {
+        document.querySelectorAll('#menuList li:not([data-bm-extra])').forEach(li => {
           const titleEl = li.querySelector('.prog-title');
-          const text = titleEl ? titleEl.textContent : li.textContent;
+          const text = titleEl ? titleEl.dataset.orig || titleEl.textContent : li.textContent;
+          if (titleEl && !titleEl.dataset.orig) titleEl.dataset.orig = text; // store original title
+          
           const score = q ? fuzzyMatch(text, q) : 1;
           const inSearch = score > 0;
           li.style.display = inSearch ? '' : 'none';
-          if (inSearch) visible++;
+          if (inSearch) {
+            if (titleEl) titleEl.innerHTML = highlightMatch(text, q);
+            visible++;
+          }
         });
       }
 
