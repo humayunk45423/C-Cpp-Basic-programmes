@@ -1492,10 +1492,12 @@ body {
 /* ===================== HOME CHIPS (Recent + Bookmarks) ===================== */
 .home-chips-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;        /* ALWAYS one row — never stack */
   gap: 8px;
   margin-top: 8px;
   align-items: center;
+  max-width: 100%;          /* never overflow hero */
+  overflow: hidden;
 }
 .last-viewed-chip {
   display: inline-flex;
@@ -1509,9 +1511,17 @@ body {
   font-weight: 700;
   color: var(--accent);
   cursor: pointer;
-  margin-top: 6px;
+  /* flex-shrink so it compresses when bookmark chip is beside it */
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
   transition: background 0.15s, transform 0.15s;
-  animation: chip-in 0.4s cubic-bezier(0.34,1.4,0.64,1) 0.35s forwards;
+}
+#last-viewed-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 .last-viewed-chip:hover { background: rgba(88,166,255,0.18); transform: scale(1.03); }
 .last-viewed-chip:active { transform: scale(0.97); }
@@ -1530,7 +1540,9 @@ body {
   cursor: pointer;
   transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
   box-shadow: 0 0 10px rgba(210,168,255,0.12);
-  animation: chip-in 0.4s cubic-bezier(0.34,1.4,0.64,1) 0.45s forwards;
+  /* Never shrink — bookmark chip always shows fully */
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .home-bm-chip:hover { background: linear-gradient(135deg,rgba(88,166,255,0.18) 0%,rgba(210,168,255,0.22) 100%); transform: scale(1.03); box-shadow: 0 0 14px rgba(210,168,255,0.22); }
 .home-bm-chip:active { transform: scale(0.97); }
@@ -6100,8 +6112,9 @@ function buildPrograms(mode) {
     titleSpan.className = 'prog-title';
     titleSpan.textContent = title;
     const starSpan = document.createElement('span');
-    starSpan.className = 'prog-star' + (bm.includes(i) ? ' starred' : '');
-    starSpan.innerHTML = bm.includes(i)
+    const bmForMode = isBookmarked(i, currentMode);
+    starSpan.className = 'prog-star' + (bmForMode ? ' starred' : '');
+    starSpan.innerHTML = bmForMode
       ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>'
       : '<svg width="14" height="14"><use href="#ic-star"/></svg>';
     starSpan.onclick = (e) => { e.stopPropagation(); toggleBookmark(i); };
@@ -6849,7 +6862,7 @@ buildPrograms = function(mode) {
     if (isNaN(snapIdx)) return;
     const topbar = snap.querySelector('.card-topbar');
     if (!topbar || topbar.querySelector('.card-bookmark-btn')) return;
-    const bm = isBookmarked(snapIdx);
+    const bm = isBookmarked(snapIdx, currentMode);
     const btn = document.createElement('button');
     btn.className = 'card-bookmark-btn' + (bm ? ' starred' : '');
     btn.id = 'bm-btn-' + snapIdx;
@@ -6857,6 +6870,7 @@ buildPrograms = function(mode) {
     btn.innerHTML = bm
       ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
       : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
+    btn.style.color = bm ? '#d2a8ff' : '';
     btn.onclick = (e) => { e.stopPropagation(); toggleBookmark(snapIdx); };
     const progBadge = topbar.querySelector('.card-prog');
     topbar.insertBefore(btn, progBadge || null);
