@@ -8442,8 +8442,46 @@ int main() {
           const topbar = document.createElement('div');
           topbar.className = 'card-topbar';
           const isStarred = !!bmEntry;
-          topbar.innerHTML = `<div class="card-title">${title}</div><div class="card-actions"><div class="card-prog">${i + 1} / ${data.length}</div><button class="bm-btn${isStarred ? ' starred' : ''}" id="bm-btn-${i}" title="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-label="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-pressed="${isStarred}" onclick="toggleBookmark(${i})">${isStarred ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>' : '<svg width="16" height="16"><use href="#ic-star"/></svg>'}</button></div>`;
+
+          // Integrated Back Button
+          const backBtn = document.createElement('button');
+          backBtn.className = 'card-back-btn';
+          backBtn.title = 'Back to home';
+          backBtn.setAttribute('aria-label', 'Back to home');
+          backBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+          backBtn.onclick = (e) => { e.stopPropagation(); goHome(); };
+          topbar.appendChild(backBtn);
+
+          // Card Title
+          const cardTitle = document.createElement('div');
+          cardTitle.className = 'card-title';
+          cardTitle.textContent = title;
+          topbar.appendChild(cardTitle);
+
+          // Card Actions (Prog + Bookmark)
+          const cardActions = document.createElement('div');
+          cardActions.className = 'card-actions';
+          const bmHtml = isStarred ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>' : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
+          cardActions.innerHTML = `<div class="card-prog">${i + 1} / ${data.length}</div><button class="bm-btn${isStarred ? ' starred' : ''}" id="bm-btn-${i}" title="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-label="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-pressed="${isStarred}" onclick="toggleBookmark(${i})">${bmHtml}</button>`;
+          topbar.appendChild(cardActions);
+
           card.appendChild(topbar);
+
+          // Onboarding: Show bookmark tooltip once on the very first card
+          if (i === 0 && !localStorage.getItem('duet-bm-hint')) {
+            setTimeout(() => {
+              const bmBtn = document.getElementById('bm-btn-0');
+              if (bmBtn) {
+                const tip = document.createElement('div');
+                tip.className = 'bm-tip';
+                tip.innerHTML = 'Save for later';
+                bmBtn.appendChild(tip);
+                setTimeout(() => { tip.classList.add('show'); }, 500);
+                setTimeout(() => { tip.classList.remove('show'); setTimeout(() => tip.remove(), 400); }, 4500);
+                localStorage.setItem('duet-bm-hint', '1');
+              }
+            }, 1000);
+          }
           if (pattern && pattern.trim()) {
             if (title.toUpperCase().includes('PATTERN')) {
               const pat = document.createElement('div');
@@ -9330,54 +9368,6 @@ int main() {
 
       // ── Defer ALL post-build DOM work into rAF so first paint is never blocked ──
       requestAnimationFrame(() => {
-        // Add back + bookmark buttons to every card topbar
-        document.querySelectorAll('.card-topbar').forEach((topbar) => {
-          // Back button
-          if (!topbar.querySelector('.card-back-btn')) {
-            const backBtn = document.createElement('button');
-            backBtn.className = 'card-back-btn';
-            backBtn.title = 'Back to home';
-            backBtn.setAttribute('aria-label', 'Back to home');
-            backBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
-            backBtn.onclick = (e) => { e.stopPropagation(); goHome(); };
-            topbar.insertBefore(backBtn, topbar.firstChild);
-          }
-
-          // Bookmark buttons
-          const snap = topbar.closest('.snap');
-          if (snap) {
-            const snapIdx = parseInt(snap.id.replace('s', ''));
-            if (!isNaN(snapIdx) && !topbar.querySelector('.card-bookmark-btn')) {
-              // BUG FIX: Pass currentMode so a bookmark in C mode doesn't 
-              // show up incorrectly as a bookmark in CPP mode
-              const bm = isBookmarked(snapIdx, mode); 
-              const btn = document.createElement('button');
-              btn.className = 'card-bookmark-btn' + (bm ? ' starred' : '');
-              btn.id = 'bm-btn-' + snapIdx;
-              btn.title = bm ? 'Remove bookmark' : 'Bookmark';
-              btn.innerHTML = bm
-                ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
-                : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
-              btn.onclick = (e) => { e.stopPropagation(); toggleBookmark(snapIdx); };
-              const progBadge = topbar.querySelector('.card-prog');
-              topbar.insertBefore(btn, progBadge || null);
-
-              // Onboarding: Show bookmark tooltip once on the very first card
-              if (snapIdx === 0 && !localStorage.getItem('duet-bm-hint')) {
-                setTimeout(() => {
-                  const tip = document.createElement('div');
-                  tip.className = 'bm-tip';
-                  tip.innerHTML = 'Save for later';
-                  btn.appendChild(tip);
-                  setTimeout(() => { tip.classList.add('show'); }, 500);
-                  setTimeout(() => { tip.classList.remove('show'); setTimeout(() => tip.remove(), 400); }, 4500);
-                  localStorage.setItem('duet-bm-hint', '1');
-                }, 1000);
-              }
-            }
-          }
-        });
-
         // Restore swipe hint
         showSwipeHintOnce();
 
