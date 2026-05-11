@@ -135,6 +135,7 @@
       --accent: #58a6ff;
       --accent2: #d2a8ff;
       --code-bg: #010409;
+      --surface-trans: rgba(13, 17, 23, 0.85);
 
       /* Syntax Highlighting Tokens - Dark Mode */
       --syn-kw: #ff7b72;
@@ -157,6 +158,7 @@
       --bg: #f6f8fa;
       --surface: #ffffff;
       --surface2: #e9e8f5;
+      --surface-trans: rgba(255, 255, 255, 0.82);
       /* Blue/purple minimalistic tint */
       --border: #d4cdec;
       /* Light purple line tint */
@@ -1397,8 +1399,20 @@
       transition: border-color 0.12s ease, color 0.12s ease,
         background-color 0.12s ease, transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
       touch-action: manipulation;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       will-change: transform;
+      position: relative;
+    }
+
+    /* Elite: Invisible 48px hit-box for small navigation icons */
+    .card-back-btn::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
     }
 
     .card-back-btn:hover {
@@ -1420,7 +1434,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: var(--surface);
+      background-color: var(--surface-trans, rgba(13, 17, 23, 0.85));
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
       border-bottom: 1px solid var(--border);
       padding: 13px 18px;
       flex-shrink: 0;
@@ -1475,6 +1491,17 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       will-change: transform;
+      position: relative;
+    }
+
+    /* Elite: Invisible 48px hit-box for bookmarking */
+    .bm-btn::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
     }
 
     .bm-btn:hover {
@@ -8388,16 +8415,25 @@ int main() {
       if (!state || state.screen === 'home') {
         showHomeUI();
       } else if (state.screen === 'app') {
-        // If the back button leads to an older mode view, rebuild that view cleanly
         if (state.mode && state.mode !== currentMode) {
           currentMode = state.mode;
-          currentLayout = 'row';
-          document.getElementById('layoutIcon').innerHTML = `<use href="#ic-split"/>`;
+          currentLayout = safeGet('duet-layout') || 'row';
+          const iconId = currentLayout === 'row' ? '#ic-split' : '#ic-stacked';
+          document.getElementById('layoutIcon').innerHTML = `<use href="${iconId}"/>`;
           buildPrograms(state.mode);
           document.getElementById('layoutFab').style.display = state.mode === 'BOTH' ? 'flex' : 'none';
         }
+
+        // Elite: Snap to last viewed index for this mode every time we return to App UI
+        const lv = getLastViewed();
+        if (lv && lv.mode === (state.mode || currentMode)) {
+          let attempts = 0;
+          const trySnap = () => { if (!_snapTo(lv.idx) && attempts++ < 20) setTimeout(trySnap, 100); };
+          trySnap();
+        }
+
         showAppUI();
-        closeMenuUI(); // Automatically close menu if coming back from the menu screen
+        closeMenuUI();
       } else if (state.screen === 'menu') {
         showAppUI();
         openMenuUI();
