@@ -8141,6 +8141,13 @@ int main() {
         delete el.dataset.highlighted;
         el.textContent = (currentIndent === 'flat') ? flattenCode(original) : original;
         
+        // Elite: Refresh line numbers to match the new text transformation
+        const lineNums = el.previousElementSibling;
+        if (lineNums && lineNums.classList.contains('line-nums')) {
+           const lineCount = el.textContent.split('\n').length;
+           lineNums.textContent = Array.from({ length: lineCount }, (_, k) => k + 1).join('\n');
+        }
+        
         // Immediate highlight for the first 10 (likely visible), defer rest
         if (i < 10) {
           if (typeof hljs !== 'undefined') hljs.highlightElement(el);
@@ -8590,7 +8597,6 @@ int main() {
           card.appendChild(topbar);
 
           // Onboarding: Show bookmark tooltip once on the very first card
-          // Onboarding: Show bookmark tooltip once on the very first card
           if (i === 0 && !safeGet('duet-bm-hint')) {
             setTimeout(() => {
               const bmBtn = document.getElementById('bm-btn-0');
@@ -8605,7 +8611,8 @@ int main() {
               }
             }, 1000);
           }
-          if (pattern && pattern.trim() && title.toUpperCase().includes('PATTERN')) {
+          // Elite: Show pattern demo if pattern string exists (inclusive of all pyramids/triangles)
+          if (pattern && pattern.trim()) {
             const pat = document.createElement('div');
             pat.className = 'pattern';
             pat.textContent = pattern;
@@ -9013,10 +9020,10 @@ int main() {
       if (existIdx !== -1) {
         // Remove ALL instances of this index to ensure clean un-starring
         bm = bm.filter(b => b.idx !== idx);
-        showToast('<svg width="15" height="15" style="flex-shrink:0"><use href="#ic-star"/></svg><span>Bookmark removed</span>');
+        showToast(T_ICON('ic-star') + '<span>Bookmark removed</span>');
       } else {
         bm.push({ idx, mode });
-        showToast('<svg width="15" height="15" style="flex-shrink:0"><use href="#ic-star-filled"/></svg><span>Bookmarked!</span>');
+        showToast(T_ICON('ic-star-filled') + '<span>Bookmarked!</span>');
       }
       setBookmarks(bm);
       // Update card btn
