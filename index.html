@@ -8238,8 +8238,8 @@ int main() {
           clearMenuSearch();
           setTimeout(() => {
             const el = document.getElementById('s' + idx);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }, 50); // only need to wait for CSS transition to commit
+            if (el) _snapTo(idx);
+          }, 50);
         };
         menuFrag.appendChild(li);
 
@@ -8698,22 +8698,38 @@ int main() {
         chip.style.display = 'none';
       }
     }
+    // ================================================
+    // SNAP SCROLL HELPER — instant jump to exact snap point
+    // scrollIntoView({behavior:'smooth'}) fights scroll-snap-type and
+    // lands between cards. We disable scroll-behavior briefly, set
+    // scrollTop directly (which snaps instantly), then restore.
+    // ================================================
+    function _snapTo(idx) {
+      const app = document.getElementById('app');
+      const el  = document.getElementById('s' + idx);
+      if (!app || !el) return;
+      app.style.scrollBehavior = 'auto';
+      app.scrollTop = el.offsetTop;
+      requestAnimationFrame(() => { app.style.scrollBehavior = ''; });
+    }
+
     function resumeLastViewed() {
       const lv = getLastViewed();
       if (!lv) return;
       openMode(lv.mode);
-      // Poll for the target element — buildPrograms is deferred via rAF+_loadHljs
-      // so the element may not exist immediately. Poll up to 2s then give up.
+      // Poll — element is built asynchronously via rAF chain.
+      // Two nested rAFs after finding the element ensure layout is committed
+      // before we set scrollTop, so the snap point lands exactly on the card.
       let attempts = 0;
       const tryScroll = () => {
         const el = document.getElementById('s' + lv.idx);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        } else if (attempts++ < 20) {
-          setTimeout(tryScroll, 100);
+          requestAnimationFrame(() => requestAnimationFrame(() => _snapTo(lv.idx)));
+        } else if (attempts++ < 25) {
+          setTimeout(tryScroll, 80);
         }
       };
-      setTimeout(tryScroll, 150);
+      setTimeout(tryScroll, 80);
     }
 
     // ================================================
@@ -8840,19 +8856,19 @@ int main() {
       const results = document.getElementById('home-search-results');
       if (input) input.value = '';
       if (results) results.classList.remove('open');
-      // Open in BOTH mode from home search
       openMode('BOTH');
-      // Poll for the element — openMode defers build via rAF + _loadHljs
+      // Instant snap scroll — poll for element, then use scrollTop (not scrollIntoView)
+      // to avoid scroll-snap conflict
       let attempts = 0;
       const tryScroll = () => {
         const el = document.getElementById('s' + idx);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
+          requestAnimationFrame(() => requestAnimationFrame(() => _snapTo(idx)));
         } else if (attempts++ < 20) {
-          setTimeout(tryScroll, 100);
+          setTimeout(tryScroll, 80);
         }
       };
-      setTimeout(tryScroll, 150);
+      setTimeout(tryScroll, 80);
     };
 
     // ================================================
@@ -8903,17 +8919,17 @@ int main() {
             // openMode — otherwise buildPrograms blocks the main thread mid-animation
             setTimeout(() => {
               openMode(mode);
-              // Scroll after buildPrograms populates DOM — poll because of rAF deferral
+              // Instant snap scroll after build — poll for element
               let attempts = 0;
               const tryScroll = () => {
                 const el = document.getElementById('s' + idx);
                 if (el) {
-                  el.scrollIntoView({ behavior: 'smooth' });
+                  requestAnimationFrame(() => requestAnimationFrame(() => _snapTo(idx)));
                 } else if (attempts++ < 15) {
                   setTimeout(tryScroll, 100);
                 }
               };
-              setTimeout(tryScroll, 100);
+              setTimeout(tryScroll, 80);
             }, 400);
           };
 
