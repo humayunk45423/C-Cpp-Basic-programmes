@@ -713,9 +713,9 @@ body {
   .hero { max-width: 960px; }
   .hero-title { font-size: clamp(48px, 4vw, 68px); }
   .hero-sub { font-size: 18px; }
-  .home-search-wrap { max-width: 832px; /* 960px - 64px*2 = card collective width */ margin-top: 22px; }
-  .mode-grid { max-width: 960px; padding: 0 48px; gap: 20px; margin: 22px auto 14px; }
-  .action-grid { max-width: 960px; padding: 0 48px; gap: 20px; margin: 0 auto; }
+  .home-search-wrap { max-width: 832px; margin: 22px auto 0; }
+  .mode-grid { width: 100%; max-width: 960px; padding: 0 64px; gap: 20px; margin: 22px auto 14px; }
+  .action-grid { width: 100%; max-width: 960px; padding: 0 64px; gap: 20px; margin: 0 auto; }
   .code-scroll { padding: 24px 32px; }
   .card-topbar { padding: 18px 28px; }
   .card-title { font-size: 16px; }
@@ -2066,8 +2066,14 @@ if ('serviceWorker' in navigator) {
   <symbol id="ic-font" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></symbol>
   <symbol id="ic-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
   <symbol id="ic-indent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="7" y1="11" x2="21" y2="11"/><line x1="11" y1="16" x2="21" y2="16"/><polyline points="3 11 5 13 3 15"/></symbol>
+  <defs>
+    <linearGradient id="grad-star" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#58a6ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d2a8ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
   <symbol id="ic-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
-  <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="url(#grad-star)" stroke="url(#grad-star)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
   <symbol id="ic-flat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
 </svg>
 
