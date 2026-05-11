@@ -8335,8 +8335,14 @@ int main() {
       _sheetTab = 'all';
       const tabAll = document.getElementById('tab-all');
       const tabBm = document.getElementById('tab-bm');
-      if (tabAll) tabAll.classList.add('active');
-      if (tabBm) tabBm.classList.remove('active');
+      if (tabAll) {
+        tabAll.classList.add('active');
+        tabAll.setAttribute('aria-selected', 'true');
+      }
+      if (tabBm) {
+        tabBm.classList.remove('active');
+        tabBm.setAttribute('aria-selected', 'false');
+      }
     }
 
     // Accessibility: Focus trap for side sheet
