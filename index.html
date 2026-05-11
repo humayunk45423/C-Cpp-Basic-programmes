@@ -14,6 +14,11 @@
 })();
 </script>
 <meta charset="UTF-8">
+<!-- Theme color for mobile browser chrome -->
+<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f8fa" media="(prefers-color-scheme: light)">
+<!-- Font preloads for zero FOUT -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="description" content="109 fundamental C and C++ programs from the DUET admission syllabus. Browse, copy and compare side by side. Free offline APK available.">
@@ -862,8 +867,8 @@ body {
 
 /* ===================== CSS VARIABLE SYNTAX HIGHLIGHTING ===================== */
 .hljs-keyword, .hljs-type, .hljs-literal { color: var(--syn-kw); font-weight: 700; }
-.hljs-string { color: #3fb950; font-weight: 600; }
-[data-theme="light"] .hljs-string { color: #1a7f37; font-weight: 600; }
+.hljs-string { color: var(--syn-str); font-weight: 600; }
+/* Light mode strings use --syn-str (#0a3069) — no override needed */
 .hljs-number { color: var(--syn-num); }
 .hljs-comment { color: var(--syn-cmt); font-style: italic; }
 .hljs-meta { color: var(--syn-cmt); font-weight: 700; }
@@ -990,27 +995,33 @@ body {
 }
 [data-theme="light"] .dl-pdf::before { background: linear-gradient(135deg, rgba(0, 86, 179, 0.05), transparent); }
 
+/* APK card — purple palette to differentiate from PDF blue */
 .dl-apk {
-  border: 1px solid rgba(88, 166, 255, 0.4);
+  border: 1px solid rgba(210, 168, 255, 0.4);
 }
-[data-theme="light"] .dl-apk { border: 1px solid rgba(0, 86, 179, 0.3); }
+[data-theme="light"] .dl-apk { border: 1px solid rgba(130, 80, 223, 0.3); }
 .dl-apk::before {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(88, 166, 255, 0.08), transparent);
+  background: linear-gradient(135deg, rgba(210,168,255,0.08), transparent);
   pointer-events: none;
 }
-[data-theme="light"] .dl-apk::before { background: linear-gradient(135deg, rgba(0, 86, 179, 0.05), transparent); }
+[data-theme="light"] .dl-apk::before { background: linear-gradient(135deg, rgba(130,80,223,0.05), transparent); }
 
 .dl-icon {
   width: 48px; height: 48px; flex-shrink: 0;
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
 }
-.dl-pdf .dl-icon, .dl-apk .dl-icon {
+.dl-pdf .dl-icon {
   color: #58a6ff;
   background: rgba(88,166,255,0.12);
 }
-[data-theme="light"] .dl-pdf .dl-icon, [data-theme="light"] .dl-apk .dl-icon { color: #0056b3; background: rgba(0,86,179,0.1); }
+[data-theme="light"] .dl-pdf .dl-icon { color: #0056b3; background: rgba(0,86,179,0.1); }
+.dl-apk .dl-icon {
+  color: var(--accent2);
+  background: rgba(210,168,255,0.12);
+}
+[data-theme="light"] .dl-apk .dl-icon { color: #8250df; background: rgba(130,80,223,0.10); }
 
 .dl-body { flex: 1; min-width: 0; }
 .dl-title {
@@ -1289,9 +1300,14 @@ body {
   outline: none;
 }
 
+.home-search:hover {
+  border-color: var(--muted);
+  box-shadow: 0 0 0 1px rgba(88,166,255,0.06);
+}
 .home-search:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(88,166,255,0.14);
+  box-shadow: 0 0 0 3px rgba(88,166,255,0.14),
+              0 2px 8px rgba(88,166,255,0.08);
   background: var(--surface);
 }
 .home-search::placeholder { color: var(--muted); }
@@ -1422,6 +1438,9 @@ body {
 .mode-grid .mode-card:nth-child(1) { animation-delay: 0.05s; }
 .mode-grid .mode-card:nth-child(2) { animation-delay: 0.12s; }
 .mode-grid .mode-card:nth-child(3) { animation-delay: 0.19s; }
+/* Download card stagger */
+.pdf-box  { animation: card-in 0.45s cubic-bezier(0.34,1.4,0.64,1) 0.26s forwards; opacity: 0; }
+.apk-box  { animation: card-in 0.45s cubic-bezier(0.34,1.4,0.64,1) 0.33s forwards; opacity: 0; }
 
 @keyframes card-in {
   from { opacity: 0; transform: translateY(18px) scale(0.97); }
@@ -1496,6 +1515,14 @@ body {
   text-transform: uppercase;
 }
 .sheet-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Active program highlight in sheet list */
+.sheet-list li.active-program {
+  background: rgba(88,166,255,0.08);
+  color: var(--accent);
+  border-left: 2px solid var(--accent);
+  padding-left: 22px;
+}
 
 /* ===================== RESPONSIVE updates for new elements ===================== */
 @media(min-width: 600px) {
@@ -1906,6 +1933,11 @@ if ('serviceWorker' in navigator) {
 </svg>
 </head>
 <body>
+<!-- Skip navigation for keyboard/screen reader users -->
+<a href="#home" class="skip-link" style="position:absolute;top:-100%;left:0;background:var(--accent);color:#fff;padding:8px 16px;font-weight:800;z-index:999999;border-radius:0 0 8px 0;text-decoration:none;transition:top 0.1s;font-family:var(--font-ui);font-size:14px;">Skip to content</a>
+<style>.skip-link:focus{top:0!important;}</style>
+<!-- Screen reader live announcer -->
+<div id="sr-live" role="status" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;"></div>
 <noscript>
   <style>
     #loader-wrapper { display: none !important; }
@@ -2387,7 +2419,7 @@ if ('serviceWorker' in navigator) {
 </svg>
         DUET Admission Syllabus
       </a>
-      <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><svg width="22px" height="22px"><use href="#ic-sun"/></svg></button>
+      <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Switch to light mode"><svg width="22px" height="22px"><use href="#ic-sun"/></svg></button>
     </div>
 
     <div class="hero">
