@@ -18,14 +18,12 @@
   <!-- Theme color for mobile browser chrome -->
   <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f8fa" media="(prefers-color-scheme: light)">
-  <!-- Font preloads for zero FOUT -->
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="canonical" href="https://humayounkobir.vercel.app">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="color-scheme" content="dark light">
   <meta name="description"
     content="109 fundamental C and C++ programs from the DUET admission syllabus. Browse, copy and compare side by side. Free offline APK available.">
-  <meta name="keywords" content="DUET, C programming, C++, programs, admission, syllabus">
+  <meta name="author" content="Humayun Kobir">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="DUET C &amp; C++ Programs">
   <meta property="og:description"
@@ -121,7 +119,6 @@
       --muted: #8b949e;
       --accent: #58a6ff;
       --accent2: #d2a8ff;
-      --accent4: #d2a8ff;
       --code-bg: #010409;
 
       /* Syntax Highlighting Tokens - Dark Mode */
@@ -151,7 +148,6 @@
       --muted: #57606a;
       --accent: #0969da;
       --accent2: #8250df;
-      --accent4: #8250df;
       --code-bg: #f6f8fa;
 
       /* Syntax Highlighting Tokens - Light Mode */
@@ -764,7 +760,7 @@
       }
 
       .mode-card:nth-child(3):hover {
-        border-color: var(--accent4);
+        border-color: var(--accent2);
         box-shadow: 0 12px 32px rgba(210, 168, 255, 0.15);
       }
 
@@ -775,7 +771,7 @@
       }
 
       .mode-card:nth-child(3):hover::after {
-        border-color: var(--accent4);
+        border-color: var(--accent2);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d2a8ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E");
         background-color: rgba(210, 168, 255, 0.12);
       }
@@ -1072,7 +1068,7 @@
       .mode-card:nth-child(3) .card-icon {
         background: rgba(210, 168, 255, 0.1);
         border-color: rgba(210, 168, 255, 0.2);
-        color: var(--accent4);
+        color: var(--accent2);
       }
 
       .card-label {
@@ -1465,9 +1461,9 @@
     }
 
     .bm-btn:hover {
-      border-color: #a78bfa;
-      color: #a78bfa;
-      background: rgba(167, 139, 250, 0.12);
+      border-color: var(--star);
+      color: var(--star);
+      background: rgba(var(--star-rgb, 167, 139, 250), 0.12);
       transform: translateY(-1px);
     }
 
@@ -1477,27 +1473,27 @@
     }
 
     .bm-btn.starred {
-      color: #a78bfa;
-      border-color: rgba(167, 139, 250, 0.5);
-      background: rgba(167, 139, 250, 0.1);
+      color: var(--star);
+      border-color: rgba(var(--star-rgb, 167, 139, 250), 0.5);
+      background: rgba(var(--star-rgb, 167, 139, 250), 0.1);
     }
 
     .bm-btn.starred:hover {
-      color: #c4b5fd;
-      border-color: #c4b5fd;
-      background: rgba(196, 181, 253, 0.15);
+      color: var(--star);
+      border-color: var(--star);
+      background: rgba(var(--star-rgb, 167, 139, 250), 0.15);
     }
 
     [data-theme="light"] .bm-btn:hover {
-      border-color: #8250df;
-      color: #8250df;
-      background: rgba(130, 80, 223, 0.08);
+      border-color: var(--star);
+      color: var(--star);
+      background: rgba(var(--star-rgb, 130, 80, 223), 0.08);
     }
 
     [data-theme="light"] .bm-btn.starred {
-      color: #8250df;
-      border-color: rgba(130, 80, 223, 0.45);
-      background: rgba(130, 80, 223, 0.08);
+      color: var(--star);
+      border-color: rgba(var(--star-rgb, 130, 80, 223), 0.45);
+      background: rgba(var(--star-rgb, 130, 80, 223), 0.08);
     }
 
     .pattern {
@@ -1521,6 +1517,23 @@
 
 
 
+
+    .prog-desc {
+      background-color: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 10px 18px;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .prog-desc {
+      color: var(--text);
+      opacity: 0.8;
+    }
 
     .panes {
       display: flex;
@@ -1612,8 +1625,8 @@
     }
 
     .lang-dot.cpp {
-      background-color: var(--accent4);
-      filter: drop-shadow(0 0 4px var(--accent4));
+      background-color: var(--accent2);
+      filter: drop-shadow(0 0 4px var(--accent2));
     }
 
     .copy-btn {
@@ -2511,7 +2524,7 @@
       left: 0;
       height: 3px;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent4));
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
       z-index: 99998;
       transition: width 0.2s ease, opacity 0.3s ease;
       opacity: 0;
@@ -3884,7 +3897,7 @@
   <!-- SVG Icons -->
   <div id="theme-flash" aria-hidden="true"></div>
   <div id="progress-bar"></div>
-  <div id="swipe-hint">
+  <div id="swipe-hint" aria-hidden="true">
     <svg class="swipe-hint-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);opacity:0.6">
       <polyline points="6 9 12 15 18 9" />
@@ -4845,6 +4858,12 @@
           <use href="#ic-home" />
         </svg>
       </button>
+      <button class="fab fab-collapsible" id="topFab" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+        <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
       <button class="fab fab-collapsible" id="layoutFab" onclick="toggleLayout()" title="Change Layout"
         aria-label="Toggle Layout" style="display:none;">
         <svg id="layoutIcon" width="22px" height="22px">
@@ -4882,14 +4901,14 @@
     <!-- Always-visible fixed pair -->
     <div class="fabs-fixed">
       <!-- Toggle arrow -->
-      <button class="fab" id="fabToggle" onclick="toggleFabs()" title="Show/hide buttons" aria-label="Toggle buttons">
+      <button class="fab" id="fabToggle" onclick="toggleFabs()" title="Show settings" aria-label="Open settings menu" aria-expanded="false">
         <svg class="toggle-icon" width="22px" height="22px" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="18 15 12 9 6 15" />
         </svg>
       </button>
       <!-- Search/jump — always present -->
-      <button class="fab" onclick="toggleMenu()" title="Jump to program" aria-label="Quick jump">
+      <button class="fab" id="fabSearch" onclick="toggleMenu()" title="Jump to program" aria-label="Jump to program list">
         <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8" />
@@ -4900,7 +4919,7 @@
 
   </div>
 
-  <div class="sheet" id="sheet">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="sheet-hdr">
       <h3 id="sheetTitle">Quick Jump</h3>
       <button class="sheet-close" onclick="closeMenu()" aria-label="Close"><svg width="20px" height="20px">
@@ -7973,7 +7992,7 @@ int main() {
     a = a - b;
     cout << "After : a = " << a << ", b = " << b << endl;
     return 0;
-}`], ["92a. CONTINUE EXAMPLE", "Skips i=5 in loop", `#include <stdio.h>
+}`], ["92a. CONTINUE EXAMPLE", "Skips multiples of 3 (3, 6, 9)", `#include <stdio.h>
 int main() {
     for (int i = 1; i <= 10; i++) {
     if (i % 3 == 0) {
@@ -8367,7 +8386,9 @@ int main() {
     // Guard against concurrent builds
     let _buildInProgress = false;
     let _pendingBuildMode = null;
+    let _currentBuildId = 0;
     function buildPrograms(mode) {
+      const buildId = ++_currentBuildId;
       if (_buildInProgress && _pendingBuildMode === mode) return;
       _buildInProgress = true;
       _pendingBuildMode = mode;
@@ -8387,7 +8408,7 @@ int main() {
       let currentIdx = 0;
 
       function renderBatch() {
-        if (_pendingBuildMode !== mode) return; // Mode changed during build
+        if (buildId !== _currentBuildId) return; // Stale build
 
         const fragment = document.createDocumentFragment();
         const menuFrag = document.createDocumentFragment();
@@ -8421,14 +8442,20 @@ int main() {
           const topbar = document.createElement('div');
           topbar.className = 'card-topbar';
           const isStarred = !!bmEntry;
-          topbar.innerHTML = `<div class="card-title">${title}</div><div class="card-actions"><div class="card-prog">${i + 1} / ${data.length}</div><button class="bm-btn${isStarred ? ' starred' : ''}" id="bm-btn-${i}" title="${isStarred ? 'Remove bookmark' : 'Bookmark'}" onclick="toggleBookmark(${i})">${isStarred ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>' : '<svg width="16" height="16"><use href="#ic-star"/></svg>'}</button></div>`;
+          topbar.innerHTML = `<div class="card-title">${title}</div><div class="card-actions"><div class="card-prog">${i + 1} / ${data.length}</div><button class="bm-btn${isStarred ? ' starred' : ''}" id="bm-btn-${i}" title="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-label="${isStarred ? 'Remove bookmark' : 'Bookmark'}" aria-pressed="${isStarred}" onclick="toggleBookmark(${i})">${isStarred ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>' : '<svg width="16" height="16"><use href="#ic-star"/></svg>'}</button></div>`;
           card.appendChild(topbar);
-
-          if (pattern && pattern.trim() && title.toUpperCase().includes('PATTERN')) {
-            const pat = document.createElement('div');
-            pat.className = 'pattern';
-            pat.textContent = pattern;
-            card.appendChild(pat);
+          if (pattern && pattern.trim()) {
+            if (title.toUpperCase().includes('PATTERN')) {
+              const pat = document.createElement('div');
+              pat.className = 'pattern';
+              pat.textContent = pattern;
+              card.appendChild(pat);
+            } else {
+              const desc = document.createElement('div');
+              desc.className = 'prog-desc';
+              desc.textContent = pattern;
+              card.appendChild(desc);
+            }
           }
           const panes = document.createElement('div');
           panes.className = `panes layout-${currentLayout}`;
@@ -8571,8 +8598,8 @@ int main() {
       var ANIM_MS = 220;     // must match CSS transition duration on .fab-collapsible
       var HEIGHT_MS = 200;     // height animation duration
       // stagger delays (ms) for each button index 0-3
-      var DELAYS_OPEN = [180, 120, 60, 0];   // bottom-first when expanding
-      var DELAYS_CLOSE = [0, 60, 120, 180];  // top-first when collapsing (reversed)
+      var DELAYS_OPEN = [360, 300, 240, 180, 120, 60, 0];   // bottom-first when expanding
+      var DELAYS_CLOSE = [0, 60, 120, 180, 240, 300, 360];  // top-first when collapsing (reversed)
 
       function getFabs() {
         return Array.from(document.querySelectorAll('#fabsCollapsible .fab-collapsible'))
@@ -8650,6 +8677,8 @@ int main() {
         _fabBusy = true;
         _fabOpen = !_fabOpen;
         btn.classList.toggle('open', _fabOpen);
+        btn.setAttribute('aria-expanded', _fabOpen);
+        btn.setAttribute('aria-label', _fabOpen ? 'Close settings menu' : 'Open settings menu');
 
         if (_fabOpen) {
           // --- EXPAND ---
@@ -8832,10 +8861,12 @@ int main() {
     }
     function updateBookmarkBtn(btn, starred) {
       btn.classList.toggle('starred', starred);
+      btn.setAttribute('aria-pressed', starred);
       btn.innerHTML = starred
         ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
         : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
       btn.title = starred ? 'Remove bookmark' : 'Bookmark';
+      btn.setAttribute('aria-label', starred ? 'Remove bookmark' : 'Bookmark');
     }
     function updateHomeBmChip() {
       const chip = document.getElementById('home-bm-chip');
@@ -8938,6 +8969,17 @@ int main() {
           });
         });
       });
+    }
+
+    function scrollToTop() {
+      haptic(10);
+      const app = document.getElementById('app');
+      if (app) {
+        app.style.scrollBehavior = 'smooth';
+        app.scrollTop = 0;
+        // Restore snapping after smooth scroll ends
+        setTimeout(() => { app.style.scrollBehavior = ''; }, 800);
+      }
     }
 
     // ================================================
