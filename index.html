@@ -8611,8 +8611,12 @@ int main() {
               }
             }, 1000);
           }
-          // Elite: Show pattern demo if pattern string exists (inclusive of all pyramids/triangles)
-          if (pattern && pattern.trim()) {
+          // Elite: ONLY show the extra section for actual visual pattern/pyramid/triangle demos
+          const isPattern = title.toUpperCase().includes('PATTERN') || 
+                            title.toUpperCase().includes('PYRAMID') || 
+                            title.toUpperCase().includes('TRIANGLE');
+                            
+          if (pattern && pattern.trim() && isPattern) {
             const pat = document.createElement('div');
             pat.className = 'pattern';
             pat.textContent = pattern;
@@ -9767,12 +9771,18 @@ int main() {
       window.addEventListener('resize', setDesktop, { passive: true });
     })();
 
-    // Restore state on reload
+    // Restore state on reload (Elite: Mode + Scroll Position)
     (function () {
       const savedMode = sessionStorage.getItem('duet-state');
       if (savedMode) {
         // Slight delay ensures DOM and lazy-loaders are ready
-        setTimeout(() => openMode(savedMode), 50);
+        setTimeout(() => {
+          if (typeof resumeLastViewed === 'function') {
+            resumeLastViewed();
+          } else {
+            openMode(savedMode);
+          }
+        }, 50);
       }
     })();
 
