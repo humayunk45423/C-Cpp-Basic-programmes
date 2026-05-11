@@ -403,7 +403,9 @@
       justify-content: center;
       position: relative;
       isolation: isolate;
-      will-change: transform;
+      /* contain:layout stops the ripple animation from causing full-page repaints */
+      contain: layout;
+      overflow: visible;
     }
 
     .theme-toggle-btn:hover {
@@ -416,7 +418,7 @@
       transform: scale(0.9);
     }
 
-    /* Single pulsating ripple ring from toggle button — ONE ring only */
+    /* Single pulsating ripple ring from toggle button — contained so it never repaints the page */
     .theme-toggle-btn::before {
       content: '';
       position: absolute;
@@ -432,24 +434,24 @@
       animation: theme-ripple 2.8s ease-out infinite;
       will-change: transform, opacity;
       backface-visibility: hidden;
+      /* Isolate the ripple layer so it NEVER triggers a page-level repaint */
+      mix-blend-mode: normal;
     }
 
     @keyframes theme-ripple {
       0% {
-        opacity: 0.55;
+        opacity: 0.5;
         transform: translate(-50%, -50%) scale(1);
         border-radius: 12px;
       }
-
-      65% {
-        opacity: 0.06;
-        transform: translate(-50%, -50%) scale(2.8);
-        border-radius: 32px;
+      70% {
+        opacity: 0.05;
+        transform: translate(-50%, -50%) scale(2.4);
+        border-radius: 28px;
       }
-
       100% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(3.2);
+        transform: translate(-50%, -50%) scale(2.6);
         border-radius: 50%;
       }
     }
@@ -4755,7 +4757,7 @@
         Programs</div>
       <div class="sheet-tab" id="tab-bm" role="tab" tabindex="0" aria-selected="false"
         onclick="switchSheetTab('bookmarks')"
-        onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('bookmarks')">⭐ Bookmarks</div>
+        onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('bookmarks')">Bookmarks</div>
     </div>
     <div class="sheet-search-wrap">
       <svg class="sheet-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -8135,22 +8137,17 @@ int main() {
       const openIconId = currentLayout === 'row' ? '#ic-split' : '#ic-stacked';
       document.getElementById('layoutIcon').innerHTML = `<use href="${openIconId}"/>`;
 
-      // Start the screen transition FIRST — so the animation begins before any heavy DOM work
+      // Start the screen transition FIRST — animation begins before any heavy DOM work
       showAppUI();
       document.getElementById('app').scrollTop = 0;
       document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
       history.pushState({ screen: 'app', mode: mode }, '', window.location.pathname + window.location.search);
 
-      // Yield the current frame (transition paint) THEN build the card list
+      // Yield current frame so transition paints, THEN do ONE build via _loadHljs.
+      // _loadHljs calls cb() synchronously when hljs is already cached, so there's
+      // no delay on subsequent visits — and only ONE buildPrograms call ever fires.
       requestAnimationFrame(() => {
-        if (typeof hljs !== 'undefined') {
-          // hljs already loaded — one build with full highlighting
-          buildPrograms(mode);
-        } else {
-          // Build immediately so the user sees content, then rebuild with highlights once hljs arrives
-          buildPrograms(mode);
-          window._loadHljs(mode, () => buildPrograms(mode));
-        }
+        window._loadHljs(mode, () => buildPrograms(mode));
       });
     }
 
@@ -8731,10 +8728,18 @@ int main() {
       const lv = getLastViewed();
       if (!lv) return;
       openMode(lv.mode);
-      setTimeout(() => {
+      // Poll for the target element — buildPrograms is deferred via rAF+_loadHljs
+      // so the element may not exist immediately. Poll up to 2s then give up.
+      let attempts = 0;
+      const tryScroll = () => {
         const el = document.getElementById('s' + lv.idx);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 320);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else if (attempts++ < 20) {
+          setTimeout(tryScroll, 100);
+        }
+      };
+      setTimeout(tryScroll, 150);
     }
 
     // ================================================
