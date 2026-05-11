@@ -4753,7 +4753,7 @@
     </div>
     <div class="sheet-tabs" role="tablist" aria-label="Program filter tabs">
       <div class="sheet-tab active" id="tab-all" role="tab" tabindex="0" aria-selected="true"
-        onclick="switchSheetTab('all')" onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('all')">All
+        onclick="switchSheetTab('all')" onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('all')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> All
         Programs</div>
       <div class="sheet-tab" id="tab-bm" role="tab" tabindex="0" aria-selected="false"
         onclick="switchSheetTab('bookmarks')"
@@ -8866,12 +8866,19 @@ int main() {
       const results = document.getElementById('home-search-results');
       if (input) input.value = '';
       if (results) results.classList.remove('open');
-      // Always open in BOTH (compare) mode from home search — user hasn't chosen a mode yet
+      // Open in BOTH mode from home search
       openMode('BOTH');
-      setTimeout(() => {
+      // Poll for the element — openMode defers build via rAF + _loadHljs
+      let attempts = 0;
+      const tryScroll = () => {
         const el = document.getElementById('s' + idx);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 320);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else if (attempts++ < 20) {
+          setTimeout(tryScroll, 100);
+        }
+      };
+      setTimeout(tryScroll, 150);
     };
 
     // ================================================
@@ -8913,24 +8920,27 @@ int main() {
           // Navigate on row click (except remove button)
           li.onclick = (e) => {
             if (e.target.closest('.bm-remove-btn')) return;
-            // closeMenuUI is SYNC — removes .show class immediately, CSS transition handles the rest.
-            // We then yield the frame so the browser can paint the sheet-close animation
-            // BEFORE openMode triggers the heavy buildPrograms DOM work.
+            // Close sheet UI immediately — CSS transition (0.38s) will animate it out
             closeMenuUI();
             clearMenuSearch();
             // Replace state so pressing back from code view goes Home (not back into sheet)
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
-            // rAF ensures current frame (sheet removal) is committed before we do work
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                openMode(mode);
-                // Scroll after buildPrograms has populated the DOM (openMode uses its own rAF)
-                setTimeout(() => {
-                  const el = document.getElementById('s' + idx);
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 420);
-              });
-            });
+            // Wait for the sheet close animation to fully finish (380ms) BEFORE triggering
+            // openMode — otherwise buildPrograms blocks the main thread mid-animation
+            setTimeout(() => {
+              openMode(mode);
+              // Scroll after buildPrograms populates DOM — poll because of rAF deferral
+              let attempts = 0;
+              const tryScroll = () => {
+                const el = document.getElementById('s' + idx);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                } else if (attempts++ < 15) {
+                  setTimeout(tryScroll, 100);
+                }
+              };
+              setTimeout(tryScroll, 100);
+            }, 400);
           };
 
           const modeLabel = mode === 'C' ? 'C' : mode === 'CPP' ? 'C++' : 'C&C++';
