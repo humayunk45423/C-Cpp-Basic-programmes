@@ -1738,6 +1738,22 @@
       font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0 !important;
     }
 
+    /* Elite Custom Scrollbar for Code Panes (Desktop) */
+    .code-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .code-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .code-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+    .code-scroll::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
     .code-scroll code.hljs,
     .code-scroll pre code,
     .code-scroll .hljs {
@@ -8453,7 +8469,7 @@ int main() {
     // Navigation Triggers
     function openMode(mode) {
       haptic(15);
-      sessionStorage.setItem('duet-state', mode);
+      safeSave('duet-state', mode);
       const savedLayout = safeGet('duet-layout') || 'row';
       currentLayout = savedLayout;
       currentMode = mode;
@@ -8481,21 +8497,15 @@ int main() {
     }
 
     function goHome() {
-      sessionStorage.removeItem('duet-state');
+      haptic(10);
+      try { localStorage.removeItem('duet-state'); } catch(e){}
       const state = history.state;
-      if (state && state.screen === 'menu') {
-        // Just go back — popstate will handle closing menu then going to app.
-        // Then a second back() gets called from the app state if needed.
-        // Close UI immediately for snappy feel, then let history do the rest.
-        closeMenuUI();
-        setTimeout(() => {
-          // After menu close anim starts, go back once (leaves menu state → app state)
-          history.back();
-          // Then go back again after a tick to leave app state → home
-          setTimeout(() => history.back(), 120);
-        }, 80);
-      } else if (state && state.screen !== 'home') {
-        history.back();
+      closeMenuUI();
+      dismissToast();
+      
+      if (state && (state.screen === 'menu' || state.screen === 'app')) {
+        // Elite: Decisive double-back for deep navigation history
+        history.go(state.screen === 'menu' ? -2 : -1);
       } else {
         showHomeUI();
       }
@@ -8730,8 +8740,8 @@ int main() {
     // COPY UTILITY 
     // ================================================
     function copyCode(code, btn) {
-      const CHECK = '<svg width="13px" height="13px"><use href="#ic-check"/></svg>Copied!';
-      const COPY = '<svg width="13px" height="13px"><use href="#ic-copy"/></svg>Copy';
+      const CHECK = T_ICON('ic-check') + '<span>Copied!</span>';
+      const COPY = T_ICON('ic-copy') + '<span>Copy</span>';
 
       const succeed = () => {
         btn.innerHTML = CHECK;
@@ -9232,7 +9242,7 @@ int main() {
       safeSave('duet-linenums', next);
       _updateLineNumFab(next === 'on');
       const label = next === 'on' ? 'Line numbers on' : 'Line numbers off';
-      showToast('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/></svg><span>' + label + '</span>');
+      showToast(T_ICON('ic-indent') + `<span>${label}</span>`);
     };
 
     // ================================================
@@ -9773,7 +9783,7 @@ int main() {
 
     // Restore state on reload (Elite: Mode + Scroll Position)
     (function () {
-      const savedMode = sessionStorage.getItem('duet-state');
+      const savedMode = safeGet('duet-state');
       if (savedMode) {
         // Slight delay ensures DOM and lazy-loaders are ready
         setTimeout(() => {
