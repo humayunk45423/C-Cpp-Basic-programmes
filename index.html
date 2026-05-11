@@ -1670,6 +1670,7 @@
       padding: 14px 16px;
       min-height: 0;
       min-width: 0;
+      contain: strict;
     }
 
     @media(min-width: 600px) {
@@ -8080,33 +8081,37 @@ int main() {
     // ================================================
     // INDENT TOGGLE (IDE style ↔ Flat / no-indent)
     // ================================================
-    let currentIndent = localStorage.getItem('duet-indent') || 'ide'; // 'ide' | 'flat'
-
+    let currentIndent = safeGet('duet-indent') || 'ide'; // 'ide' | 'flat'
+ 
     function flattenCode(code) {
       return code.split('\n').map(line => line.trimStart()).join('\n');
     }
-
+ 
     function applyIndentToAll() {
-      document.querySelectorAll('.code-scroll code').forEach(el => {
+      const all = Array.from(document.querySelectorAll('.code-scroll code'));
+      // Elite: Only highlight visible/nearby cards immediately, defer others
+      all.forEach((el, i) => {
         const original = el.dataset.original;
-        if (!original) return; // not yet created via makePane, skip
-        // Reset hljs v11: must remove BOTH the class AND the data-highlighted attribute
-        // otherwise hljs.highlightElement() silently bails out (it checks data-highlighted)
+        if (!original) return;
         el.classList.remove('hljs');
         delete el.dataset.highlighted;
-        if (currentIndent === 'flat') {
-          el.textContent = flattenCode(original);
+        el.textContent = (currentIndent === 'flat') ? flattenCode(original) : original;
+        
+        // Immediate highlight for the first 10 (likely visible), defer rest
+        if (i < 10) {
+          if (typeof hljs !== 'undefined') hljs.highlightElement(el);
         } else {
-          el.textContent = original;
+          setTimeout(() => {
+            if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+          }, 100 + (i * 2));
         }
-        if (typeof hljs !== 'undefined') hljs.highlightElement(el);
       });
     }
-
+ 
     function toggleIndent() {
       haptic(8);
       currentIndent = currentIndent === 'ide' ? 'flat' : 'ide';
-      localStorage.setItem('duet-indent', currentIndent);
+      safeSave('duet-indent', currentIndent);
       const iconId = currentIndent === 'ide' ? '#ic-indent' : '#ic-flat';
       document.getElementById('indentIcon').innerHTML = `<use href="${iconId}"/>`;
       applyIndentToAll();
