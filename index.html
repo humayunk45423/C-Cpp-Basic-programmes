@@ -8414,10 +8414,6 @@ int main() {
       renderBatch();
     }
 
-      // Release build lock after this tick
-      _buildInProgress = false;
-    }
-
     function makePane(lang, code) {
       const pane = document.createElement('div');
       pane.className = 'pane';
@@ -9513,33 +9509,6 @@ int main() {
     // ============================================================
     // FOCUS TRAP for bottom sheet (accessibility)
     // ============================================================
-    (function initFocusTrap() {
-      const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-      function trapFocus(e) {
-        const sheet = document.getElementById('sheet');
-        if (!sheet || !sheet.classList.contains('show')) return;
-        const els = [...sheet.querySelectorAll(FOCUSABLE)].filter(el => !el.disabled);
-        if (!els.length) return;
-        const first = els[0], last = els[els.length - 1];
-        if (e.key === 'Tab') {
-          if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
-          else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
-        }
-      }
-      document.addEventListener('keydown', trapFocus);
-      // Move focus into sheet when opened
-      const origOpen = window.openMenuSheet;
-      window.openMenuSheet = function () {
-        if (origOpen) origOpen();
-        setTimeout(() => {
-          const sheet = document.getElementById('sheet');
-          const first = sheet && sheet.querySelector(FOCUSABLE);
-          if (first) first.focus();
-        }, 100);
-      };
-    })();
-
-
     // Add .is-desktop class to body for cleaner CSS targeting
     (function () {
       function setDesktop() {
