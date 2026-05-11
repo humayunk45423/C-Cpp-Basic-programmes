@@ -186,6 +186,14 @@ html { text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
   transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1), transform 0.32s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+/* ===================== EXTREME PERFORMANCE TUNING ===================== */
+/* 1. Eliminate 300ms tap delay on mobile for all interactive elements */
+a, button, input, .mode-card, .download-card, .fab, .sheet-list li, .hsr-item { touch-action: manipulation; }
+/* 2. Layout isolation — scrolling through 109 programs no longer repaints the whole page */
+#app { contain: strict; }
+.snap { contain: content; }
+.fabs, .sheet, .overlay { contain: layout paint; }
+
 /* ===================== BASE ===================== */
 body {
   font-family: var(--font-ui); background-color: var(--bg); color: var(--text);
@@ -6488,11 +6496,20 @@ function resumeLastViewed() {
 function initProgressBar(appEl) {
   const bar = document.getElementById('progress-bar');
   if (!bar) return;
+  let ticking = false;
   function update() {
-    const total = appEl.scrollHeight - appEl.clientHeight;
-    if (total <= 0) { bar.style.width = '0%'; return; }
-    const pct = Math.min(100, (appEl.scrollTop / total) * 100);
-    bar.style.width = pct + '%';
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const total = appEl.scrollHeight - appEl.clientHeight;
+        if (total <= 0) { bar.style.width = '0%'; }
+        else {
+          const pct = Math.min(100, (appEl.scrollTop / total) * 100);
+          bar.style.width = pct + '%';
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
   }
   appEl.addEventListener('scroll', update, { passive: true });
 }
@@ -6547,6 +6564,17 @@ function showSwipeHintOnce() {
 }
 
 // ================================================
+// DEBOUNCE UTILITY (Performance)
+// ================================================
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+// ================================================
 // HOME SEARCH
 // ================================================
 (function initHomeSearch() {
@@ -6573,7 +6601,8 @@ function showSwipeHintOnce() {
     results.classList.add('open');
   }
 
-  input.addEventListener('input', () => render(input.value.trim()));
+  const debouncedRender = debounce((val) => render(val), 60);
+  input.addEventListener('input', () => debouncedRender(input.value.trim()));
   input.addEventListener('focus', () => { if (input.value.trim()) render(input.value.trim()); });
   document.addEventListener('click', e => {
     if (!e.target.closest('.home-search-wrap')) { results.classList.remove('open'); }
@@ -6776,12 +6805,10 @@ document.addEventListener('keydown', e => {
   function setup() {
     const menuSearchEl = document.getElementById('menuSearch');
     if (!menuSearchEl) return;
-    menuSearchEl.addEventListener('input', function() {
-      const q = this.value.toLowerCase().trim();
+    const debouncedMenuSearch = debounce(function(q) {
       const items = document.querySelectorAll('#menuList li');
       let visible = 0;
       items.forEach(li => {
-        // Search only the title text, not the number prefix
         const titleEl = li.querySelector('.prog-title');
         const text = titleEl ? titleEl.textContent.toLowerCase() : li.textContent.toLowerCase();
         const show = !q || text.includes(q);
@@ -6790,6 +6817,10 @@ document.addEventListener('keydown', e => {
       });
       const noRes = document.getElementById('menuNoResults');
       if (noRes) noRes.style.display = visible === 0 ? 'block' : 'none';
+    }, 60);
+
+    menuSearchEl.addEventListener('input', function() {
+      debouncedMenuSearch(this.value.toLowerCase().trim());
     });
   }
   if (document.readyState === 'loading') {
