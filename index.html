@@ -2556,6 +2556,48 @@
       animation: results-in 0.18s cubic-bezier(0.34, 1.4, 0.64, 1) both;
     }
 
+    /* ===================== ELITE UI: SKELETON LOADERS ===================== */
+    .skeleton-wrap {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .skeleton-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .shimmer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transform: translateX(-100%);
+      animation: shimmer-anim 1.5s infinite;
+    }
+    [data-theme="light"] .shimmer {
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
+    }
+    @keyframes shimmer-anim {
+      100% { transform: translateX(100%); }
+    }
+    .sk-bar {
+      height: 20px;
+      background: var(--surface2);
+      margin: 15px;
+      border-radius: 4px;
+      width: 60%;
+    }
+    .sk-body {
+      height: 200px;
+      background: var(--surface2);
+      margin: 0 15px;
+      border-radius: 8px;
+    }
+
     @keyframes results-in {
       from {
         opacity: 0;
@@ -7938,6 +7980,7 @@ int main() {
     }
 
     function toggleIndent() {
+      haptic(8);
       currentIndent = currentIndent === 'ide' ? 'flat' : 'ide';
       localStorage.setItem('duet-indent', currentIndent);
       const iconId = currentIndent === 'ide' ? '#ic-indent' : '#ic-flat';
@@ -8039,6 +8082,7 @@ int main() {
     }
 
     function cycleFont() {
+      haptic(8);
       fontIdx = (fontIdx + 1) % FONTS.length;
       const f = FONTS[fontIdx];
       document.documentElement.setAttribute('data-font', f);
@@ -8070,6 +8114,7 @@ int main() {
     let currentLayout = 'row';
 
     function toggleLayout() {
+      haptic(10);
       currentLayout = currentLayout === 'row' ? 'col' : 'row';
       localStorage.setItem('duet-layout', currentLayout);
 
@@ -8091,8 +8136,16 @@ int main() {
     let codeObserver = null;
     let currentMode = null; // Store current mode to recreate if navigating via back button
 
+    // Elite: Haptic feedback utility
+    function haptic(ms = 12) {
+      if (window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(ms);
+      }
+    }
+
     // Core UI manipulation functions
     function showHomeUI() {
+      haptic(8);
       const home = document.getElementById('home');
       const app = document.getElementById('app');
       const fabs = document.getElementById('fabs');
@@ -8195,6 +8248,7 @@ int main() {
 
     // Navigation Triggers
     function openMode(mode) {
+      haptic(15);
       sessionStorage.setItem('duet-state', mode);
       const savedLayout = localStorage.getItem('duet-layout') || 'row';
       currentLayout = savedLayout;
@@ -8202,15 +8256,21 @@ int main() {
       const openIconId = currentLayout === 'row' ? '#ic-split' : '#ic-stacked';
       document.getElementById('layoutIcon').innerHTML = `<use href="${openIconId}"/>`;
 
-      // Start the screen transition FIRST — animation begins before any heavy DOM work
+      // Start the screen transition FIRST
       showAppUI();
       document.getElementById('app').scrollTop = 0;
       document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
       history.pushState({ screen: 'app', mode: mode }, '', window.location.pathname + window.location.search);
 
+      // Elite: Inject skeleton loader immediately for perceived speed
+      const container = document.getElementById('prog-container');
+      container.innerHTML = `
+        <div class="skeleton-wrap">
+          <div class="skeleton-card"><div class="sk-bar"></div><div class="sk-body"></div><div class="shimmer"></div></div>
+          <div class="skeleton-card"><div class="sk-bar"></div><div class="sk-body"></div><div class="shimmer"></div></div>
+        </div>`;
+
       // Yield current frame so transition paints, THEN do ONE build via _loadHljs.
-      // _loadHljs calls cb() synchronously when hljs is already cached, so there's
-      // no delay on subsequent visits — and only ONE buildPrograms call ever fires.
       requestAnimationFrame(() => {
         window._loadHljs(mode, () => buildPrograms(mode));
       });
@@ -8554,6 +8614,7 @@ int main() {
       };
 
       window.toggleFabs = function () {
+        haptic(5);
         var wrap = document.getElementById('fabsCollapsible');
         var btn = document.getElementById('fabToggle');
         var fabs = getFabs();
@@ -8723,6 +8784,7 @@ int main() {
       return getBookmarks().some(b => b.idx === idx && (mode ? b.mode === mode : true));
     }
     function toggleBookmark(idx) {
+      haptic(10);
       const mode = currentMode || 'BOTH';
       let bm = getBookmarks();
       const existIdx = bm.findIndex(b => b.idx === idx && b.mode === mode);
@@ -8905,6 +8967,7 @@ int main() {
     }
 
     window.toggleLineNums = function () {
+      haptic(8);
       const html = document.documentElement;
       const isOn = html.getAttribute('data-linenums') === 'on';
       const next = isOn ? 'off' : 'on';
@@ -8938,6 +9001,21 @@ int main() {
       };
     }
 
+    // Elite: Scoring Fuzzy Search
+    function fuzzyMatch(text, q) {
+      text = text.toLowerCase();
+      q = q.toLowerCase();
+      if (text.includes(q)) return 100;
+      let score = 0, lastIdx = -1;
+      for (let i = 0; i < q.length; i++) {
+        const idx = text.indexOf(q[i], lastIdx + 1);
+        if (idx === -1) return 0;
+        score += (idx === lastIdx + 1) ? 10 : 5;
+        lastIdx = idx;
+      }
+      return score;
+    }
+
     // ================================================
     // HOME SEARCH
     // ================================================
@@ -8948,8 +9026,9 @@ int main() {
 
       function render(q) {
         if (!q) { results.innerHTML = ''; results.classList.remove('open'); return; }
-        const matches = data.map((d, i) => ({ i, title: d[0] }))
-          .filter(d => d.title.toLowerCase().includes(q.toLowerCase()))
+        const matches = data.map((d, i) => ({ i, title: d[0], score: fuzzyMatch(d[0], q) }))
+          .filter(d => d.score > 0)
+          .sort((a, b) => b.score - a.score)
           .slice(0, 8);
         if (!matches.length) {
           results.innerHTML = '<div class="hsr-item" style="color:var(--muted);cursor:default">No programs found</div>';
@@ -9001,6 +9080,7 @@ int main() {
     // ================================================
     let _sheetTab = 'all';
     window.switchSheetTab = function (tab) {
+      if (_sheetTab !== tab) haptic(8);
       _sheetTab = tab;
       const tabAll = document.getElementById('tab-all');
       const tabBm = document.getElementById('tab-bm');
@@ -9026,26 +9106,22 @@ int main() {
           const { idx, mode } = entry;
           if (idx == null || !data[idx]) return;
           const title = data[idx][0];
-          const titleLower = title.toLowerCase();
-          if (q && !titleLower.includes(q)) return;
+          const score = q ? fuzzyMatch(title, q) : 1;
+          if (q && score === 0) return;
 
           const li = document.createElement('li');
           li.dataset.bmExtra = '1';
+          li.dataset.score = score;
           li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;position:relative;';
 
           // Navigate on row click (except remove button)
           li.onclick = (e) => {
             if (e.target.closest('.bm-remove-btn')) return;
-            // Close sheet UI immediately — CSS transition (0.38s) will animate it out
             closeMenuUI();
             clearMenuSearch();
-            // Replace state so pressing back from code view goes Home (not back into sheet)
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
-            // Wait for the sheet close animation to fully finish (380ms) BEFORE triggering
-            // openMode — otherwise buildPrograms blocks the main thread mid-animation
             setTimeout(() => {
               openMode(mode);
-              // Instant snap scroll after build — poll for element
               let attempts = 0;
               const tryScroll = () => {
                 const el = document.getElementById('s' + idx);
@@ -9069,7 +9145,7 @@ int main() {
           removeBtn.innerHTML = '<svg width="14" height="14"><use href="#ic-trash"/></svg>';
           removeBtn.onclick = (e) => {
             e.stopPropagation();
-            // Animate out
+            haptic(15);
             li.style.transition = 'opacity 0.22s ease, transform 0.22s ease, max-height 0.28s ease';
             li.style.overflow = 'hidden';
             li.style.maxHeight = li.offsetHeight + 'px';
@@ -9080,18 +9156,14 @@ int main() {
               li.style.padding = '0 16px';
             });
             setTimeout(() => {
-              // Remove from storage
               let bmList = getBookmarks();
               const removeIdx = bmList.findIndex(b => b.idx === idx && b.mode === mode);
               if (removeIdx !== -1) bmList.splice(removeIdx, 1);
               setBookmarks(bmList);
-              // Update card button if visible
               const btn = document.getElementById('bm-btn-' + idx);
               if (btn) updateBookmarkBtn(btn, isBookmarked(idx, mode));
-              // Update sheet star
               const star = document.querySelector('#menuList [data-idx="' + idx + '"] .prog-star');
               if (star) { star.classList.remove('starred'); star.innerHTML = '<svg width="14" height="14"><use href="#ic-star"/></svg>'; }
-              // Refresh the bookmark tab
               switchSheetTab('bookmarks');
             }, 280);
           };
@@ -9107,11 +9179,12 @@ int main() {
       } else {
         // IMPORTANT: remove bm-extra entries FIRST so they don't pollute the query
         document.querySelectorAll('#menuList [data-bm-extra]').forEach(el => el.remove());
-        // Now query only the real program items
+        // Now query only the real program items using Elite fuzzy search
         document.querySelectorAll('#menuList li').forEach(li => {
           const titleEl = li.querySelector('.prog-title');
-          const text = titleEl ? titleEl.textContent.toLowerCase() : li.textContent.toLowerCase();
-          const inSearch = !q || text.includes(q);
+          const text = titleEl ? titleEl.textContent : li.textContent;
+          const score = q ? fuzzyMatch(text, q) : 1;
+          const inSearch = score > 0;
           li.style.display = inSearch ? '' : 'none';
           if (inSearch) visible++;
         });
