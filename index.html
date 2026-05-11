@@ -13,6 +13,21 @@
         if (f) document.documentElement.setAttribute('data-font', f);
       } catch (e) { }
     })();
+
+    // ── Viewport Stability: Prevent keyboard from shrinking cards ──
+    (function () {
+      let lastW = window.innerWidth;
+      function setVh() {
+        const h = window.innerHeight;
+        const w = window.innerWidth;
+        if (w !== lastW || !document.documentElement.style.getPropertyValue('--vh')) {
+          document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+          lastW = w;
+        }
+      }
+      setVh();
+      window.addEventListener('resize', setVh, { passive: true });
+    })();
   </script>
   <meta charset="UTF-8">
   <!-- Theme color for mobile browser chrome -->
@@ -100,7 +115,7 @@
         core.onerror = handleFail;
         document.head.appendChild(core);
         
-        // Elite: 6 second timeout guard
+        // Elite: 6 second timeout guard — always proceed so app never hangs
         setTimeout(function() { if (!_hljsLoaded && _hljsLoading) handleFail(); }, 6000);
       };
     })();
