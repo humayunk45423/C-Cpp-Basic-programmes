@@ -8219,8 +8219,8 @@ int main() {
     const ICON_SUN = '<svg width="22px" height="22px"><use href="#ic-sun"/></svg>';
     const ICON_MOON = '<svg width="22px" height="22px"><use href="#ic-moon"/></svg>';
 
-    // Toast icon snippets (16px, inherits current color)
-    const T_ICON = (id) => `<svg width="15px" height="15px" style="flex-shrink:0"><use href="#${id}"/></svg>`;
+    // Toast icon snippets (Dynamic Size, inherits current color)
+    const T_ICON = (id, size = 15) => `<svg width="${size}px" height="${size}px" style="flex-shrink:0"><use href="#${id}"/></svg>`;
     const TOAST_HOME = T_ICON('ic-home') + '<span>Home</span>';
     const TOAST_DARK = T_ICON('ic-moon') + '<span>Dark Mode</span>';
     const TOAST_LIGHT = T_ICON('ic-sun') + '<span>Light Mode</span>';
@@ -9474,7 +9474,7 @@ int main() {
               const btn = document.getElementById('bm-btn-' + idx);
               if (btn) updateBookmarkBtn(btn, isBookmarked(idx, mode));
               const star = document.querySelector('#menuList [data-idx="' + idx + '"] .prog-star');
-              if (star) { star.classList.remove('starred'); star.innerHTML = T_ICON('ic-star'); }
+              if (star) { star.classList.remove('starred'); star.innerHTML = T_ICON('ic-star', 14); }
               switchSheetTab('bookmarks');
             }, 280);
           };
@@ -9537,10 +9537,18 @@ int main() {
     });
 
     // ================================================
-    // KEYBOARD: extra shortcuts
+    // KEYBOARD: Global Shortcuts & Accessibility
     // ================================================
     document.addEventListener('keydown', e => {
-      // B = toggle bookmark on current visible program
+      // 1. Accessibility: Enter key on focused mode-cards
+      if (e.key === 'Enter') {
+        const active = document.activeElement;
+        if (active && active.classList.contains('mode-card')) {
+          active.click();
+        }
+      }
+
+      // 2. B = toggle bookmark on current visible program
       if (e.key === 'b' || e.key === 'B') {
         const app = document.getElementById('app');
         if (!app.classList.contains('show')) return;
