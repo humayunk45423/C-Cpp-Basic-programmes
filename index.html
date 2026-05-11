@@ -1227,6 +1227,19 @@ body {
 }
 
 /* ===================== BOOKMARK STAR IN SHEET LIST ===================== */
+/* Mode badge inside bookmark list */
+.bm-mode-badge {
+  display: inline-flex; align-items: center;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 6px;
+  background: linear-gradient(135deg, rgba(88,166,255,0.18) 0%, rgba(210,168,255,0.18) 100%);
+  border: 1px solid rgba(210,168,255,0.3);
+  color: #d2a8ff;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+[data-theme="light"] .bm-mode-badge { color: #8250df; background: linear-gradient(135deg,rgba(9,105,218,0.1) 0%,rgba(130,80,223,0.1) 100%); border-color: rgba(130,80,223,0.25); }
+
 .sheet-list li .prog-star {
   flex-shrink: 0;
   width: 22px; height: 22px;
@@ -1236,9 +1249,9 @@ body {
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
 }
-.sheet-list li .prog-star:hover { color: var(--gold); background: rgba(240,183,47,0.1); }
-.sheet-list li .prog-star.starred { color: var(--gold); }
-.sheet-list li.bookmarked { background: rgba(240,183,47,0.04); }
+.sheet-list li .prog-star:hover { color: #d2a8ff; background: rgba(210,168,255,0.12); }
+.sheet-list li .prog-star.starred { color: #d2a8ff; }
+.sheet-list li.bookmarked { background: linear-gradient(90deg, rgba(88,166,255,0.04) 0%, rgba(210,168,255,0.06) 100%); }
 
 /* ===================== PROGRESS BAR ===================== */
 #progress-bar {
@@ -1472,11 +1485,18 @@ body {
   flex-shrink: 0;
   transition: color 0.15s, background 0.15s, transform 0.15s;
 }
-.card-bookmark-btn:hover { background: rgba(240,183,47,0.12); color: var(--gold); }
+.card-bookmark-btn:hover { background: rgba(210,168,255,0.12); color: #d2a8ff; }
 .card-bookmark-btn:active { transform: scale(0.88); }
-.card-bookmark-btn.starred { color: var(--gold); }
+.card-bookmark-btn.starred { color: #d2a8ff; filter: drop-shadow(0 0 5px rgba(210,168,255,0.6)); }
 
-/* ===================== LAST VIEWED BADGE ON HOME ===================== */
+/* ===================== HOME CHIPS (Recent + Bookmarks) ===================== */
+.home-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
 .last-viewed-chip {
   display: inline-flex;
   align-items: center;
@@ -1495,6 +1515,26 @@ body {
 }
 .last-viewed-chip:hover { background: rgba(88,166,255,0.18); transform: scale(1.03); }
 .last-viewed-chip:active { transform: scale(0.97); }
+/* Bookmarks chip — purple gradient glow twin */
+.home-bm-chip {
+  display: none; /* shown by JS when bookmarks exist */
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(88,166,255,0.1) 0%, rgba(210,168,255,0.14) 100%);
+  border: 1px solid rgba(210,168,255,0.32);
+  border-radius: 20px;
+  padding: 5px 12px 5px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #d2a8ff;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 10px rgba(210,168,255,0.12);
+  animation: chip-in 0.4s cubic-bezier(0.34,1.4,0.64,1) 0.45s forwards;
+}
+.home-bm-chip:hover { background: linear-gradient(135deg,rgba(88,166,255,0.18) 0%,rgba(210,168,255,0.22) 100%); transform: scale(1.03); box-shadow: 0 0 14px rgba(210,168,255,0.22); }
+.home-bm-chip:active { transform: scale(0.97); }
+[data-theme="light"] .home-bm-chip { color: #8250df; border-color: rgba(130,80,223,0.3); background: linear-gradient(135deg,rgba(9,105,218,0.08) 0%,rgba(130,80,223,0.1) 100%); }
 @keyframes chip-in {
   from { opacity: 0; transform: scale(0.88); }
   to   { opacity: 1; transform: scale(1); }
@@ -2449,9 +2489,15 @@ if ('serviceWorker' in navigator) {
       <h1 class="hero-title">Fundamental <span>C & C++</span> Programs</h1>
       <p class="hero-sub">109 programs from the DUET admission syllabus — browse, copy & compare side by side.</p>
 
-      <div id="last-viewed-chip" class="last-viewed-chip" style="display:none" onclick="resumeLastViewed()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span id="last-viewed-text">Resume: #1</span>
+      <div class="home-chips-row">
+        <div id="last-viewed-chip" class="last-viewed-chip" style="display:none" onclick="resumeLastViewed()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="last-viewed-text">Resume: #1</span>
+        </div>
+        <div id="home-bm-chip" class="home-bm-chip" onclick="openBookmarksSheet()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span id="home-bm-count">0 Bookmarks</span>
+        </div>
       </div>
     </div>
   </div>
@@ -6440,31 +6486,44 @@ function dismissToast() {
 }
 
 // ================================================
-// BOOKMARKS
+// BOOKMARKS — stores [{idx, mode}] with mode tracking
 // ================================================
+function _bmMigrate(raw) {
+  // Migrate old format (array of numbers) to new [{idx,mode}] format
+  if (!Array.isArray(raw)) return [];
+  return raw.map(item => typeof item === 'object' ? item : { idx: item, mode: currentMode || 'BOTH' });
+}
 function getBookmarks() {
-  try { return JSON.parse(localStorage.getItem('duet-bookmarks') || '[]'); } catch(e) { return []; }
+  try { return _bmMigrate(JSON.parse(localStorage.getItem('duet-bookmarks') || '[]')); } catch(e) { return []; }
 }
 function setBookmarks(bm) {
   localStorage.setItem('duet-bookmarks', JSON.stringify(bm));
+  updateHomeBmChip();
 }
-function isBookmarked(idx) { return getBookmarks().includes(idx); }
+function isBookmarked(idx, mode) {
+  return getBookmarks().some(b => b.idx === idx && (mode ? b.mode === mode : true));
+}
 function toggleBookmark(idx) {
+  const mode = currentMode || 'BOTH';
   let bm = getBookmarks();
-  if (bm.includes(idx)) {
-    bm = bm.filter(i => i !== idx);
+  const existIdx = bm.findIndex(b => b.idx === idx && b.mode === mode);
+  if (existIdx !== -1) {
+    bm.splice(existIdx, 1);
     showToast('<svg width="15" height="15" style="flex-shrink:0"><use href="#ic-star"/></svg><span>Bookmark removed</span>');
   } else {
-    bm.push(idx);
+    bm.push({ idx, mode });
     showToast('<svg width="15" height="15" style="flex-shrink:0"><use href="#ic-star-filled"/></svg><span>Bookmarked!</span>');
   }
   setBookmarks(bm);
   // Update card btn
   const btn = document.getElementById('bm-btn-' + idx);
-  if (btn) updateBookmarkBtn(btn, bm.includes(idx));
+  if (btn) updateBookmarkBtn(btn, isBookmarked(idx, mode));
   // Update sheet star if visible
   const star = document.querySelector('#menuList [data-idx="' + idx + '"] .prog-star');
-  if (star) { star.classList.toggle('starred', bm.includes(idx)); star.innerHTML = bm.includes(idx) ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>' : '<svg width="14" height="14"><use href="#ic-star"/></svg>'; }
+  const nowStarred = isBookmarked(idx, mode);
+  if (star) { star.classList.toggle('starred', nowStarred); star.innerHTML = nowStarred ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>' : '<svg width="14" height="14"><use href="#ic-star"/></svg>'; }
+  // Refresh bookmark tab if open
+  if (_sheetTab === 'bookmarks') switchSheetTab('bookmarks');
 }
 function updateBookmarkBtn(btn, starred) {
   btn.classList.toggle('starred', starred);
@@ -6472,6 +6531,19 @@ function updateBookmarkBtn(btn, starred) {
     ? '<svg width="16" height="16"><use href="#ic-star-filled"/></svg>'
     : '<svg width="16" height="16"><use href="#ic-star"/></svg>';
   btn.title = starred ? 'Remove bookmark' : 'Bookmark';
+}
+function updateHomeBmChip() {
+  const chip = document.getElementById('home-bm-chip');
+  const cnt  = document.getElementById('home-bm-count');
+  if (!chip) return;
+  const bm = getBookmarks();
+  if (bm.length === 0) { chip.style.display = 'none'; return; }
+  chip.style.display = 'inline-flex';
+  cnt.textContent = bm.length + ' Bookmark' + (bm.length === 1 ? '' : 's');
+}
+function openBookmarksSheet() {
+  openMenuSheet();
+  setTimeout(() => switchSheetTab('bookmarks'), 80);
 }
 
 // ================================================
@@ -6653,25 +6725,61 @@ window.switchSheetTab = function(tab) {
   tabBm.setAttribute('aria-selected', tab === 'bookmarks' ? 'true' : 'false');
   const items = document.querySelectorAll('#menuList li');
   const bm = getBookmarks();
-  // Also respect any active search query
   const searchEl = document.getElementById('menuSearch');
   const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
   let visible = 0;
-  items.forEach(li => {
-    const idx = parseInt(li.dataset.idx);
-    const inTab = tab === 'all' || bm.includes(idx);
-    // Also apply search filter if active
-    const titleEl = li.querySelector('.prog-title');
-    const text = titleEl ? titleEl.textContent.toLowerCase() : li.textContent.toLowerCase();
-    const inSearch = !q || text.includes(q);
-    const show = inTab && inSearch;
-    li.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
+
+  if (tab === 'bookmarks') {
+    // In bookmark tab: show one entry per bookmark (may have same idx in different modes)
+    items.forEach(li => { li.style.display = 'none'; });
+    const listEl = document.getElementById('menuList');
+    // Remove old bm-extra entries
+    listEl.querySelectorAll('[data-bm-extra]').forEach(el => el.remove());
+
+    bm.forEach(entry => {
+      const { idx, mode } = entry;
+      if (idx == null || !data[idx]) return;
+      const title = data[idx][0];
+      const titleLower = title.toLowerCase();
+      if (q && !titleLower.includes(q)) return;
+
+      const li = document.createElement('li');
+      li.dataset.bmExtra = '1';
+      li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;';
+      li.onclick = () => {
+        closeMenu();
+        openMode(mode);
+        setTimeout(() => {
+          const el = document.getElementById('s' + idx);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 320);
+      };
+      const modeLabel = mode === 'C' ? 'C' : mode === 'CPP' ? 'C++' : 'C&C++';
+      li.innerHTML = `
+        <span class="prog-num" style="flex-shrink:0">${idx+1}</span>
+        <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${title}</span>
+        <span class="bm-mode-badge">${modeLabel}</span>`;
+      listEl.appendChild(li);
+      visible++;
+    });
+  } else {
+    items.forEach(li => {
+      li.style.display = '';
+      const idx = parseInt(li.dataset.idx);
+      const titleEl = li.querySelector('.prog-title');
+      const text = titleEl ? titleEl.textContent.toLowerCase() : li.textContent.toLowerCase();
+      const inSearch = !q || text.includes(q);
+      li.style.display = inSearch ? '' : 'none';
+      if (inSearch) visible++;
+    });
+    // Remove any bm-extra entries left from bookmark tab
+    document.querySelectorAll('#menuList [data-bm-extra]').forEach(el => el.remove());
+  }
+
   const noRes = document.getElementById('menuNoResults');
   if (noRes) {
     noRes.style.display = visible === 0 ? 'block' : 'none';
-    if (visible === 0 && tab === 'bookmarks' && !q) noRes.textContent = 'No bookmarks yet — tap ⭐ on any program';
+    if (visible === 0 && tab === 'bookmarks' && !q) noRes.textContent = 'No bookmarks yet — tap ★ on any program';
     else if (visible === 0) noRes.textContent = 'No programs found';
   }
 };
@@ -6679,7 +6787,7 @@ window.switchSheetTab = function(tab) {
 // ================================================
 // INIT LAST VIEWED CHIP on load
 // ================================================
-document.addEventListener('DOMContentLoaded', updateLastViewedChip);
+document.addEventListener('DOMContentLoaded', () => { updateLastViewedChip(); updateHomeBmChip(); });
 
 // ================================================
 // KEYBOARD: extra shortcuts
