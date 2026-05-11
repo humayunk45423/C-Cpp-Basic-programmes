@@ -2335,9 +2335,7 @@
       color: #d2a8ff;
     }
 
-    .sheet-list li.bookmarked {
-      background: linear-gradient(90deg, rgba(88, 166, 255, 0.04) 0%, rgba(210, 168, 255, 0.06) 100%);
-    }
+    /* bookmarked rows: NO row highlight — only the star icon changes */
 
     /* Remove bookmark button in bookmark tab */
     .bm-remove-btn {
@@ -2368,33 +2366,7 @@
       transition-duration: 0.07s;
     }
 
-    /* card bookmark button gradient fill when starred */
-    .card-bookmark-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      border-radius: 8px;
-      padding: 4px;
-      transition: color 0.15s, background 0.15s, transform 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .card-bookmark-btn:hover {
-      background: rgba(210, 168, 255, 0.12);
-      color: #d2a8ff;
-    }
-
-    .card-bookmark-btn.starred {
-      color: #a371f7;
-    }
-
-    .card-bookmark-btn.starred svg {
-      filter: drop-shadow(0 0 4px rgba(163, 113, 247, 0.5));
-    }
+    /* card bookmark button — defined once below near .card-bookmark-btn section */
 
     /* ===================== PROGRESS BAR ===================== */
     #progress-bar {
@@ -3747,7 +3719,7 @@
       </svg></div>
   </div>
 
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <symbol id="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
       stroke-linejoin="round">
       <circle cx="12" cy="12" r="4" />
@@ -3849,9 +3821,8 @@
       <polygon
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </symbol>
-    <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="url(#star-grad)" stroke="url(#star-grad)" stroke-width="1.5"
-      stroke-linecap="round" stroke-linejoin="round">
-      <polygon
+    <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="none" stroke="none">
+      <polygon fill="url(#star-grad)" stroke="url(#star-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </symbol>
     <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
