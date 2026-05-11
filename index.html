@@ -9323,6 +9323,13 @@ int main() {
       const debouncedRender = debounce((val) => render(val), 60);
       input.addEventListener('input', () => debouncedRender(input.value.trim()));
       input.addEventListener('focus', () => { if (input.value.trim()) render(input.value.trim()); });
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          const first = results.querySelector('.hsr-item');
+          if (first) first.click();
+        }
+      });
+
       document.addEventListener('click', e => {
         if (!e.target.closest('.home-search-wrap')) { results.classList.remove('open'); }
       });
@@ -9373,6 +9380,10 @@ int main() {
         // In bookmark tab: show one entry per bookmark (may have same idx in different modes)
         items.forEach(li => { li.style.display = 'none'; });
         const listEl = document.getElementById('menuList');
+        
+        // Elite: Detect if we have zero search results
+        let totalSearchFound = 0;
+
         // Remove old bm-extra entries
         listEl.querySelectorAll('[data-bm-extra]').forEach(el => el.remove());
 
