@@ -8716,20 +8716,44 @@ int main() {
     function resumeLastViewed() {
       const lv = getLastViewed();
       if (!lv) return;
-      openMode(lv.mode);
-      // Poll — element is built asynchronously via rAF chain.
-      // Two nested rAFs after finding the element ensure layout is committed
-      // before we set scrollTop, so the snap point lands exactly on the card.
-      let attempts = 0;
-      const tryScroll = () => {
-        const el = document.getElementById('s' + lv.idx);
-        if (el) {
-          requestAnimationFrame(() => requestAnimationFrame(() => _snapTo(lv.idx)));
-        } else if (attempts++ < 25) {
-          setTimeout(tryScroll, 80);
-        }
-      };
-      setTimeout(tryScroll, 80);
+      const mode = lv.mode;
+
+      // ── Pre-build while hidden, then reveal at correct position ──
+      // Normal openMode calls showAppUI first (starting the opacity transition)
+      // then builds 109 cards — the DOM build blocks the main thread MID-transition
+      // causing visible stutter. Instead we:
+      //   1. Set up all state (no showAppUI yet — app stays opacity:0)
+      //   2. Build programs synchronously (invisible, no stutter visible)
+      //   3. After override rAFs complete (buttons/line-nums injected),
+      //      instantly snap to target, THEN reveal the app
+      //   → User sees app fade in already at the correct card. Zero scroll jump.
+
+      // Step 1 — state setup (mirrors openMode minus showAppUI)
+      sessionStorage.setItem('duet-state', mode);
+      const savedLayout = localStorage.getItem('duet-layout') || 'row';
+      currentLayout = savedLayout;
+      currentMode = mode;
+      const iconId = savedLayout === 'row' ? '#ic-split' : '#ic-stacked';
+      document.getElementById('layoutIcon').innerHTML = `<use href="${iconId}"/>`;
+      document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
+      history.pushState({ screen: 'app', mode }, '', window.location.pathname + window.location.search);
+      document.getElementById('app').scrollTop = 0;
+
+      // Step 2 — build (app still hidden)
+      window._loadHljs(mode, () => {
+        buildPrograms(mode);
+
+        // Step 3 — wait for override's 2 rAFs (button + line-num injection),
+        // then snap + reveal. 3 nested rAFs ensures we run AFTER the override.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              _snapTo(lv.idx);   // instant scroll to target card
+              showAppUI();       // fade in — already at the right position
+            });
+          });
+        });
+      });
     }
 
     // ================================================
