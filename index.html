@@ -8147,7 +8147,6 @@ int main() {
     function layoutToast(label) { return T_ICON(label === 'Stacked' ? 'ic-stacked' : 'ic-split') + '<span>' + label + '</span>'; }
 
     // ===================== STORAGE HELPERS =====================
-    // ===================== STORAGE HELPERS =====================
     function safeSave(key, val) {
       try { localStorage.setItem(key, val); } catch(e) { console.warn('Storage failed', e); }
     }
@@ -8156,6 +8155,7 @@ int main() {
     }
 
     function toggleTheme() {
+      haptic(10);
       const root = document.documentElement;
       const flash = document.getElementById('theme-flash');
       const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -8389,7 +8389,7 @@ int main() {
     function openMode(mode) {
       haptic(15);
       sessionStorage.setItem('duet-state', mode);
-      const savedLayout = localStorage.getItem('duet-layout') || 'row';
+      const savedLayout = safeGet('duet-layout') || 'row';
       currentLayout = savedLayout;
       currentMode = mode;
       const openIconId = currentLayout === 'row' ? '#ic-split' : '#ic-stacked';
@@ -8482,9 +8482,18 @@ int main() {
           li.innerHTML = `<span class="prog-num">${i + 1}</span><span class="prog-title">${title}</span><span class="prog-star${bmEntry ? ' starred' : ''}">${bmEntry ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>' : '<svg width="14" height="14"><use href="#ic-star"/></svg>'}</span>`;
           li.querySelector('.prog-star').onclick = (e) => { e.stopPropagation(); toggleBookmark(i); };
           li.onclick = () => {
+            haptic(10);
             closeMenuUI();
             clearMenuSearch();
-            setTimeout(() => { const el = document.getElementById('s' + i); if (el) _snapTo(i); }, 50);
+            let attempts = 0;
+            const trySnap = () => {
+              if (_snapTo(i)) {
+                // Success
+              } else if (attempts++ < 25) {
+                setTimeout(trySnap, 80);
+              }
+            };
+            trySnap();
           };
           menuFrag.appendChild(li);
 
@@ -9027,15 +9036,15 @@ int main() {
     function _snapTo(idx) {
       const app = document.getElementById('app');
       const el  = document.getElementById('s' + idx);
-      if (!app || !el) return;
+      if (!app || !el) return false;
       
-      // getBoundingClientRect is more robust than offsetTop for nested layouts
       const rect = el.getBoundingClientRect();
       const offset = rect.top + app.scrollTop;
       
       app.style.scrollBehavior = 'auto';
       app.scrollTop = offset;
       requestAnimationFrame(() => { app.style.scrollBehavior = ''; });
+      return true;
     }
 
     function resumeLastViewed() {
@@ -9068,16 +9077,18 @@ int main() {
       window._loadHljs(mode, () => {
         buildPrograms(mode);
 
-        // Step 3 — wait for override's 2 rAFs (button + line-num injection),
-        // then snap + reveal. 3 nested rAFs ensures we run AFTER the override.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              _snapTo(lv.idx);   // instant scroll to target card
-              showAppUI();       // fade in — already at the right position
-            });
-          });
-        });
+        // Step 3 — Polling Snap: wait for target index to be rendered in batch
+        let attempts = 0;
+        const trySnap = () => {
+          if (_snapTo(lv.idx)) {
+            requestAnimationFrame(showAppUI);
+          } else if (attempts++ < 25) {
+            setTimeout(trySnap, 100);
+          } else {
+            showAppUI();
+          }
+        };
+        trySnap();
       });
     }
 
@@ -9238,26 +9249,24 @@ int main() {
     })();
 
     window.homeSearchOpen = function (idx) {
+      haptic(10);
       const input = document.getElementById('homeSearch');
       const results = document.getElementById('home-search-results');
       if (input) input.value = '';
       if (results) results.classList.remove('open');
       
-      // If user is already in C or CPP mode, stay in that mode.
-      // Otherwise (if on Home or in BOTH), default to BOTH.
       const targetMode = (currentMode === 'C' || currentMode === 'CPP') ? currentMode : 'BOTH';
       openMode(targetMode);
 
       let attempts = 0;
-      const tryScroll = () => {
-        const el = document.getElementById('s' + idx);
-        if (el) {
-          requestAnimationFrame(() => requestAnimationFrame(() => _snapTo(idx)));
-        } else if (attempts++ < 20) {
-          setTimeout(tryScroll, 80);
+      const trySnap = () => {
+        if (_snapTo(idx)) {
+          // Success
+        } else if (attempts++ < 25) {
+          setTimeout(trySnap, 80);
         }
       };
-      setTimeout(tryScroll, 80);
+      trySnap();
     };
 
     // ================================================
@@ -9315,6 +9324,7 @@ int main() {
             closeMenuUI();
             clearMenuSearch();
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
+            
             setTimeout(() => {
               openMode(mode);
               let attempts = 0;
