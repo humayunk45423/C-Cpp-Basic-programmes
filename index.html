@@ -2282,12 +2282,82 @@
     }
 
     .sheet-no-results {
-      padding: 32px 24px;
+      padding: 48px 32px;
       text-align: center;
       color: var(--muted);
       font-size: 14px;
       font-weight: 600;
       display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    /* Bookmark Tooltip (Onboarding) */
+    .bm-tip {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+    .bm-tip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .bm-tip::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 14px;
+      border: 6px solid transparent;
+      border-bottom-color: var(--accent);
+    }
+
+    /* Swipe Hint */
+    #swipe-hint {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    #swipe-hint.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .swipe-icon {
+      animation: swipe-anim 2s infinite ease-in-out;
+    }
+    @keyframes swipe-anim {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     /* ===================== BOOKMARK STAR IN SHEET LIST ===================== */
@@ -4651,6 +4721,10 @@
   <!-- ==================== APP ==================== -->
   <section id="app" aria-label="Program viewer">
     <div id="prog-container"></div>
+    <div id="swipe-hint">
+      <svg class="swipe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+      <span>Swipe up for next program</span>
+    </div>
   </section>
   <!-- ==================== FABs ==================== -->
   <div class="overlay" id="overlay" onclick="closeMenu()"></div>
@@ -8057,10 +8131,16 @@ int main() {
       }, 400);
     }
 
+    let _lastFocused = null;
     function openMenuUI() {
+      _lastFocused = document.activeElement;
       document.getElementById('sheet').classList.add('show');
       document.getElementById('overlay').classList.add('show');
       document.body.classList.add('sheet-open');
+      setTimeout(() => {
+        const search = document.getElementById('menuSearch');
+        if (search) search.focus();
+      }, 300);
     }
 
     function closeMenuUI() {
@@ -8068,6 +8148,7 @@ int main() {
       document.getElementById('overlay').classList.remove('show');
       document.body.classList.remove('sheet-open');
       clearMenuSearch();
+      if (_lastFocused && _lastFocused.focus) _lastFocused.focus();
       // Reset sheet tab to 'all' each time sheet closes, so it's fresh next open
       _sheetTab = 'all';
       const tabAll = document.getElementById('tab-all');
@@ -8075,6 +8156,20 @@ int main() {
       if (tabAll) tabAll.classList.add('active');
       if (tabBm) tabBm.classList.remove('active');
     }
+
+    // Accessibility: Focus trap for side sheet
+    document.addEventListener('keydown', e => {
+      const sheet = document.getElementById('sheet');
+      if (!sheet.classList.contains('show') || e.key !== 'Tab') return;
+      const focusable = Array.from(sheet.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    });
 
     // Intercept Physical/Browser Back Button
     window.addEventListener('popstate', (e) => {
@@ -9027,9 +9122,20 @@ int main() {
 
       const noRes = document.getElementById('menuNoResults');
       if (noRes) {
-        noRes.style.display = visible === 0 ? 'block' : 'none';
-        if (visible === 0 && tab === 'bookmarks' && !q) noRes.textContent = 'No bookmarks yet — tap ★ on any program';
-        else if (visible === 0) noRes.textContent = 'No programs found';
+        const isEmptyBookmarks = (visible === 0 && tab === 'bookmarks' && !q);
+        noRes.style.display = visible === 0 ? 'flex' : 'none';
+        if (isEmptyBookmarks) {
+          noRes.innerHTML = `
+            <div style="text-align:center;opacity:0.8">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:16px;display:block;margin-left:auto;margin-right:auto">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <div style="font-weight:600;font-size:15px;color:var(--text);margin-bottom:4px">No bookmarks yet</div>
+              <div style="font-size:13px;color:var(--muted)">Tap the ★ star on any program to save it here for quick access.</div>
+            </div>`;
+        } else if (visible === 0) {
+          noRes.innerHTML = `<div style="color:var(--muted)">No programs found</div>`;
+        }
       }
     };
 
@@ -9113,9 +9219,25 @@ int main() {
               btn.onclick = (e) => { e.stopPropagation(); toggleBookmark(snapIdx); };
               const progBadge = topbar.querySelector('.card-prog');
               topbar.insertBefore(btn, progBadge || null);
+
+              // Onboarding: Show bookmark tooltip once on the very first card
+              if (snapIdx === 0 && !localStorage.getItem('duet-bm-hint')) {
+                setTimeout(() => {
+                  const tip = document.createElement('div');
+                  tip.className = 'bm-tip';
+                  tip.innerHTML = 'Save for later';
+                  btn.appendChild(tip);
+                  setTimeout(() => { tip.classList.add('show'); }, 500);
+                  setTimeout(() => { tip.classList.remove('show'); setTimeout(() => tip.remove(), 400); }, 4500);
+                  localStorage.setItem('duet-bm-hint', '1');
+                }, 1000);
+              }
             }
           }
         });
+
+        // Restore swipe hint
+        showSwipeHintOnce();
 
         // Line numbers — second rAF so buttons render first
         requestAnimationFrame(() => {
