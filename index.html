@@ -6765,12 +6765,19 @@ window.switchSheetTab = function(tab) {
       li.dataset.bmExtra = '1';
       li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;';
       li.onclick = () => {
-        closeMenu();
-        openMode(mode);
+        // FIX: closeMenuUI()+replaceState is SYNC — no async popstate race condition.
+        // Do NOT use closeMenu() which calls history.back() async, causing
+        // popstate to fire showHomeUI() and snap the user back to home.
+        closeMenuUI();
+        clearMenuSearch();
+        history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
         setTimeout(() => {
-          const el = document.getElementById('s' + idx);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 320);
+          openMode(mode);
+          setTimeout(() => {
+            const el = document.getElementById('s' + idx);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 350);
+        }, 60); // 60ms lets sheet-close animation settle before building programs
       };
       const modeLabel = mode === 'C' ? 'C' : mode === 'CPP' ? 'C++' : 'C&C++';
       li.innerHTML = `
