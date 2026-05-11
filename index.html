@@ -1652,14 +1652,14 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent 0%, var(--accent) 35%, #d2a8ff 65%, transparent 100%);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, #d2a8ff 100%);
     opacity: 0.85;
-    border-radius: 100%;
+    border-radius: 50%;
     box-shadow: 0 1px 12px var(--accent), 0 0 4px #d2a8ff;
   }
   [data-theme="light"] .home-hero-band::after {
-    background: linear-gradient(90deg, transparent 0%, var(--accent) 35%, #8250df 65%, transparent 100%);
+    background: linear-gradient(90deg, var(--accent) 0%, #8250df 100%);
     box-shadow: 0 1px 8px rgba(9, 105, 218, 0.4), 0 0 3px rgba(130, 80, 223, 0.3);
   }
   .home-topbar {
@@ -1858,11 +1858,11 @@ body {
   }
   
   /* Scale up fonts significantly for desktop so code isn't tiny */
-  [data-font="sm"] { --code-size: 14px; }
-  [data-font="md"] { --code-size: 17px; }
-  [data-font="lg"] { --code-size: 21px; }
-  .pattern { font-size: 16px; padding: 16px 24px; }
-  .line-nums { padding-right: 18px; margin-right: 18px; }
+  [data-font="sm"] { --code-size: 21px; }
+  [data-font="md"] { --code-size: 24px; }
+  [data-font="lg"] { --code-size: 28px; }
+  .pattern { font-size: 18px; padding: 20px 32px; }
+  .line-nums { padding-right: 20px; margin-right: 20px; }
 }
 
 /* ===== DUET LOGO — dark/light theme adaptive ===== */
@@ -5950,6 +5950,7 @@ history.replaceState({ screen: 'home' }, '', window.location.pathname + window.l
 
 // Navigation Triggers
 function openMode(mode) {
+  sessionStorage.setItem('duet-state', mode);
   const savedLayout = localStorage.getItem('duet-layout') || 'row';
   currentLayout = savedLayout;
   currentMode = mode;
@@ -5972,6 +5973,7 @@ function openMode(mode) {
 }
 
 function goHome() {
+  sessionStorage.removeItem('duet-state');
   const state = history.state;
   if (state && state.screen === 'menu') {
     // Just go back — popstate will handle closing menu then going to app.
@@ -7021,6 +7023,15 @@ function clearMenuSearch() {
   }
   setDesktop();
   window.addEventListener('resize', setDesktop, {passive: true});
+})();
+
+// Restore state on reload
+(function() {
+  const savedMode = sessionStorage.getItem('duet-state');
+  if (savedMode) {
+    // Slight delay ensures DOM and lazy-loaders are ready
+    setTimeout(() => openMode(savedMode), 50);
+  }
 })();
 
 </script>
