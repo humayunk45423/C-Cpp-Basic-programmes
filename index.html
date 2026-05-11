@@ -135,6 +135,7 @@
       --radius: 16px;
       --code-size: 14px;
       --star: #a78bfa;
+      --star-rgb: 167, 139, 250;
     }
 
     [data-theme="light"] {
@@ -160,6 +161,7 @@
 
       --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       --star: #8250df;
+      --star-rgb: 130, 80, 223;
     }
 
     /* Dynamic Font Sizing via Variables */
@@ -8383,6 +8385,7 @@ int main() {
     let _pendingBuildMode = null;
     let _currentBuildId = 0;
     function buildPrograms(mode) {
+      if (codeObserver) codeObserver.disconnect();
       const buildId = ++_currentBuildId;
       if (_buildInProgress && _pendingBuildMode === mode) return;
       _buildInProgress = true;
@@ -8881,9 +8884,10 @@ int main() {
       haptic(10);
       const mode = currentMode || 'BOTH';
       let bm = getBookmarks();
-      const existIdx = bm.findIndex(b => b.idx === idx && b.mode === mode);
+      const existIdx = bm.findIndex(b => b.idx === idx); // Global check by index only
       if (existIdx !== -1) {
-        bm.splice(existIdx, 1);
+        // Remove ALL instances of this index to ensure clean un-starring
+        bm = bm.filter(b => b.idx !== idx);
         showToast('<svg width="15" height="15" style="flex-shrink:0"><use href="#ic-star"/></svg><span>Bookmark removed</span>');
       } else {
         bm.push({ idx, mode });
@@ -9389,13 +9393,10 @@ int main() {
       }).observe(_appEl, { attributes: true, attributeFilter: ['class'] });
     }
 
-    // ================================================
     // OVERRIDE buildPrograms to inject line numbers,
     // bookmark buttons, last-viewed tracking, swipe hint
     // ================================================
     const _origBuildPrograms = buildPrograms;
-    // Keep a reference to the last scroll tracker so we can remove it before adding a new one
-    let _lastScrollTracker = null;
     buildPrograms = function (mode) {
       _origBuildPrograms(mode);
 
