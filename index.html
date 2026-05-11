@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-font="md">
 
 <head>
@@ -3791,7 +3791,7 @@
       <polygon
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </symbol>
-    <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"
+    <defs><linearGradient id="grad-star" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#58a6ff;stop-opacity:1" /><stop offset="100%" style="stop-color:#d2a8ff;stop-opacity:1" /></linearGradient></defs><symbol id="ic-star-filled" viewBox="0 0 24 24" fill="url(#grad-star)" stroke="url(#grad-star)" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <polygon
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -8197,7 +8197,7 @@ int main() {
           if (isMenuState) {
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
             setTimeout(() => {
-              openMode(currentMode); // openMode already pushes 'app' state
+              openMode(mode); // openMode already pushes 'app' state
               setTimeout(() => {
                 const el = document.getElementById('s' + idx);
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
