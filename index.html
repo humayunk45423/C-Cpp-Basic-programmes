@@ -64,6 +64,16 @@
         if (_hljsLoading) return;
         _hljsLoading = true;
 
+        var failCount = 0;
+        function handleFail() {
+          failCount++;
+          // Proceed even on failure so the app doesn't hang
+          _hljsLoaded = true;
+          _hljsLoading = false;
+          _hljsQueue.forEach(function (fn) { fn(); });
+          _hljsQueue = [];
+        }
+
         function onCoreReady() {
           var langs = mode === 'CPP' ? ['cpp'] : mode === 'BOTH' ? ['c', 'cpp'] : ['c'];
           var loaded = 0;
@@ -79,6 +89,7 @@
                 _hljsQueue = [];
               }
             };
+            s.onerror = handleFail;
             document.head.appendChild(s);
           });
         }
@@ -86,7 +97,11 @@
         var core = document.createElement('script');
         core.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
         core.onload = onCoreReady;
+        core.onerror = handleFail;
         document.head.appendChild(core);
+        
+        // Elite: 6 second timeout guard
+        setTimeout(function() { if (!_hljsLoaded && _hljsLoading) handleFail(); }, 6000);
       };
     })();
   </script>
@@ -1554,11 +1569,13 @@
 
     .panes.layout-col {
       flex-direction: column;
+      align-items: stretch;
     }
 
     .panes.layout-col .pane {
       border-right: none;
       border-bottom: 1px solid var(--border);
+      flex: 1 0 0;
       min-height: 0;
     }
 
@@ -8537,7 +8554,8 @@ int main() {
           card.appendChild(topbar);
 
           // Onboarding: Show bookmark tooltip once on the very first card
-          if (i === 0 && !localStorage.getItem('duet-bm-hint')) {
+          // Onboarding: Show bookmark tooltip once on the very first card
+          if (i === 0 && !safeGet('duet-bm-hint')) {
             setTimeout(() => {
               const bmBtn = document.getElementById('bm-btn-0');
               if (bmBtn) {
@@ -8547,7 +8565,7 @@ int main() {
                 bmBtn.appendChild(tip);
                 setTimeout(() => { tip.classList.add('show'); }, 500);
                 setTimeout(() => { tip.classList.remove('show'); setTimeout(() => tip.remove(), 400); }, 4500);
-                localStorage.setItem('duet-bm-hint', '1');
+                safeSave('duet-bm-hint', '1');
               }
             }, 1000);
           }
