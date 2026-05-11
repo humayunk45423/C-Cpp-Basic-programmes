@@ -2484,6 +2484,48 @@
     /* bookmarked rows: NO row highlight — only the star icon changes */
 
     /* Remove bookmark button in bookmark tab */
+    /* ===================== SKELETON LOADER ===================== */
+    .skeleton-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .skeleton-card {
+      height: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .sk-bar {
+      height: 60px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .sk-body {
+      flex: 1;
+      background: var(--code-bg);
+      margin: 20px;
+      border-radius: 8px;
+    }
+    .shimmer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+      transform: translateX(-100%);
+      animation: shimmer-anim 1.5s infinite;
+    }
+    @keyframes shimmer-anim {
+      100% { transform: translateX(100%); }
+    }
+
     .bm-remove-btn {
       flex-shrink: 0;
       width: 26px;
@@ -8104,6 +8146,15 @@ int main() {
     // Layout toast helper
     function layoutToast(label) { return T_ICON(label === 'Stacked' ? 'ic-stacked' : 'ic-split') + '<span>' + label + '</span>'; }
 
+    // ===================== STORAGE HELPERS =====================
+    // ===================== STORAGE HELPERS =====================
+    function safeSave(key, val) {
+      try { localStorage.setItem(key, val); } catch(e) { console.warn('Storage failed', e); }
+    }
+    function safeGet(key) {
+      try { return localStorage.getItem(key); } catch(e) { return null; }
+    }
+
     function toggleTheme() {
       const root = document.documentElement;
       const flash = document.getElementById('theme-flash');
@@ -8113,7 +8164,7 @@ int main() {
 
       setTimeout(() => {
         root.setAttribute('data-theme', nextTheme);
-        localStorage.setItem('duet-theme', nextTheme);
+        safeSave('duet-theme', nextTheme);
         // Icon shows what you'll SWITCH TO next: sun = now dark (click for light), moon = now light (click for dark)
         const icon = nextTheme === 'dark' ? ICON_SUN : ICON_MOON;
         document.getElementById('themeBtn').innerHTML = icon;
@@ -8140,7 +8191,7 @@ int main() {
     }
 
     (function initTheme() {
-      const saved = localStorage.getItem('duet-theme');
+      const saved = safeGet('duet-theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const theme = saved || (prefersDark ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
@@ -8168,14 +8219,14 @@ int main() {
       fontIdx = (fontIdx + 1) % FONTS.length;
       const f = FONTS[fontIdx];
       document.documentElement.setAttribute('data-font', f);
-      localStorage.setItem('duet-font', f);
+      safeSave('duet-font', f);
       showToast(fontToast(FONT_TOAST_LABELS[fontIdx]));
       const fab = document.getElementById('fontFab');
       if (fab) fab.textContent = getFontFabLabel(fontIdx);
     }
 
     (function initFont() {
-      const saved = localStorage.getItem('duet-font') || 'md';
+      const saved = safeGet('duet-font') || 'md';
       fontIdx = FONTS.indexOf(saved) >= 0 ? FONTS.indexOf(saved) : 1;
       document.documentElement.setAttribute('data-font', saved);
       // Guard: element may not exist yet if script runs before body parses
@@ -8198,7 +8249,7 @@ int main() {
     function toggleLayout() {
       haptic(10);
       currentLayout = currentLayout === 'row' ? 'col' : 'row';
-      localStorage.setItem('duet-layout', currentLayout);
+      safeSave('duet-layout', currentLayout);
 
       document.querySelectorAll('.panes').forEach(el => {
         el.className = `panes layout-${currentLayout}`;
@@ -8869,10 +8920,10 @@ int main() {
       return raw.map(item => typeof item === 'object' ? item : { idx: item, mode: currentMode || 'BOTH' });
     }
     function getBookmarks() {
-      try { return _bmMigrate(JSON.parse(localStorage.getItem('duet-bookmarks') || '[]')); } catch (e) { return []; }
+      try { return _bmMigrate(JSON.parse(safeGet('duet-bookmarks') || '[]')); } catch (e) { return []; }
     }
     function setBookmarks(bm) {
-      localStorage.setItem('duet-bookmarks', JSON.stringify(bm));
+      safeSave('duet-bookmarks', JSON.stringify(bm));
       updateHomeBmChip();
     }
     function isBookmarked(idx, mode) {
@@ -8942,11 +8993,11 @@ int main() {
     // LAST VIEWED — remember which program + mode was last open
     // ================================================
     function saveLastViewed(mode, idx) {
-      try { localStorage.setItem('duet-last', JSON.stringify({ mode, idx })); } catch (e) { }
+      safeSave('duet-last', JSON.stringify({ mode, idx }));
       updateLastViewedChip();
     }
     function getLastViewed() {
-      try { return JSON.parse(localStorage.getItem('duet-last')); } catch (e) { return null; }
+      try { return JSON.parse(safeGet('duet-last')); } catch (e) { return null; }
     }
     function updateLastViewedChip() {
       const lv = getLastViewed();
@@ -8998,7 +9049,7 @@ int main() {
 
       // Step 1 — state setup (mirrors openMode minus showAppUI)
       sessionStorage.setItem('duet-state', mode);
-      const savedLayout = localStorage.getItem('duet-layout') || 'row';
+      const savedLayout = safeGet('duet-layout') || 'row';
       currentLayout = savedLayout;
       currentMode = mode;
       const iconId = savedLayout === 'row' ? '#ic-split' : '#ic-stacked';
@@ -9064,7 +9115,7 @@ int main() {
     // ================================================
     (function initLineNums() {
       // Restore saved state — default is 'off'
-      const saved = localStorage.getItem('duet-linenums') || 'off';
+      const saved = safeGet('duet-linenums') || 'off';
       document.documentElement.setAttribute('data-linenums', saved);
       // FAB active style if on
       document.addEventListener('DOMContentLoaded', function () {
@@ -9091,7 +9142,7 @@ int main() {
       const isOn = html.getAttribute('data-linenums') === 'on';
       const next = isOn ? 'off' : 'on';
       html.setAttribute('data-linenums', next);
-      localStorage.setItem('duet-linenums', next);
+      safeSave('duet-linenums', next);
       _updateLineNumFab(next === 'on');
       const label = next === 'on' ? 'Line numbers on' : 'Line numbers off';
       showToast('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/></svg><span>' + label + '</span>');
@@ -9101,12 +9152,12 @@ int main() {
     // SWIPE HINT (show once on first visit to code view)
     // ================================================
     function showSwipeHintOnce() {
-      if (localStorage.getItem('duet-swipe-seen')) return;
+      if (safeGet('duet-swipe-seen')) return;
       const hint = document.getElementById('swipe-hint');
       if (!hint) return;
       hint.classList.add('show');
       setTimeout(() => { hint.classList.remove('show'); }, 3000);
-      localStorage.setItem('duet-swipe-seen', '1');
+      safeSave('duet-swipe-seen', '1');
     }
 
     // ================================================
@@ -9138,8 +9189,10 @@ int main() {
     // Elite: Visual Search Highlighting
     function highlightMatch(text, q) {
       if (!q) return text;
+      // Escape for HTML rendering
+      const esc = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const regex = new RegExp(`(${q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
-      return text.replace(regex, '<mark class="search-hl">$1</mark>');
+      return esc.replace(regex, '<mark class="search-hl">$1</mark>');
     }
 
     // ================================================
