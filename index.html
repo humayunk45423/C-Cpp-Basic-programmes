@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-font="md">
 
 <head>
@@ -2303,7 +2303,6 @@
       border: 1px solid rgba(210, 168, 255, 0.3);
       color: #d2a8ff;
       flex-shrink: 0;
-      margin-left: auto;
     }
 
     [data-theme="light"] .bm-mode-badge {
@@ -2336,6 +2335,63 @@
 
     .sheet-list li.bookmarked {
       background: linear-gradient(90deg, rgba(88, 166, 255, 0.04) 0%, rgba(210, 168, 255, 0.06) 100%);
+    }
+
+    /* Remove bookmark button in bookmark tab */
+    .bm-remove-btn {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+    }
+
+    .bm-remove-btn:hover {
+      color: #ff7b72;
+      background: rgba(255, 123, 114, 0.12);
+      transform: scale(1.12);
+    }
+
+    .bm-remove-btn:active {
+      transform: scale(0.9);
+      transition-duration: 0.07s;
+    }
+
+    /* card bookmark button gradient fill when starred */
+    .card-bookmark-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 4px;
+      transition: color 0.15s, background 0.15s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card-bookmark-btn:hover {
+      background: rgba(210, 168, 255, 0.12);
+      color: #d2a8ff;
+    }
+
+    .card-bookmark-btn.starred {
+      color: #a371f7;
+    }
+
+    .card-bookmark-btn.starred svg {
+      filter: drop-shadow(0 0 4px rgba(163, 113, 247, 0.5));
     }
 
     /* ===================== PROGRESS BAR ===================== */
@@ -3602,10 +3658,8 @@
       const swUrl = URL.createObjectURL(swBlob);
       window.addEventListener('load', () => {
         navigator.serviceWorker.register(swUrl).catch(() => {
-          // SW failed (file:// or cross-origin)
-          if (typeof showToast === 'function' && window.location.protocol !== 'file:') {
-            showToast('<span>Offline mode unavailable</span>', 3000);
-          }
+          // SW failed silently (blob:// scope limitation on some browsers)
+          // No toast — this is expected when served as a single HTML file
         });
       }, { once: true });
     }
@@ -3781,15 +3835,29 @@
       <line x1="11" y1="16" x2="21" y2="16" />
       <polyline points="3 11 5 13 3 15" />
     </symbol>
+    <!-- Gradient for filled star: bluish-purple -->
+    <defs>
+      <linearGradient id="star-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#79c0ff" />
+        <stop offset="100%" stop-color="#d2a8ff" />
+      </linearGradient>
+    </defs>
     <symbol id="ic-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
       stroke-linejoin="round">
       <polygon
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </symbol>
-    <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"
+    <symbol id="ic-star-filled" viewBox="0 0 24 24" fill="url(#star-grad)" stroke="url(#star-grad)" stroke-width="1.5"
       stroke-linecap="round" stroke-linejoin="round">
       <polygon
         points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </symbol>
+    <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6" /><path d="M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
     </symbol>
     <symbol id="ic-flat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
       stroke-linejoin="round">
@@ -8610,8 +8678,11 @@ int main() {
       cnt.textContent = bm.length + ' Bookmark' + (bm.length === 1 ? '' : 's');
     }
     function openBookmarksSheet() {
+      // Switch tab immediately before animation starts to avoid visible flicker/freeze
+      _sheetTab = 'bookmarks';
       openMenuSheet();
-      setTimeout(() => switchSheetTab('bookmarks'), 80);
+      // Use rAF to batch the DOM updates after the sheet starts animating
+      requestAnimationFrame(() => switchSheetTab('bookmarks'));
     }
 
     // ================================================
@@ -8804,7 +8875,7 @@ int main() {
         // Remove old bm-extra entries
         listEl.querySelectorAll('[data-bm-extra]').forEach(el => el.remove());
 
-        bm.forEach(entry => {
+        bm.forEach((entry, bmEntryIndex) => {
           const { idx, mode } = entry;
           if (idx == null || !data[idx]) return;
           const title = data[idx][0];
@@ -8813,11 +8884,12 @@ int main() {
 
           const li = document.createElement('li');
           li.dataset.bmExtra = '1';
-          li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;';
-          li.onclick = () => {
+          li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;position:relative;';
+
+          // Navigate on row click (except remove button)
+          li.onclick = (e) => {
+            if (e.target.closest('.bm-remove-btn')) return;
             // FIX: closeMenuUI()+replaceState is SYNC — no async popstate race condition.
-            // Do NOT use closeMenu() which calls history.back() async, causing
-            // popstate to fire showHomeUI() and snap the user back to home.
             closeMenuUI();
             clearMenuSearch();
             history.replaceState({ screen: 'home' }, '', window.location.pathname + window.location.search);
@@ -8829,11 +8901,49 @@ int main() {
               }, 350);
             }, 60); // 60ms lets sheet-close animation settle before building programs
           };
+
           const modeLabel = mode === 'C' ? 'C' : mode === 'CPP' ? 'C++' : 'C&C++';
+
+          // Remove bookmark button
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'bm-remove-btn';
+          removeBtn.title = 'Remove bookmark';
+          removeBtn.setAttribute('aria-label', 'Remove bookmark');
+          removeBtn.innerHTML = '<svg width="14" height="14"><use href="#ic-trash"/></svg>';
+          removeBtn.onclick = (e) => {
+            e.stopPropagation();
+            // Animate out
+            li.style.transition = 'opacity 0.22s ease, transform 0.22s ease, max-height 0.28s ease';
+            li.style.overflow = 'hidden';
+            li.style.maxHeight = li.offsetHeight + 'px';
+            requestAnimationFrame(() => {
+              li.style.opacity = '0';
+              li.style.transform = 'translateX(24px)';
+              li.style.maxHeight = '0';
+              li.style.padding = '0 16px';
+            });
+            setTimeout(() => {
+              // Remove from storage
+              let bmList = getBookmarks();
+              const removeIdx = bmList.findIndex(b => b.idx === idx && b.mode === mode);
+              if (removeIdx !== -1) bmList.splice(removeIdx, 1);
+              setBookmarks(bmList);
+              // Update card button if visible
+              const btn = document.getElementById('bm-btn-' + idx);
+              if (btn) updateBookmarkBtn(btn, isBookmarked(idx, mode));
+              // Update sheet star
+              const star = document.querySelector('#menuList [data-idx="' + idx + '"] .prog-star');
+              if (star) { star.classList.remove('starred'); star.innerHTML = '<svg width="14" height="14"><use href="#ic-star"/></svg>'; }
+              // Refresh the bookmark tab
+              switchSheetTab('bookmarks');
+            }, 280);
+          };
+
           li.innerHTML = `
-        <span class="prog-num" style="flex-shrink:0">${idx + 1}</span>
-        <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${title}</span>
-        <span class="bm-mode-badge">${modeLabel}</span>`;
+            <span class="prog-num" style="flex-shrink:0">${idx + 1}</span>
+            <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${title}</span>
+            <span class="bm-mode-badge">${modeLabel}</span>`;
+          li.appendChild(removeBtn);
           listEl.appendChild(li);
           visible++;
         });
