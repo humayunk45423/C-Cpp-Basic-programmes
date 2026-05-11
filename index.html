@@ -8627,6 +8627,8 @@ int main() {
       updateHomeBmChip();
     }
     function isBookmarked(idx, mode) {
+      // If mode is provided, check for that specific index + mode combo
+      // If mode is NOT provided, check if the program index is bookmarked in ANY mode
       return getBookmarks().some(b => b.idx === idx && (mode ? b.mode === mode : true));
     }
     function toggleBookmark(idx) {
@@ -8708,8 +8710,13 @@ int main() {
       const app = document.getElementById('app');
       const el  = document.getElementById('s' + idx);
       if (!app || !el) return;
+      
+      // getBoundingClientRect is more robust than offsetTop for nested layouts
+      const rect = el.getBoundingClientRect();
+      const offset = rect.top + app.scrollTop;
+      
       app.style.scrollBehavior = 'auto';
-      app.scrollTop = el.offsetTop;
+      app.scrollTop = offset;
       requestAnimationFrame(() => { app.style.scrollBehavior = ''; });
     }
 
@@ -8880,9 +8887,12 @@ int main() {
       const results = document.getElementById('home-search-results');
       if (input) input.value = '';
       if (results) results.classList.remove('open');
-      openMode('BOTH');
-      // Instant snap scroll — poll for element, then use scrollTop (not scrollIntoView)
-      // to avoid scroll-snap conflict
+      
+      // If user is already in C or CPP mode, stay in that mode.
+      // Otherwise (if on Home or in BOTH), default to BOTH.
+      const targetMode = (currentMode === 'C' || currentMode === 'CPP') ? currentMode : 'BOTH';
+      openMode(targetMode);
+
       let attempts = 0;
       const tryScroll = () => {
         const el = document.getElementById('s' + idx);
@@ -9090,7 +9100,9 @@ int main() {
           if (snap) {
             const snapIdx = parseInt(snap.id.replace('s', ''));
             if (!isNaN(snapIdx) && !topbar.querySelector('.card-bookmark-btn')) {
-              const bm = isBookmarked(snapIdx);
+              // BUG FIX: Pass currentMode so a bookmark in C mode doesn't 
+              // show up incorrectly as a bookmark in CPP mode
+              const bm = isBookmarked(snapIdx, mode); 
               const btn = document.createElement('button');
               btn.className = 'card-bookmark-btn' + (bm ? ' starred' : '');
               btn.id = 'bm-btn-' + snapIdx;
@@ -9121,7 +9133,6 @@ int main() {
           });
           // Track last viewed — set up once after DOM is stable
           const appEl = document.getElementById('app');
-          if (_lastScrollTracker) appEl.removeEventListener('scroll', _lastScrollTracker);
           const snapEls = document.querySelectorAll('.snap');
           let lvTimer = null;
           const trackLV = () => {
@@ -9135,8 +9146,8 @@ int main() {
               if (best !== null) saveLastViewed(mode, best);
             }, 400);
           };
-          _lastScrollTracker = trackLV;
-          appEl.addEventListener('scroll', trackLV, { passive: true });
+          // Use .onscroll to replace the previous listener (avoids leaks)
+          appEl.onscroll = trackLV;
 
           // Show swipe hint on first visit
           showSwipeHintOnce();
