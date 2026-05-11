@@ -867,8 +867,8 @@ body {
 
 /* ===================== CSS VARIABLE SYNTAX HIGHLIGHTING ===================== */
 .hljs-keyword, .hljs-type, .hljs-literal { color: var(--syn-kw); font-weight: 700; }
-.hljs-string { color: var(--syn-str); font-weight: 600; }
-/* Light mode strings use --syn-str (#0a3069) — no override needed */
+.hljs-string { color: #3fb950; font-weight: 600; }
+[data-theme="light"] .hljs-string { color: #1a7f37; font-weight: 600; }
 .hljs-number { color: var(--syn-num); }
 .hljs-comment { color: var(--syn-cmt); font-style: italic; }
 .hljs-meta { color: var(--syn-cmt); font-weight: 700; }
