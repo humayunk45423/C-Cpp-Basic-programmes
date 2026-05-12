@@ -4879,8 +4879,7 @@
     </div>
 
     <div class="mode-grid">
-      <div class="mode-card" role="button" tabindex="0" aria-label="Browse C programs" onclick="openMode('C')"
-        onkeydown="if(event.key==='Enter'||event.key===' ')openMode('C')">
+      <div class="mode-card" role="button" tabindex="0" aria-label="Browse C programs" onclick="openMode('C')">
         <div class="card-icon"><svg width="32px" height="32px">
             <use href="#ic-book-c" />
           </svg></div>
@@ -4889,8 +4888,7 @@
           <div class="card-desc lang-green">Tap to browse</div>
         </div>
       </div>
-      <div class="mode-card" role="button" tabindex="0" aria-label="Browse C++ programs" onclick="openMode('CPP')"
-        onkeydown="if(event.key==='Enter'||event.key===' ')openMode('CPP')">
+      <div class="mode-card" role="button" tabindex="0" aria-label="Browse C++ programs" onclick="openMode('CPP')">
         <div class="card-icon"><svg width="32px" height="32px">
             <use href="#ic-book-cpp" />
           </svg></div>
@@ -4900,7 +4898,7 @@
         </div>
       </div>
       <div class="mode-card full" role="button" tabindex="0" aria-label="Compare C and C++ side by side"
-        onclick="openMode('BOTH')" onkeydown="if(event.key==='Enter'||event.key===' ')openMode('BOTH')">
+        onclick="openMode('BOTH')">
         <div class="card-icon"><svg width="32px" height="32px">
             <use href="#ic-compare" />
           </svg></div>
@@ -9540,10 +9538,11 @@ int main() {
     // KEYBOARD: Global Shortcuts & Accessibility
     // ================================================
     document.addEventListener('keydown', e => {
-      // 1. Accessibility: Enter key on focused mode-cards
-      if (e.key === 'Enter') {
+      // 1. Accessibility: Enter or Space key on focused mode-cards
+      if (e.key === 'Enter' || e.key === ' ') {
         const active = document.activeElement;
         if (active && active.classList.contains('mode-card')) {
+          if (e.key === ' ') e.preventDefault(); // prevent scroll
           active.click();
         }
       }
