@@ -5073,11 +5073,11 @@ int main() {
     float a, b;
     printf("Enter two numbers: ");
     scanf("%f %f", &a, &b);
-    printf("Sum = %.2f\\n", a + b);
-    printf("Subtraction = %.2f\\n", a - b);
-    printf("Multiplication = %.2f\\n", a * b);
+    printf("Sum = %f\\n", a + b);
+    printf("Subtraction = %f\\n", a - b);
+    printf("Multiplication = %f\\n", a * b);
     if (b != 0)
-        printf("Division = %.2f\\n", a / b);
+        printf("Division = %f\\n", a / b);
     else
         printf("Division = Infinity\\n");
     return 0;
@@ -5213,7 +5213,7 @@ int main() {
     printf("Enter three numbers: ");
     scanf("%f %f %f", &a, &b, &c);
     avg = (a + b + c) / 3;
-    printf("Average = %.2f\\n", avg);
+    printf("Average = %f\\n", avg);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5230,7 +5230,7 @@ int main() {
     printf("Enter base and height: ");
     scanf("%f %f", &base, &height);
     area = (base * height) / 2;
-    printf("Right Angle Triangle Area = %.2f\\n", area);
+    printf("Right Angle Triangle Area = %f\\n", area);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5247,7 +5247,7 @@ int main() {
     printf("Enter side length: ");
     scanf("%f", &a);
     area = (1.7320508 / 4) * a * a;
-    printf("Equilateral Triangle Area = %.2f\\n", area);
+    printf("Equilateral Triangle Area = %f\\n", area);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5274,7 +5274,7 @@ int main() {
     guess = (guess + x / guess) / 2;
     }
     area = guess;
-    printf("Scalene Triangle Area = %.2f\\n", area);
+    printf("Scalene Triangle Area = %f\\n", area);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5302,8 +5302,8 @@ int main() {
     scanf("%f", &r);
     area = pi * r * r;
     circ = 2 * pi * r;
-    printf("Area = %.4f Sq M\\n", area);
-    printf("Circumference = %.4f M\\n", circ);
+    printf("Area = %f Sq M\\n", area);
+    printf("Circumference = %f M\\n", circ);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5399,7 +5399,7 @@ int main() {
     printf("Enter temperature in Celsius: ");
     scanf("%f", &c);
     f = (c * 9 / 5) + 32;
-    printf("%.2f C = %.2f F\\n", c, f);
+    printf("%f C = %f F\\n", c, f);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -5416,7 +5416,7 @@ int main() {
     printf("Enter temperature in Fahrenheit: ");
     scanf("%f", &f);
     c = (f - 32) * 5 / 9;
-    printf("%.2f F = %.2f C\\n", f, c);
+    printf("%f F = %f C\\n", f, c);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -6462,7 +6462,7 @@ int main() {
     for (int i = 1; i <= n; i++) {
     sum = sum + 1.0 / i;
     }
-    printf("Sum = %.4f\\n", sum);
+    printf("Sum = %f\\n", sum);
     return 0;
 }`, `#include<iostream>
 using namespace std;
@@ -6485,7 +6485,7 @@ int main() {
     for (int i = 1; i <= n; i++) {
     sum = sum + 1.0 / ((float)i * i);
     }
-    printf("Sum = %.4f\\n", sum);
+    printf("Sum = %f\\n", sum);
     return 0;
 }`, `#include<iostream>
 using namespace std;
