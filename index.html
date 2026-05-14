@@ -8562,7 +8562,7 @@ int main() {
           // Side menu
           const li = document.createElement('li');
           li.dataset.idx = i;
-          const bmEntry = bm.find(b => b.idx === i);
+          const bmEntry = bm.find(b => b.idx === i && b.mode === mode);
           if (bmEntry) li.classList.add('bookmarked');
           li.innerHTML = `<span class="prog-num">${i + 1}</span><span class="prog-title">${title}</span><span class="prog-star${bmEntry ? ' starred' : ''}">${bmEntry ? '<svg width="14" height="14"><use href="#ic-star-filled"/></svg>' : '<svg width="14" height="14"><use href="#ic-star"/></svg>'}</span>`;
           li.querySelector('.prog-star').onclick = (e) => { e.stopPropagation(); toggleBookmark(i); };
@@ -9040,10 +9040,9 @@ int main() {
       haptic(10);
       const mode = currentMode || 'BOTH';
       let bm = getBookmarks();
-      const existIdx = bm.findIndex(b => b.idx === idx); // Global check by index only
+      const existIdx = bm.findIndex(b => b.idx === idx && b.mode === mode);
       if (existIdx !== -1) {
-        // Remove ALL instances of this index to ensure clean un-starring
-        bm = bm.filter(b => b.idx !== idx);
+        bm.splice(existIdx, 1);
         showToast(T_ICON('ic-star') + '<span>Bookmark removed</span>');
       } else {
         bm.push({ idx, mode });
@@ -9352,7 +9351,7 @@ int main() {
       if (input) input.value = '';
       if (results) results.classList.remove('open');
       
-      const targetMode = (currentMode === 'C' || currentMode === 'CPP') ? currentMode : 'BOTH';
+      const targetMode = 'BOTH';
       openMode(targetMode);
 
       let attempts = 0;
