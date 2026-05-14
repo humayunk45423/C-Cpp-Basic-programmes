@@ -5040,9 +5040,6 @@
         </svg></button>
     </div>
     <div class="sheet-tabs" role="tablist" aria-label="Program filter tabs">
-      <div class="sheet-tab active" id="tab-all" role="tab" tabindex="0" aria-selected="true"
-        onclick="switchSheetTab('all')" onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('all')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> All
-        Programs</div>
       <div class="sheet-tab" id="tab-bm" role="tab" tabindex="0" aria-selected="false"
         onclick="switchSheetTab('bookmarks')"
         onkeydown="if(event.key==='Enter'||event.key===' ')switchSheetTab('bookmarks')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Bookmarks</div>
@@ -8425,8 +8422,8 @@ int main() {
         tabAll.setAttribute('aria-selected', 'true');
       }
       if (tabBm) {
-        tabBm.classList.remove('active');
-        tabBm.setAttribute('aria-selected', 'false');
+        tabBm.classList.toggle('active', _sheetTab === 'bookmarks');
+        tabBm.setAttribute('aria-selected', _sheetTab === 'bookmarks' ? 'true' : 'false');
       }
     }
 
@@ -9378,10 +9375,14 @@ int main() {
       _sheetTab = tab;
       const tabAll = document.getElementById('tab-all');
       const tabBm = document.getElementById('tab-bm');
-      tabAll.classList.toggle('active', tab === 'all');
-      tabBm.classList.toggle('active', tab === 'bookmarks');
-      tabAll.setAttribute('aria-selected', tab === 'all' ? 'true' : 'false');
-      tabBm.setAttribute('aria-selected', tab === 'bookmarks' ? 'true' : 'false');
+      if (tabAll) {
+        tabAll.classList.toggle('active', tab === 'all');
+        tabAll.setAttribute('aria-selected', tab === 'all' ? 'true' : 'false');
+      }
+      if (tabBm) {
+        tabBm.classList.toggle('active', tab === 'bookmarks');
+        tabBm.setAttribute('aria-selected', tab === 'bookmarks' ? 'true' : 'false');
+      }
       const items = document.querySelectorAll('#menuList li');
       // Reverse bookmarks so the newest one appears at the top
       const bm = getBookmarks().slice().reverse();
