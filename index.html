@@ -3412,6 +3412,14 @@
       background: linear-gradient(135deg, rgba(9, 105, 218, 0.08) 0%, rgba(130, 80, 223, 0.1) 100%);
     }
 
+    /* Empty state — both chips dimmed when no data */
+    .last-viewed-chip.chip-empty,
+    .home-bm-chip.chip-empty {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
     .home-first-hint {
       display: flex;
       align-items: center;
@@ -5184,7 +5192,7 @@
         <p class="hero-sub">All 111 programs from the official DUET admission syllabus — curated, verified, and ready to study.</p>
 
         <div class="home-chips-row">
-          <div id="last-viewed-chip" class="last-viewed-chip" style="display:none" role="button" tabindex="0" onclick="resumeLastViewed()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();resumeLastViewed();}">
+          <div id="last-viewed-chip" class="last-viewed-chip chip-empty" role="button" tabindex="0" onclick="resumeLastViewed()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();resumeLastViewed();}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
               stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10" />
@@ -9945,9 +9953,14 @@ int main() {
       const cnt = document.getElementById('home-bm-count');
       if (!chip) return;
       const bm = getBookmarks();
-      if (bm.length === 0) { chip.style.display = 'none'; return; }
       chip.style.display = 'inline-flex';
-      cnt.textContent = bm.length + ' Bookmark' + (bm.length === 1 ? '' : 's');
+      if (bm.length === 0) {
+        cnt.textContent = '0 Bookmarks';
+        chip.classList.add('chip-empty');
+      } else {
+        cnt.textContent = bm.length + ' Bookmark' + (bm.length === 1 ? '' : 's');
+        chip.classList.remove('chip-empty');
+      }
     }
     function openBookmarksSheet() {
       // Switch tab immediately before animation starts to avoid visible flicker/freeze
@@ -9980,12 +9993,14 @@ int main() {
       const chip = document.getElementById('last-viewed-chip');
       const txt = document.getElementById('last-viewed-text');
       if (!chip || !txt) return;
+      chip.style.display = 'inline-flex';
       if (lv && lv.idx != null && data[lv.idx]) {
         const shortTitle = data[lv.idx][0].split('.').slice(0, 2).join('.').substring(0, 28);
         txt.textContent = 'Resume: ' + shortTitle;
-        chip.style.display = 'inline-flex';
+        chip.classList.remove('chip-empty');
       } else {
-        chip.style.display = 'none';
+        txt.textContent = 'No Recent Programs';
+        chip.classList.add('chip-empty');
       }
     }
     // ================================================
@@ -10657,6 +10672,14 @@ int main() {
       const barEl = document.getElementById('loaderProgress');
       const wrapEl = document.getElementById('loaderLabelWrap');
       const loader = document.getElementById('startup-loader');
+
+      // Skip loader on repeat visits — only show on first visit
+      const LOADER_KEY = 'duet-seen';
+      if (safeGet(LOADER_KEY)) {
+        if (loader) { loader.classList.add('hide'); setTimeout(() => { try { loader.remove(); } catch(e){} }, 0); }
+        return;
+      }
+      try { localStorage.setItem(LOADER_KEY, '1'); } catch(e) {}
       const TARGET = 'Initializing DUET Code...';
       const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&!';
       const TOTAL = 1100; // total ms
