@@ -34,6 +34,8 @@
         document.documentElement.setAttribute('data-theme', t);
         var f = localStorage.getItem('duet-font');
         if (f) document.documentElement.setAttribute('data-font', f);
+        var p = localStorage.getItem('duet-preset');
+        if (p && p !== 'modern') document.documentElement.setAttribute('data-preset', p);
       } catch (e) { }
     })();
 
@@ -213,8 +215,271 @@
       --syn-op: #cf222e;
 
       --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      --radius: 32px;
+      --font-ui: 'Outfit', sans-serif;
       --star: #8250df;
       --star-rgb: 130, 80, 223;
+    }
+
+    /* =====================================================================
+       THEME PRESET SYSTEM
+       Each preset owns ALL tokens + light variant via compound selector.
+       --radius = shape personality. --font-ui = type personality.
+       ===================================================================== */
+
+    /* ── MODERN MINIMAL: default :root / [data-theme="light"] — no block needed ── */
+
+    /* ══ WOOD FINISH — 60% walnut / 30% oak / 10% amber ══════════════════ */
+    [data-preset="wood"] {
+      --bg:            #1c1007;
+      --surface:       #2e1e0f;
+      --surface2:      #3f2c18;
+      --surface-trans: rgba(28,16,7,0.94);
+      --border:        #5a3a1a;
+      --text:          #f0ddb8;
+      --muted:         #9a7850;
+      --accent:        #c8913a;
+      --accent2:       #e8b86a;
+      --code-bg:       #120b04;
+      --shadow:        0 8px 28px rgba(0,0,0,0.65), 0 2px 0 rgba(200,145,58,0.08);
+      --radius:        16px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #c8913a;
+      --star-rgb:      200,145,58;
+      --syn-kw:        #d46a30;
+      --syn-str:       #90c860;
+      --syn-num:       #c8b040;
+      --syn-cmt:       #604830;
+      --syn-title:     #e8b86a;
+      --syn-op:        #d46a30;
+    }
+    [data-preset="wood"][data-theme="light"] {
+      --bg:            #f5ead4;
+      --surface:       #fdf3e0;
+      --surface2:      #e8d8b8;
+      --surface-trans: rgba(245,234,212,0.95);
+      --border:        #b8884a;
+      --text:          #2a1806;
+      --muted:         #7a5828;
+      --accent:        #8a4e10;
+      --accent2:       #b86820;
+      --code-bg:       #fdf6e6;
+      --shadow:        0 4px 16px rgba(80,40,0,0.16);
+      --radius:        16px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #8a4e10;
+      --star-rgb:      138,78,16;
+      --syn-kw:        #8a2010;
+      --syn-str:       #3a6010;
+      --syn-num:       #6a5010;
+      --syn-cmt:       #806848;
+      --syn-title:     #8a4e10;
+      --syn-op:        #8a2010;
+    }
+
+    /* ══ VIBRANT COLORFUL — 60% deep indigo / 30% violet / 10% hot-pink+cyan ══ */
+    [data-preset="vibrant"] {
+      --bg:            #0a0118;
+      --surface:       #150230;
+      --surface2:      #220450;
+      --surface-trans: rgba(10,1,24,0.94);
+      --border:        #5500bb;
+      --text:          #f2eaff;
+      --muted:         #9966cc;
+      --accent:        #ff1060;
+      --accent2:       #00e8ff;
+      --code-bg:       #060012;
+      --shadow:        0 8px 40px rgba(120,0,255,0.4), 0 2px 12px rgba(255,16,96,0.25);
+      --radius:        24px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #ff1060;
+      --star-rgb:      255,16,96;
+      --syn-kw:        #ff1060;
+      --syn-str:       #00e8ff;
+      --syn-num:       #ffd000;
+      --syn-cmt:       #5522aa;
+      --syn-title:     #cc88ff;
+      --syn-op:        #ff6820;
+    }
+    [data-preset="vibrant"][data-theme="light"] {
+      --bg:            #f8f0ff;
+      --surface:       #ffffff;
+      --surface2:      #eedeff;
+      --surface-trans: rgba(248,240,255,0.95);
+      --border:        #bb44ee;
+      --text:          #1a0030;
+      --muted:         #7722aa;
+      --accent:        #cc0050;
+      --accent2:       #0088bb;
+      --code-bg:       #f4eaff;
+      --shadow:        0 4px 24px rgba(150,0,200,0.2);
+      --radius:        24px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #cc0050;
+      --star-rgb:      204,0,80;
+      --syn-kw:        #cc0050;
+      --syn-str:       #006688;
+      --syn-num:       #886600;
+      --syn-cmt:       #7722aa;
+      --syn-title:     #8800cc;
+      --syn-op:        #aa3300;
+    }
+
+    /* ══ CLASSIC — 60% dark navy / 30% slate / 10% steel blue — shape: 6px sharp ══ */
+    /* ══ CLASSIC — ash gray + warm brown. Zero radius. Rectangular everything. ══ */
+    [data-preset="classic"] {
+      --bg:            #1a1a1a;
+      --surface:       #242424;
+      --surface2:      #2e2e2e;
+      --surface-trans: rgba(26,26,26,0.96);
+      --border:        #5c4a38;
+      --text:          #d8d0c8;
+      --muted:         #7a6e62;
+      --accent:        #c8a878;
+      --accent2:       #e0c090;
+      --code-bg:       #111111;
+      --shadow:        0 4px 12px rgba(0,0,0,0.6);
+      --radius:        0px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #c8a878;
+      --star-rgb:      200,168,120;
+      --syn-kw:        #c0392b;
+      --syn-str:       #c8a878;
+      --syn-num:       #a08060;
+      --syn-cmt:       #5a5048;
+      --syn-title:     #e0c090;
+      --syn-op:        #c0392b;
+    }
+    [data-preset="classic"][data-theme="light"] {
+      --bg:            #e8e4de;
+      --surface:       #f0ece6;
+      --surface2:      #ddd8d0;
+      --surface-trans: rgba(232,228,222,0.96);
+      --border:        #a8906a;
+      --text:          #1e1a16;
+      --muted:         #6a5e50;
+      --accent:        #7a5830;
+      --accent2:       #9a7040;
+      --code-bg:       #e0dbd4;
+      --shadow:        0 4px 12px rgba(0,0,0,0.14);
+      --radius:        0px;
+      --font-ui:       'Outfit', sans-serif;
+      --star:          #7a5830;
+      --star-rgb:      122,88,48;
+      --syn-kw:        #8a2010;
+      --syn-str:       #7a5830;
+      --syn-num:       #6a4820;
+      --syn-cmt:       #807060;
+      --syn-title:     #7a5830;
+      --syn-op:        #8a2010;
+    }
+
+    /* ══ CLASSIC RETRO — amber phosphor CRT. Readable. No scanlines. ══ */
+    [data-preset="retro"] {
+      --bg:            #0a0800;
+      --surface:       #140f00;
+      --surface2:      #1e1800;
+      --surface-trans: rgba(10,8,0,0.97);
+      --border:        #4a3800;
+      --text:          #ffb000;
+      --muted:         #7a5800;
+      --accent:        #ffb000;
+      --accent2:       #ffd060;
+      --code-bg:       #070500;
+      --shadow:        0 0 16px rgba(255,176,0,0.08), 0 8px 28px rgba(0,0,0,0.9);
+      --radius:        0px;
+      --font-ui:       'JetBrains Mono', monospace;
+      --star:          #ffb000;
+      --star-rgb:      255,176,0;
+      --syn-kw:        #ffb000;
+      --syn-str:       #ffd060;
+      --syn-num:       #ffb000;
+      --syn-cmt:       #5a4400;
+      --syn-title:     #ffd060;
+      --syn-op:        #ffb000;
+    }
+    [data-preset="retro"][data-theme="light"] {
+      --bg:            #fdf5d8;
+      --surface:       #fffae8;
+      --surface2:      #f0e8b8;
+      --surface-trans: rgba(253,245,216,0.97);
+      --border:        #c8a030;
+      --text:          #3a2800;
+      --muted:         #7a6020;
+      --accent:        #8a5c00;
+      --accent2:       #b07800;
+      --code-bg:       #f8eecc;
+      --shadow:        0 4px 12px rgba(100,60,0,0.14);
+      --radius:        0px;
+      --font-ui:       'JetBrains Mono', monospace;
+      --star:          #8a5c00;
+      --star-rgb:      138,92,0;
+      --syn-kw:        #8a5c00;
+      --syn-str:       #6a4400;
+      --syn-num:       #7a5000;
+      --syn-cmt:       #a08040;
+      --syn-title:     #8a5c00;
+      --syn-op:        #8a5c00;
+    }
+    /* Retro: mono font-family ONLY — no size/spacing/layout changes */
+    [data-preset="retro"] body,
+    [data-preset="retro"] .hero-title,
+    [data-preset="retro"] .hero-sub,
+    [data-preset="retro"] .card-label,
+    [data-preset="retro"] .card-desc,
+    [data-preset="retro"] .topbar-badge,
+    [data-preset="retro"] .home-footer {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+    /* Retro: compensate mono width so hero-title stays single line */
+    [data-preset="retro"] .hero-title {
+      font-size: clamp(20px, 5.5vw, 30px) !important;
+      letter-spacing: -0.02em !important;
+    }
+    /* Retro: amber phosphor glow on key text */
+    [data-preset="retro"] .hero-title,
+    [data-preset="retro"] .card-label,
+    [data-preset="retro"] .topbar-badge {
+      text-shadow: 0 0 6px rgba(255,176,0,0.5), 0 0 16px rgba(255,176,0,0.15);
+    }
+    [data-preset="retro"] .home-search {
+      border-color: #4a3800 !important;
+      caret-color: #ffb000;
+    }
+
+    /* ── NUCLEAR: zero ALL border-radius for classic + retro (elements only, not pseudo) ── */
+    [data-preset="classic"] *,
+    [data-preset="retro"] * {
+      border-radius: 0 !important;
+    }
+
+    /* ── VIBRANT: subtle color halos on cards ── */
+    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(1) {
+      box-shadow: 0 0 0 1px rgba(255,16,96,0.3), 0 8px 32px rgba(255,16,96,0.2) !important;
+    }
+    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(2) {
+      box-shadow: 0 0 0 1px rgba(0,232,255,0.3), 0 8px 32px rgba(0,232,255,0.2) !important;
+    }
+    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(3) {
+      box-shadow: 0 0 0 1px rgba(255,208,0,0.3), 0 8px 32px rgba(100,0,255,0.25) !important;
+    }
+    [data-preset="vibrant"] .hero-title span {
+      background: linear-gradient(90deg, #ff1060, #cc88ff, #00e8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── WOOD: subtle noise grain via SVG data URI ── */
+    [data-preset="wood"] #home::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
     }
 
     /* Dynamic Font Sizing via Variables */
@@ -308,95 +573,109 @@
       padding: 0 14px 8px !important;
     }
 
-    /* ── C Code card — purple tint ── */
+    /* ── 60/30/10 UX RULE — Modern Minimal home
+       60% = bg/surface (neutral dark)
+       30% = cards/containers (surface elevation, NO color tints)
+       10% = accent ONLY on: hero span, CTA desc text, focus rings, footer link
+    ── */
+
+    /* Cards: flat neutral — no colored gradient tints */
     .mode-grid .mode-card:nth-child(1) {
-      background: linear-gradient(145deg, rgba(210,168,255,0.10) 0%, var(--surface) 60%) !important;
-      border-color: rgba(210,168,255,0.35) !important;
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
-    .mode-grid .mode-card:nth-child(1) .card-icon { color: #d2a8ff !important; }
-    .mode-grid .mode-card:nth-child(1) .card-desc { color: #d2a8ff !important; }
-    .mode-grid .mode-card:nth-child(1):hover {
-      box-shadow: 0 8px 24px rgba(210,168,255,0.2) !important;
-      border-color: rgba(210,168,255,0.6) !important;
-    }
-
-    /* ── C++ Code card — blue tint ── */
     .mode-grid .mode-card:nth-child(2) {
-      background: linear-gradient(145deg, rgba(88,166,255,0.10) 0%, var(--surface) 60%) !important;
-      border-color: rgba(88,166,255,0.35) !important;
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
-    .mode-grid .mode-card:nth-child(2) .card-icon { color: #58a6ff !important; }
-    .mode-grid .mode-card:nth-child(2) .card-desc { color: #58a6ff !important; }
-    .mode-grid .mode-card:nth-child(2):hover {
-      box-shadow: 0 8px 24px rgba(88,166,255,0.2) !important;
-      border-color: rgba(88,166,255,0.6) !important;
+    .mode-grid .mode-card:nth-child(3) {
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
 
-    /* ── C vs C++ card — mixed gradient ── */
-    .mode-grid .mode-card:nth-child(3) {
-      background: linear-gradient(135deg, rgba(88,166,255,0.07) 0%, rgba(210,168,255,0.07) 100%) !important;
-      border-color: rgba(210,168,255,0.3) !important;
-    }
+    /* Card desc: muted, not accent-colored */
+    .mode-grid .mode-card:nth-child(1) .card-desc { color: var(--muted) !important; }
+    .mode-grid .mode-card:nth-child(2) .card-desc { color: var(--muted) !important; }
     .mode-grid .mode-card:nth-child(3) .card-desc {
-      background: linear-gradient(90deg, #58a6ff, #d2a8ff) !important;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      font-weight: 700 !important;
+      background: none !important;
+      -webkit-background-clip: unset !important;
+      -webkit-text-fill-color: unset !important;
+      background-clip: unset !important;
+      color: var(--accent) !important;
+      font-weight: 600 !important;
+    }
+
+    /* Card icons: neutral tint, single accent color via var */
+    .mode-grid .mode-card:nth-child(1) .card-icon { color: var(--accent2) !important; }
+    .mode-grid .mode-card:nth-child(2) .card-icon { color: var(--accent) !important; }
+
+    /* Hover: only border brightens — no colored glow */
+    .mode-grid .mode-card:nth-child(1):hover {
+      box-shadow: var(--shadow) !important;
+      border-color: var(--accent2) !important;
+    }
+    .mode-grid .mode-card:nth-child(2):hover {
+      box-shadow: var(--shadow) !important;
+      border-color: var(--accent) !important;
     }
     .mode-grid .mode-card:nth-child(3):hover {
-      box-shadow: 0 8px 24px rgba(150,120,255,0.18) !important;
-      border-color: rgba(210,168,255,0.55) !important;
+      box-shadow: var(--shadow) !important;
+      border-color: var(--accent) !important;
     }
 
-    /* ── Arrow chevron matches card accent color ── */
+    /* Arrow chevrons: neutral */
     .mode-grid .mode-card:nth-child(1)::after {
-      background-color: rgba(210,168,255,0.1) !important;
-      border-color: rgba(210,168,255,0.3) !important;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d2a8ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
+      background-color: rgba(255,255,255,0.04) !important;
+      border-color: var(--border) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
     }
     .mode-grid .mode-card:nth-child(2)::after {
-      background-color: rgba(88,166,255,0.1) !important;
-      border-color: rgba(88,166,255,0.3) !important;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2358a6ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
+      background-color: rgba(255,255,255,0.04) !important;
+      border-color: var(--border) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
     }
     .mode-grid .mode-card:nth-child(3)::after {
-      background-color: rgba(170,130,255,0.1) !important;
-      border-color: rgba(210,168,255,0.3) !important;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d2a8ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
+      background-color: rgba(255,255,255,0.04) !important;
+      border-color: var(--border) !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
     }
 
-    /* ── Light mode card tints ── */
+    /* Light mode: same flat neutral */
     [data-theme="light"] .mode-grid .mode-card:nth-child(1) {
-      background: linear-gradient(145deg, rgba(130,80,223,0.07) 0%, #fff 60%) !important;
-      border-color: rgba(130,80,223,0.25) !important;
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
     [data-theme="light"] .mode-grid .mode-card:nth-child(2) {
-      background: linear-gradient(145deg, rgba(0,86,179,0.07) 0%, #fff 60%) !important;
-      border-color: rgba(0,86,179,0.25) !important;
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
     [data-theme="light"] .mode-grid .mode-card:nth-child(3) {
-      background: linear-gradient(135deg, rgba(0,86,179,0.05) 0%, rgba(130,80,223,0.05) 100%) !important;
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
     }
 
-    /* ── Icon boxes ── */
+    /* Icon boxes: neutral bg */
     .mode-card .card-icon {
       width: 40px !important;
       height: 40px !important;
       border-radius: 12px !important;
-      background: rgba(88,166,255,0.10) !important;
-      border: 1px solid rgba(88,166,255,0.18) !important;
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid var(--border) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
     }
+    [data-theme="light"] .mode-card .card-icon {
+      background: rgba(0,0,0,0.04) !important;
+      border-color: var(--border) !important;
+    }
     .mode-grid .mode-card:nth-child(1) .card-icon {
-      background: rgba(210,168,255,0.12) !important;
-      border-color: rgba(210,168,255,0.22) !important;
+      background: rgba(255,255,255,0.05) !important;
+      border-color: var(--border) !important;
     }
     .mode-grid .mode-card:nth-child(3) .card-icon {
-      background: rgba(210,168,255,0.10) !important;
-      border-color: rgba(210,168,255,0.20) !important;
+      background: rgba(255,255,255,0.05) !important;
+      border-color: var(--border) !important;
     }
 
     /* ── Scale on tap ── */
@@ -410,15 +689,15 @@
       border-radius: 12px !important;
     }
     .dl-pdf .dl-icon {
-      background: rgba(88,166,255,0.15) !important;
-      box-shadow: 0 0 0 1px rgba(88,166,255,0.2) !important;
+      background: rgba(255,255,255,0.06) !important;
+      box-shadow: 0 0 0 1px var(--border) !important;
     }
     .dl-apk .dl-icon {
-      background: rgba(210,168,255,0.15) !important;
-      box-shadow: 0 0 0 1px rgba(210,168,255,0.2) !important;
+      background: rgba(255,255,255,0.06) !important;
+      box-shadow: 0 0 0 1px var(--border) !important;
     }
-    .dl-pdf:hover { box-shadow: 0 8px 24px rgba(88,166,255,0.18) !important; }
-    .dl-apk:hover { box-shadow: 0 8px 24px rgba(210,168,255,0.18) !important; }
+    .dl-pdf:hover { box-shadow: var(--shadow) !important; border-color: var(--accent) !important; }
+    .dl-apk:hover { box-shadow: var(--shadow) !important; border-color: var(--accent2) !important; }
 
     /* ── Section labels ── */
     .mode-grid::before {
@@ -460,20 +739,19 @@
     @media(min-width: 900px) {
     }
     .home-footer a {
-      background: linear-gradient(90deg, #58a6ff, #d2a8ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--accent);
+      -webkit-text-fill-color: unset;
+      background: none;
       font-weight: 800 !important;
     }
 
     /* ── Search focus/hover ── */
     .home-search:focus {
       border-color: var(--accent) !important;
-      box-shadow: 0 0 0 3px rgba(88,166,255,0.18), 0 2px 8px rgba(88,166,255,0.10) !important;
+      box-shadow: 0 0 0 3px rgba(var(--star-rgb), 0.12) !important;
     }
     .home-search:hover:not(:focus) {
-      border-color: rgba(88,166,255,0.45) !important;
+      border-color: var(--border) !important;
     }
 
     /* ===================== END 10/10 UI ENHANCEMENTS ===================== */
@@ -667,13 +945,181 @@
       text-transform: uppercase;
       height: 36px;
       padding: 0 14px;
-      border-radius: 12px;
+      border-radius: var(--radius, 12px);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: min(260px, 65vw);
       flex-shrink: 1;
       min-width: 0;
+    }
+
+    /* ===================== THEME PRESET BUTTON ===================== */
+    .theme-preset-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: min(var(--radius, 12px), 12px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    }
+    .theme-preset-btn:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background-color: var(--surface2);
+    }
+    .theme-preset-btn:active { transform: scale(0.9); }
+    .theme-preset-btn svg { width: 18px; height: 18px; display: block; flex-shrink: 0; }
+
+    /* ── Preset panel modal system ── */
+    .preset-panel-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10010;
+      /* Blocks all interaction beneath — no scroll-through */
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .preset-panel-backdrop.open {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ── Preset panel: hardcoded dark — immune to ALL presets/themes ── */
+    .theme-preset-panel {
+      position: fixed;
+      top: 58px;
+      right: 14px;
+      width: min(300px, calc(100vw - 28px));
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px #30363d;
+      z-index: 10020;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .theme-preset-panel.open {
+      display: flex;
+      animation: preset-panel-in 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes preset-panel-in {
+      from { opacity:0; transform: translateY(-8px) scale(0.96); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .preset-panel-header {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 2px 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── 5 preset tiles in a 1-col list ── */
+    .preset-tiles {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preset-tile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius, 12px);
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background 0.12s ease, border-color 0.15s ease, transform 0.1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .preset-tile:hover { background: var(--surface2); border-color: var(--border); transform: translateX(2px); }
+    .preset-tile.active {
+      border-color: var(--accent);
+      background: rgba(var(--star-rgb), 0.08);
+    }
+    .preset-tile.active::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    /* Visual preview — shows color + shape personality */
+    .preset-preview {
+      width: 44px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .preset-preview-bg {
+      position: absolute;
+      inset: 0;
+    }
+    /* Mini "button" shape inside preview shows the radius personality */
+    .preset-preview-btn {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      right: 5px;
+      height: 8px;
+    }
+    .preset-preview-dot {
+      position: absolute;
+      top: 5px;
+      right: 6px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+
+    .preset-tile-info { flex: 1; min-width: 0; }
+    .preset-tile-name {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .preset-tile-desc {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* Topbar right cluster */
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
     }
 
     .theme-toggle-btn {
@@ -683,14 +1129,12 @@
       flex-shrink: 0;
       width: 36px;
       height: 36px;
-      border-radius: 12px;
+      border-radius: min(var(--radius, 12px), 12px);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      isolation: isolate;
-      /* contain:style isolates stacking context without clipping the ripple ring */
       contain: style;
       overflow: visible;
     }
@@ -720,11 +1164,12 @@
       left: 50%;
       width: 36px;
       height: 36px;
-      border-radius: 12px;
+      border-radius: min(var(--radius, 12px), 12px);
       border: 1.5px solid var(--accent);
       opacity: 0;
       transform: translate(-50%, -50%) scale(1);
       pointer-events: none;
+      z-index: -1;
       animation: theme-ripple 2.6s ease-out infinite;
       will-change: transform, opacity;
       backface-visibility: hidden;
@@ -734,7 +1179,7 @@
       0% {
         opacity: 0.55;
         transform: translate(-50%, -50%) scale(1);
-        border-radius: 12px;
+        border-radius: min(var(--radius, 12px), 12px);
       }
       70% {
         opacity: 0.08;
@@ -751,6 +1196,30 @@
     [data-theme="light"] .theme-toggle-btn::before {
       border-color: var(--accent);
     }
+
+    /* Classic & retro: ripple stays square — matches nuclear border-radius:0 */
+    [data-preset="classic"] .theme-toggle-btn::before,
+    [data-preset="retro"] .theme-toggle-btn::before {
+      border-radius: 0 !important;
+      animation: theme-ripple-square 2.6s ease-out infinite;
+    }
+    @keyframes theme-ripple-square {
+      0%   { opacity: 0.55; transform: translate(-50%, -50%) scale(1);   border-radius: 0; }
+      70%  { opacity: 0.08; transform: translate(-50%, -50%) scale(2.2); border-radius: 0; }
+      100% { opacity: 0;    transform: translate(-50%, -50%) scale(2.5); border-radius: 0; }
+    }
+    /* Classic & retro: icon containers go square, matching nuclear border-radius:0 */
+    [data-preset="classic"] .card-icon,
+    [data-preset="retro"] .card-icon,
+    [data-preset="classic"] .dl-icon,
+    [data-preset="retro"] .dl-icon,
+    [data-preset="classic"] .theme-toggle-btn,
+    [data-preset="retro"] .theme-toggle-btn,
+    [data-preset="classic"] .theme-preset-btn,
+    [data-preset="retro"] .theme-preset-btn {
+      border-radius: 0 !important;
+    }
+
 
     .hero {
       width: 100%;
@@ -1199,7 +1668,7 @@
         letter-spacing: 1.4px;
         padding: 0 14px;
         gap: 8px;
-        border-radius: 12px;
+        border-radius: var(--radius, 12px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1210,7 +1679,7 @@
       .theme-toggle-btn {
         width: 36px !important;
         height: 36px !important;
-        border-radius: 12px !important;
+        border-radius: min(var(--radius, 12px), 12px) !important;
         flex-shrink: 0;
       }
 
@@ -1295,7 +1764,7 @@
       .card-icon {
         width: 44px;
         height: 44px;
-        border-radius: 12px;
+        border-radius: var(--radius, 12px);
         background: rgba(88, 166, 255, 0.1);
         border: 1px solid rgba(88, 166, 255, 0.2);
         color: var(--accent);
@@ -2316,7 +2785,7 @@
       width: 48px;
       height: 48px;
       flex-shrink: 0;
-      border-radius: 12px;
+      border-radius: var(--radius, 12px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2976,7 +3445,7 @@
       width: 100%;
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 32px;
+      border-radius: var(--radius);
       color: var(--text);
       font-family: var(--font-ui);
       font-size: 14px;
@@ -3884,7 +4353,7 @@
       .theme-toggle-btn {
         width: 34px;
         height: 34px;
-        border-radius: 10px;
+        border-radius: min(var(--radius, 10px), 10px);
       }
 
       /* Hero */
@@ -3975,7 +4444,7 @@
       .home-search {
         font-size: 13px;
         padding: 9px 12px 9px 38px;
-        border-radius: 32px;
+        border-radius: var(--radius);
       }
 
       .home-search-icon {
@@ -4487,6 +4956,10 @@
       <line x1="3" y1="6" x2="21" y2="6" />
       <line x1="3" y1="12" x2="21" y2="12" />
       <line x1="3" y1="18" x2="21" y2="18" />
+    </symbol>
+    <symbol id="ic-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/>
+      <path d="M10 6.5H3M16 6.5h5M3 12h1M10 12h11M3 17.5h8M19 17.5h2"/>
     </symbol>
   </svg>
 
@@ -5181,10 +5654,18 @@
           </svg>
           DUET Admission Programs
         </a>
-        <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Switch to light mode"><svg
-            width="18px" height="18px">
-            <use href="#ic-sun" />
-          </svg></button>
+        <div class="topbar-right">
+          <button class="theme-preset-btn" id="themePresetBtn" onclick="togglePresetPanel(event)" aria-label="Choose theme preset" title="Theme Presets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/>
+              <path d="M10 6.5H3M16 6.5h5M3 12h1M10 12h11M3 17.5h8M19 17.5h2"/>
+            </svg>
+          </button>
+          <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Switch to light mode"><svg
+              width="18px" height="18px">
+              <use href="#ic-sun" />
+            </svg></button>
+        </div>
       </div>
 
       <div class="hero">
@@ -8457,7 +8938,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("* ");
         printf("\\n");
@@ -8471,7 +8952,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << "* ";
         cout << endl;
@@ -8489,7 +8970,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("# ");
         printf("\\n");
@@ -8503,7 +8984,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << "# ";
         cout << endl;
@@ -8521,7 +9002,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%d ", col);
         printf("\\n");
@@ -8535,7 +9016,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << col << " ";
         cout << endl;
@@ -8553,7 +9034,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%d ", row);
         printf("\\n");
@@ -8567,7 +9048,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << row << " ";
         cout << endl;
@@ -8585,7 +9066,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%d ", col%2);
         printf("\\n");
@@ -8599,7 +9080,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << col%2 << " ";
         cout << endl;
@@ -8617,7 +9098,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%d ", row%2);
         printf("\\n");
@@ -8631,7 +9112,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << row%2 << " ";
         cout << endl;
@@ -8649,7 +9130,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%c ", row+64);
         printf("\\n");
@@ -8663,7 +9144,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << (char)(row+64) << " ";
         cout << endl;
@@ -8681,7 +9162,7 @@ int main() {
     scanf("%d", &n);
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            printf(" ");
+            printf("  "); // double space
         for (col = 1; col <= 2 * row - 1; col++)
             printf("%c ", col+64);
         printf("\\n");
@@ -8695,7 +9176,7 @@ int main() {
     cin >> n;
     for (row = 1; row <= n; row++) {
         for (col = 1; col <= n - row; col++)
-            cout << " ";
+            cout << "  "; // double space
         for (col = 1; col <= 2 * row - 1; col++)
             cout << (char)(col+64) << " ";
         cout << endl;
@@ -9024,6 +9505,165 @@ int main() {
       try { return localStorage.getItem(key); } catch(e) { return null; }
     }
 
+    // ================================================
+    // THEME PRESETS — panel injected at <body> level
+    // to escape all stacking contexts (contain:strict, z-index, etc.)
+    // ================================================
+    const PRESETS = ['modern','wood','vibrant','classic','retro'];
+
+    // Build and inject panel once at body level
+    (function buildPresetPanel() {
+      const html = `
+        <div id="presetBackdrop" style="display:none;position:fixed;inset:0;z-index:2147483640;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
+        <div id="themePresetPanel" style="display:none;position:fixed;z-index:2147483647;width:min(300px,calc(100vw - 28px));background:#161b22;border:1px solid #30363d;border-radius:20px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,0.8);flex-direction:column;gap:8px;font-family:'Outfit',sans-serif;">
+          <div id="presetPanelHeader" style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8b949e;padding:0 2px 4px;border-bottom:1px solid #30363d;">Theme Preset</div>
+          <div id="presetTiles" style="display:flex;flex-direction:column;gap:6px;"></div>
+        </div>`;
+      document.body.insertAdjacentHTML('beforeend', html);
+
+      // Tiles data
+      const tiles = [
+        { key:'modern',  name:'Modern Minimal',   desc:'Clean · Pill-shaped · Blue-purple', bg:'linear-gradient(135deg,#0d1117,#1c1d35)', btnBg:'#58a6ff', btnR:'8px', dotBg:'#d2a8ff', dotGlow:'' },
+        { key:'wood',    name:'Wood Finish',       desc:'Walnut · Organic · Amber grain',    bg:'linear-gradient(160deg,#1c1007,#3f2c18)', btnBg:'#c8913a', btnR:'4px', dotBg:'#e8b86a', dotGlow:'' },
+        { key:'vibrant', name:'Vibrant Colorful',  desc:'Indigo · Electric · 60-30-10 pop', bg:'linear-gradient(135deg,#0a0118,#220450)', btnBg:'linear-gradient(90deg,#ff1060,#00e8ff)', btnR:'6px', dotBg:'#ffd000', dotGlow:'0 0 4px #ff1060' },
+        { key:'classic', name:'Classic',           desc:'Ash gray · Warm brown · Rectangular', bg:'linear-gradient(135deg,#1a1a1a,#2e2e2e)', btnBg:'#c8a878', btnR:'0',   dotBg:'#e0c090', dotGlow:'' },
+        { key:'retro',   name:'Classic Retro',     desc:'CRT · Amber phosphor · No radius',  bg:'#0a0800',                                 btnBg:'#ffb000', btnR:'0',   dotBg:'#ffd060', dotGlow:'0 0 6px #ffb000' },
+      ];
+
+      const tilesEl = document.getElementById('presetTiles');
+      tiles.forEach(t => {
+        const tile = document.createElement('div');
+        tile.dataset.preset = t.key;
+        tile.setAttribute('onclick', `applyPreset('${t.key}')`);
+        tile.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;cursor:pointer;border:1.5px solid transparent;transition:background 0.12s,border-color 0.15s;position:relative;';
+        tile.onmouseenter = () => { tile.style.background='rgba(255,255,255,0.06)'; tile.style.borderColor='#30363d'; };
+        tile.onmouseleave = () => { if(!tile.classList.contains('active')){ tile.style.background=''; tile.style.borderColor='transparent'; } };
+        tile.innerHTML = `
+          <div style="width:44px;height:36px;border-radius:8px;flex-shrink:0;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.1);">
+            <div style="position:absolute;inset:0;background:${t.bg}"></div>
+            <div style="position:absolute;bottom:5px;left:5px;right:5px;height:8px;background:${t.btnBg};border-radius:${t.btnR};${t.dotGlow?'box-shadow:'+t.dotGlow:''}"></div>
+            <div style="position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:${t.dotBg};${t.dotGlow?'box-shadow:'+t.dotGlow:''}"></div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div class="ptile-name" style="font-size:13px;font-weight:600;color:#e6edf3;white-space:nowrap;">${t.name}</div>
+            <div style="font-size:11px;color:#8b949e;margin-top:1px;">${t.desc}</div>
+          </div>
+          <div class="ptile-dot" style="display:none;width:8px;height:8px;border-radius:50%;background:#58a6ff;box-shadow:0 0 6px #58a6ff;flex-shrink:0;"></div>`;
+        tilesEl.appendChild(tile);
+      });
+
+      document.getElementById('presetBackdrop').addEventListener('click', closePresetPanel);
+    })();
+
+    function _updatePanelTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+      const panel = document.getElementById('themePresetPanel');
+      const header = document.getElementById('presetPanelHeader');
+      if (!panel) return;
+      if (isDark) {
+        panel.style.background = '#161b22';
+        panel.style.border = '1px solid #30363d';
+        panel.style.boxShadow = '0 20px 60px rgba(0,0,0,0.8)';
+        if (header) { header.style.color = '#8b949e'; header.style.borderBottomColor = '#30363d'; }
+      } else {
+        panel.style.background = '#ffffff';
+        panel.style.border = '1px solid #d0d7de';
+        panel.style.boxShadow = '0 8px 32px rgba(0,0,0,0.12)';
+        if (header) { header.style.color = '#57606a'; header.style.borderBottomColor = '#d0d7de'; }
+      }
+      document.querySelectorAll('#presetTiles [data-preset]').forEach(tile => {
+        tile.onmouseenter = () => {
+          if (!tile.classList.contains('active')) {
+            tile.style.background = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+            tile.style.borderColor = isDark ? '#30363d' : '#d0d7de';
+          }
+        };
+        tile.onmouseleave = () => {
+          if (!tile.classList.contains('active')) { tile.style.background = ''; tile.style.borderColor = 'transparent'; }
+        };
+      });
+    }
+
+    function _positionPanel() {
+      const btn = document.getElementById('themePresetBtn');
+      const panel = document.getElementById('themePresetPanel');
+      if (!btn || !panel) return;
+      const r = btn.getBoundingClientRect();
+      const pw = Math.min(300, window.innerWidth - 28);
+      panel.style.width = pw + 'px';
+      panel.style.top = (r.bottom + 8) + 'px';
+      if (window.innerWidth <= 480) {
+        // Mobile: center horizontally
+        panel.style.left = Math.round((window.innerWidth - pw) / 2) + 'px';
+      } else {
+        // Desktop: align right edge to button right
+        let left = r.right - pw;
+        if (left < 14) left = 14;
+        panel.style.left = left + 'px';
+      }
+    }
+
+    function togglePresetPanel(e) {
+      if (e) e.stopPropagation();
+      const panel = document.getElementById('themePresetPanel');
+      if (!panel) return;
+      if (panel.style.display === 'flex') { closePresetPanel(); return; }
+      _positionPanel();
+      _updatePanelTheme();
+      syncPresetActiveState();
+      document.getElementById('presetBackdrop').style.display = 'block';
+      panel.style.display = 'flex';
+      panel.style.animation = 'preset-panel-in 0.22s cubic-bezier(0.34,1.56,0.64,1) both';
+    }
+
+    function closePresetPanel() {
+      const panel = document.getElementById('themePresetPanel');
+      const backdrop = document.getElementById('presetBackdrop');
+      if (panel) panel.style.display = 'none';
+      if (backdrop) backdrop.style.display = 'none';
+    }
+
+    function syncPresetActiveState() {
+      const current = document.documentElement.getAttribute('data-preset') || 'modern';
+      const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+      const inactiveNameColor = isDark ? '#e6edf3' : '#1f2328';
+      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+      const accentRgb = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+      document.querySelectorAll('#presetTiles [data-preset]').forEach(el => {
+        const isActive = el.dataset.preset === current;
+        el.classList.toggle('active', isActive);
+        el.style.borderColor = isActive ? accent : 'transparent';
+        el.style.background  = isActive ? `color-mix(in srgb, ${accent} 10%, transparent)` : '';
+        const dot = el.querySelector('.ptile-dot');
+        if (dot) { dot.style.background = accent; dot.style.boxShadow = `0 0 6px ${accent}`; dot.style.display = isActive ? 'block' : 'none'; }
+        const nm  = el.querySelector('.ptile-name');
+        if (nm)  nm.style.color = isActive ? accent : inactiveNameColor;
+      });
+    }
+
+    function applyPreset(preset) {
+      haptic(12);
+      const root = document.documentElement;
+      const flash = document.getElementById('theme-flash');
+      closePresetPanel();
+      flash.classList.add('active');
+      setTimeout(() => {
+        root.removeAttribute('data-preset');
+        if (preset !== 'modern') root.setAttribute('data-preset', preset);
+        safeSave('duet-preset', preset);
+        syncPresetActiveState();
+        const labels = { modern:'Modern Minimal', wood:'Wood Finish', vibrant:'Vibrant Colorful', classic:'Classic', retro:'Classic Retro' };
+        showToast(T_ICON('ic-palette') + '<span>' + (labels[preset] || preset) + '</span>', root.getAttribute('data-theme') || 'dark');
+        requestAnimationFrame(() => requestAnimationFrame(() => flash.classList.remove('active')));
+      }, 160);
+    }
+
+    (function initPreset() {
+      const saved = safeGet('duet-preset') || 'modern';
+      if (saved !== 'modern') document.documentElement.setAttribute('data-preset', saved);
+      document.addEventListener('DOMContentLoaded', syncPresetActiveState);
+    })();
+
     function toggleTheme() {
       haptic(10);
       const root = document.documentElement;
@@ -9050,6 +9690,9 @@ int main() {
           t.style.color = isDark ? '#e6edf3' : '#1f2328';
           t.style.border = isDark ? '1px solid #30363d' : '1px solid #d0d7de';
         }
+
+        _updatePanelTheme();
+        syncPresetActiveState();
 
         // Toast confirming theme switch
         showToast(nextTheme === 'dark' ? TOAST_DARK : TOAST_LIGHT, nextTheme);
