@@ -11,11 +11,7 @@ const assets = [
   'duetcode.svg',
   'manifest.json',
   'sw.js',
-  'DUET Admission C.pdf',
-  'DUET Admission Cpp.pdf',
   'DUET C & C++ Programs.pdf',
-  'duet-admission-c-programs.pdf',
-  'duet-admission-cpp-programs.pdf',
 ];
 
 const srcDir = path.join(__dirname, '..');

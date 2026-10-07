@@ -5,11 +5,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './manifest.json',
   './duetcode.svg',
-  './DUET Admission C.pdf',
-  './DUET Admission Cpp.pdf',
-  './DUET C & C++ Programs.pdf',
-  './duet-admission-c-programs.pdf',
-  './duet-admission-cpp-programs.pdf'
+  './DUET C & C++ Programs.pdf'
 ];
 
 self.addEventListener('install', event => {
