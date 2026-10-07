@@ -8,6 +8,19 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    button,
+    [role="button"],
+    a,
+    .mode-card,
+    .download-card,
+    .fab,
+    .copy-btn,
+    .bm-btn,
+    .sheet-tab,
+    .chip {
+      touch-action: manipulation;
+    }
+
     html {
       text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
