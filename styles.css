@@ -406,10 +406,29 @@
     @media(min-width: 900px) {
     }
     .home-footer a {
-      color: var(--accent);
-      -webkit-text-fill-color: unset;
-      background: none;
+      background: linear-gradient(120deg, #58a6ff, #bc8cff, #79c0ff, #d2a8ff, #388bfd) !important;
+      background-size: 260% 260% !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      color: transparent !important;
       font-weight: 800 !important;
+      text-decoration: none !important;
+      display: inline-block !important;
+      animation: author-gradient-shift 4.5s ease-in-out infinite alternate !important;
+      will-change: background-position;
+    }
+
+    @keyframes author-gradient-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
     .home-search:focus {
       border-color: var(--accent) !important;
@@ -1094,16 +1113,9 @@
         background-color: rgba(210, 168, 255, 0.12);
       }
     }
-    .home-footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 800;
-      transition: color 0.2s;
-    }
-
     .home-footer a:hover {
-      text-decoration: underline;
-      color: var(--text);
+      text-decoration: none;
+      filter: brightness(1.25) drop-shadow(0 0 8px rgba(121, 192, 255, 0.4));
     }
 
     .home-footer {
