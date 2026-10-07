@@ -918,12 +918,50 @@
         closeMenuUI();
       }
     }
-    function handlePdfClick(e, anchor) {
-      // Native anchor click handles download; only intercept if href is missing
-      if (!anchor.href || anchor.href === window.location.href) {
+    function downloadFile(e, url, filename) {
+      if (e) {
         e.preventDefault();
-        showToast(TOAST_PDFMISS);
+        e.stopPropagation();
       }
+      showToast('<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Starting download for ' + filename + '...');
+
+      // Try blob fetch first (forces silent download dialog without opening new tabs/viewer)
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error('Fetch status ' + res.status);
+          return res.blob();
+        })
+        .then(blob => {
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            if (a.parentNode) a.parentNode.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+          }, 2000);
+          showToast('✅ ' + filename + ' downloaded!');
+        })
+        .catch(() => {
+          // Direct fallback without target="_blank"
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.setAttribute('download', filename);
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            if (a.parentNode) a.parentNode.removeChild(a);
+          }, 2000);
+        });
+    }
+
+    function handlePdfClick(e, anchor) {
+      const url = anchor && anchor.href ? anchor.href : 'DUET C & C++ Programs.pdf';
+      downloadFile(e, url, 'DUET C & C++ Programs.pdf');
     }
     let toastTimer = null;
     function showToast(html, theme) {
