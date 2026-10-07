@@ -1,0 +1,3621 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUET — C &amp; C++ Programs</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:    #0E2E50;
+  --purple:  #2A0E50;
+  --accent1: #1A6ED4;
+  --accent2: #7B3FD4;
+  --red:     #8B0000;
+  --orange:  #8B3000;
+  --navy:    #000820;
+  --text:    #000000;
+  --muted:   #0E1830;
+  --border:  #607090;
+  --bg:      #E8E9ED;
+  --card:    #FFFFFF;
+  --hdr-bg:  #FFFFFF;
+  --demo-bg: #E8F0FF;
+  --demo-bd: #A8C0E8;
+  --fn-bn: 'Noto Sans Bengali', 'Noto Sans', sans-serif;
+  --fn-mo: 'JetBrains Mono', 'Courier New', monospace;
+  --str-green: #004800;
+  --fn-di: 'Playfair Display', Georgia, serif;
+}
+
+/* ── Screen wrapper ── */
+html { background: #9AA8BE; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fn-bn);
+  width: 210mm;
+  max-width: 210mm;
+  margin: 0 auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Print button (hidden on print) ── */
+.print-btn {
+  position: fixed; top: 14px; right: 14px;
+  background: var(--blue); color: #fff;
+  border: none; padding: 9px 20px;
+  border-radius: 6px; font-size: 13px; font-weight: 700;
+  cursor: pointer; z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  letter-spacing: .04em;
+}
+.print-btn:hover { background: #071B30; }
+
+/* ══════════════════════════════════════════
+   COVER PAGE  — fully white, fits one A4
+══════════════════════════════════════════ */
+.cover-page {
+  width: 210mm;
+  height: 297mm;           /* EXACT A4 — never overflows */
+  max-height: 297mm;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: page;
+  overflow: hidden;
+}
+
+/* Top accent bar only */
+.cover-topbar {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg,#1A6ED4 0%,#7B3FD4 50%,#C0282E 100%);
+  flex-shrink: 0;
+}
+
+/* Main white hero area */
+.cover-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10mm;
+  background: #FFFFFF;
+  text-align: center;
+}
+
+.cover-univ {
+  font-family: var(--fn-mo);
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: #000000;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-bottom: 8mm;
+}
+
+.cover-eyebrow {
+  font-family: var(--fn-mo);
+  font-size: 12pt;
+  font-weight: 700;
+  letter-spacing: .25em;
+  color: #000000;
+  text-transform: uppercase;
+  margin-bottom: 5mm;
+}
+
+.cover-rule-line {
+  width: 18mm; height: 3px;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  border-radius: 2px;
+  margin: 0 auto 7mm;
+}
+
+.cover-title {
+  font-family: var(--fn-di);
+  font-size: 50pt;
+  font-weight: 900;
+  line-height: 1.0;
+  color: #000000;
+  margin-bottom: 5mm;
+  letter-spacing: -.02em;
+}
+
+.cover-subtitle {
+  font-family: var(--fn-bn);
+  font-size: 17pt;
+  color: #000000;
+  margin-bottom: 7mm;
+  font-weight: 400;
+}
+
+.cover-tags {
+  display: flex; gap: 3mm;
+  justify-content: center;
+  margin-bottom: 6mm;
+}
+.cover-tag {
+  font-family: var(--fn-mo);
+  font-size: 11pt; font-weight: 700;
+  letter-spacing: .12em;
+  padding: 5px 16px;
+  border-radius: 4px;
+}
+.cover-tag.c-t   { background: var(--blue);   color: #D4E8FF; }
+.cover-tag.cpp-t { background: var(--purple);  color: #E8D4FF; }
+
+.cover-count {
+  font-family: var(--fn-mo);
+  font-size: 11pt; color: #000000; letter-spacing: .08em;
+}
+
+/* Divider between hero and credentials */
+.cover-divider {
+  width: calc(100% - 36mm);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C8D0E0 20%, #C8D0E0 80%, transparent);
+  margin: 0 18mm;
+  flex-shrink: 0;
+}
+
+/* ── Credentials redesign: clean writing-form style ── */
+.cover-creds {
+  flex-shrink: 0;
+  padding: 8mm 18mm 7mm;
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  margin: 0 10mm 6mm;
+  border-radius: 4px;
+}
+
+.cover-creds-label {
+  font-family: var(--fn-mo);
+  font-size: 6pt; font-weight: 700;
+  letter-spacing: .35em; color: #000000;
+  text-transform: uppercase;
+  margin-bottom: 6mm;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cover-creds-label::before,
+.cover-creds-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #000000;
+}
+
+/* 3-column grid for all 6 fields */
+.cover-creds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5mm 7mm;
+}
+
+.cred-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cred-label {
+  font-family: var(--fn-mo);
+  font-size: 6.5pt; font-weight: 700;
+  letter-spacing: .2em; color: #000000;
+  text-transform: uppercase;
+  margin-bottom: 2mm;
+}
+
+/* Writing line — generous, clean underline only */
+.cred-value {
+  font-family: var(--fn-bn);
+  font-size: 10pt; font-weight: 400;
+  color: transparent; /* hide the underscores */
+  border: none;
+  border-bottom: 1.5px solid #000000;
+  padding-bottom: 2mm;
+  min-height: 7mm;
+  background: linear-gradient(to right, #F5F7FC 0%, #FFFFFF 100%);
+  border-radius: 1px 1px 0 0;
+  display: block;
+}
+
+/* Bottom bar */
+.cover-bottombar {
+  flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 2.5mm 18mm;
+  background: #F7F8FB;
+  border-top: 1px solid #E8ECF4;
+}
+.cover-bottombar-l { font-family: var(--fn-mo); font-size: 8pt; color: #000000; font-weight: 700; letter-spacing: .08em; }
+.cover-bottombar-r { font-family: var(--fn-mo); font-size: 8pt; color: #000000; font-weight: 700; letter-spacing: .08em; }
+
+/* ══════════════════════════════════════════
+   CONTENT PAGES
+══════════════════════════════════════════ */
+.content { padding: 1mm 5mm 1mm; }
+
+/* ── Section dividers ── */
+.section-div {
+  display: flex; align-items: center; gap: 8px;
+  margin: 3mm 0 2mm;
+  page-break-after: avoid; break-after: avoid;
+  page-break-inside: avoid; break-inside: avoid;
+}
+
+/* Keep section title glued to the first program card after it */
+.section-div + .prog {
+  page-break-before: avoid;
+  break-before: avoid;
+}
+.section-div-line { flex:1; height:1px; background: #B0BAD0; }
+.section-div-label {
+  font-family: var(--fn-bn);
+  font-size: 7.5pt; font-weight: 900;
+  letter-spacing: .05em; color: #000000;
+  white-space: nowrap;
+}
+
+/* ── Page-pair: force two programs onto one page ── */
+.page-pair {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  page-break-before: always;
+  break-before: page;
+}
+.page-pair .prog {
+  margin-bottom: 3mm;
+}
+.page-pair .section-div {
+  margin: 1.5mm 0 1.5mm;
+}
+
+/* ── Program card ── */
+.prog {
+  border: 1px solid #000000;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 5mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  background: var(--card);
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+}
+
+/* ── Header ── */
+.prog-hdr {
+  padding: 1px 8px 1px;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid #000000;
+  display: flex; align-items: baseline;
+  gap: 8px; flex-wrap: wrap;
+}
+.prog-bn { font-size: 8.5pt; font-weight: 700; color: #000000; font-family: var(--fn-bn); }
+.prog-en { font-size: 7.5pt; font-weight: 700; color: var(--muted); font-family: var(--fn-mo); letter-spacing:.05em; }
+
+/* ── Demo block ── */
+.demo { background: var(--demo-bg); border-bottom: 1px solid var(--demo-bd); padding: 2px 10px 2px 12px; border-left: 4px solid #4A6ED4; }
+.demo pre {
+  font-family: var(--fn-mo);
+  font-size: 6.8pt;
+  color: #000000;
+  line-height: 1.38;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  overflow: visible;
+  font-weight: 700;
+}
+
+/* ── Two-column code layout ── */
+.code-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.code-col { position: relative; }
+.code-col + .code-col { border-left: 1px solid #000000; }
+
+/* ── Compact 3-col layout: demo | C | C++ side by side ── */
+.prog-compact .demo {
+  border-bottom: none;
+  border-right: 1px solid var(--demo-bd);
+}
+.prog-compact .prog-body {
+  display: grid;
+  grid-template-columns: 140px 1fr 1fr;
+}
+.prog-compact .code-cols {
+  display: contents;
+}
+.prog-compact .code-col {
+  border-left: 1px solid var(--border);
+}
+.prog-compact pre.code {
+  font-size: 8pt;
+  line-height: 1.52;
+  padding: 5px 8px;
+}
+.prog-compact .demo pre {
+  font-size: 7pt;
+  line-height: 1.48;
+}
+
+/* Language badge */
+.lang-tag {
+  position: absolute; top: 0; right: 0;
+  font-family: var(--fn-mo);
+  font-size: 5.5pt; font-weight: 700;
+  letter-spacing: .15em;
+  padding: 1px 5px;
+  border-radius: 0 0 0 3px;
+  z-index: 2;
+}
+.c-tag   { background: var(--blue);   color: #D4E8FF; }
+.cpp-tag { background: var(--purple);  color: #E8D4FF; }
+
+/* ── Code block — THE CRITICAL FIX ── */
+pre.code {
+  font-family: var(--fn-mo);
+  font-size: 8pt;
+  font-weight: 600;
+  line-height: 1.28;
+  padding: 3px 8px;
+  background: #FFFFFF;
+  color: var(--text);
+  white-space: pre;
+  overflow: visible;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  tab-size: 4;
+  margin: 0;
+}
+
+/* ── Syntax colors ── */
+.p  { color: #7700BB; font-weight: 700; }                /* preprocessor — vivid purple */
+.h  { color: #BB0030; font-weight: 700; }                /* header — bold crimson */
+.kt { color: #0044BB; font-weight: 700; }                /* type keyword — strong blue */
+.kc { color: #0044BB; font-weight: 700; }                /* control keyword — strong blue */
+.fn { color: #994400; font-weight: 700; }                /* function — deep amber/orange */
+.uf { color: #994400; font-weight: 700; }                /* user function — deep amber */
+.s  { color: #006600; font-weight: 700; }                /* string — rich forest green */
+.n  { color: #BB4400; font-weight: 700; }                /* number — bold orange */
+.op { color: #222222; font-weight: 700; }                /* operator — near-black */
+.c  { color: #606060; font-style: italic; font-weight: 600; } /* comment — clear gray */
+
+/* ── Pattern Group A & B: compressed to fit one page each ── */
+#p45, #p46 {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+#p46 .pat-box-label { font-size: 5pt; padding: 1px 4px; }
+#p46 .pat-box pre   { font-size: 6pt; line-height: 1.25; }
+#p46 .pat-box      { padding: 3px 4px; }
+#p46 .pat-preview   { padding: 4px 6px; }
+#p46 .pat-preview-grid { gap: 3px; grid-template-columns: repeat(4, minmax(90px, 1fr)); }
+#p52 .pat-box pre { font-family: 'Courier New', Courier, monospace; font-size: 7pt; line-height: 1.4; letter-spacing: 0; word-spacing: 0; font-weight: 700; }
+#p46 pre.code { font-size: 7pt; line-height: 1.35; padding: 4px 6px; }
+#p46 .prog-hdr { padding: 2px 8px; }
+
+/* ── SURGICAL: p42+p43+p44+p45 all four on one page ── */
+#p42 {
+  page-break-before: always;
+  break-before: page;
+}
+#p43, #p44, #p45 {
+  page-break-before: avoid;
+  break-before: avoid;
+}
+/* squeeze p42-p44 (simple series cards) */
+#p42 .demo pre, #p43 .demo pre, #p44 .demo pre { font-size: 6pt; line-height: 1.25; }
+#p42 .demo, #p43 .demo, #p44 .demo { padding: 1px 8px 1px 10px; }
+#p42 pre.code, #p43 pre.code, #p44 pre.code { font-size: 7pt; line-height: 1.18; padding: 2px 6px; }
+#p42 .prog-hdr, #p43 .prog-hdr, #p44 .prog-hdr { padding: 0px 8px; }
+#p42, #p43, #p44 { margin-bottom: 1mm; }
+/* squeeze p45 pattern card heavily */
+#p45 .pat-box-label { font-size: 4.8pt; padding: 1px 3px; line-height: 1.2; }
+#p45 .pat-box pre  { font-size: 5.5pt; line-height: 1.2; }
+#p45 .pat-box      { padding: 2px 3px; }
+#p45 .pat-preview  { padding: 3px 5px; }
+#p45 .pat-preview-grid { gap: 2px; grid-template-columns: repeat(4, minmax(80px, 1fr)); }
+#p45 pre.code      { font-size: 6.5pt; line-height: 1.2; padding: 2px 5px; }
+#p45 .prog-hdr     { padding: 1px 8px; }
+#p45               { margin-bottom: 0; }
+
+/* ── SURGICAL: p46+p47 together on one page ── */
+#p46 {
+  page-break-before: always;
+  break-before: page;
+}
+#p47 {
+  page-break-before: avoid;
+  break-before: avoid;
+}
+/* compress p47 to fit with p46 */
+#p47 .pat-box-label { font-size: 5pt; padding: 1px 4px; }
+#p47 .pat-box pre   { font-size: 6pt; line-height: 1.25; }
+#p47 .pat-box       { padding: 3px 4px; }
+#p47 .pat-preview   { padding: 4px 6px; }
+#p47 .pat-preview-grid { gap: 3px; grid-template-columns: repeat(4, minmax(90px, 1fr)); }
+#p47 pre.code { font-size: 7pt; line-height: 1.3; padding: 4px 6px; }
+#p47 .prog-hdr { padding: 2px 8px; }
+#p46 { margin-bottom: 2mm; }
+
+/* compress section-div between p44 and p45 — part of the 4-on-one-page group */
+#p45 { margin-top: 0; }
+.section-div:has(+ .prog#p45) { margin: 0.5mm 0 0.5mm; }
+#p45, #p46, #p47, #p48, #p49, #p50, #p51, #p52 {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.diamond-mid-label {
+  width: 100%;
+  text-align: center;
+  font-family: var(--fn-mo);
+  font-size: 5.5pt; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: #2A0870;
+  background: #EDE8FF;
+  border-top: 1px dashed #8060CC;
+  border-bottom: 1px dashed #8060CC;
+  padding: 3px 0;
+}
+
+/* ══════════════════════════════════════════
+   PRINT  — clean, professional, no clipping
+══════════════════════════════════════════ */
+@page { size: A4; margin: 8mm 5mm 4mm 5mm; }
+@page :first { margin: 0; }   /* cover page fills full sheet */
+
+/* Subtle running footer on every non-cover page */
+@page :not(:first) {
+  @bottom-right {
+    content: "Humayoun";
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6pt;
+    color: #B8C2D4;
+    letter-spacing: .08em;
+  }
+}
+
+@media print {
+  /* ── Force exact color reproduction on every engine ── */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html { background: white !important; }
+  body {
+    background: white !important;
+    width: 198mm; max-width: 198mm;
+  }
+  .print-btn  { display: none !important; }
+  .print-notice { display: none !important; }
+  .content { padding: 0; }
+
+  /* Cover: exact A4 sheet, no margins */
+  .cover-page {
+    width: 210mm;
+    height: 297mm;
+    margin: -10mm -8mm;
+  }
+
+  /* ── Force all background colors to print ── */
+  .prog-hdr          { background: #BCCCE8 !important; }
+  .demo              { background: #E8F0FF !important; border-left: 4px solid #4A6ED4 !important; }
+  .cover-topbar      { background: linear-gradient(90deg,#1A6ED4 0%,#7B3FD4 50%,#C0282E 100%) !important; }
+  .cover-main        { background: #FFFFFF !important; }
+  .cover-creds       { background: #FFFFFF !important; }
+  .cover-bottombar   { background: #F7F8FB !important; }
+  .cover-tag.c-t     { background: #0E2E50 !important; color: #D4E8FF !important; }
+  .cover-tag.cpp-t   { background: #2A0E50 !important; color: #E8D4FF !important; }
+  .lang-tag.c-tag    { background: #0E2E50 !important; color: #D4E8FF !important; }
+  .lang-tag.cpp-tag  { background: #2A0E50 !important; color: #E8D4FF !important; }
+  .pat-preview       { background: #E8F0FF !important; }
+  .pat-box           { background: #FFFFFF !important; overflow: visible !important; }
+  .pat-box-label     { background: linear-gradient(90deg, #FFF8E1 0%, #FFF3CD 100%) !important; border-left: 3px solid #E6A817 !important; overflow: visible !important; }
+  .pat-box pre       { overflow: visible !important; }
+  .cover-rule-line   { background: linear-gradient(90deg,#1A6ED4,#7B3FD4) !important; }
+  pre.code           { background: #FFFFFF !important; }
+  .section-div-line  { background: #B0BAD0 !important; }
+  .diamond-mid-label { background: #EDE8FF !important; }
+  .pat-group-label   { background: #F5F0FF !important; }
+  .humayun-strip     { border-top: 1.5px solid #B0BAD0 !important; }
+
+  /* ── Syntax colors — force all text colors ── */
+  .p  { color: #7700BB !important; }
+  .h  { color: #BB0030 !important; }
+  .kt { color: #0044BB !important; }
+  .kc { color: #0044BB !important; }
+  .fn { color: #994400 !important; }
+  .uf { color: #994400 !important; }
+  .s  { color: #006600 !important; }
+  .n  { color: #BB4400 !important; }
+  .op { color: #222222 !important; }
+  .c  { color: #606060 !important; }
+
+  .prog {
+    margin-bottom: 5mm;
+    box-shadow: none;
+    border-color: #8090B0;
+  }
+  .prog-hdr { padding: 1px 10px 1px; }
+  .prog-bn  { font-size: 8.5pt !important; }
+  .prog-en  { font-size: 7.5pt !important; }
+  pre.code  { font-size: 8pt; line-height: 1.28; padding: 3px 8px; }
+  .demo pre { font-size: 7.5pt; line-height: 1.38; }
+  .section-div { margin: 3mm 0 2mm; }
+  .section-div-label { font-size: 7.5pt !important; }
+
+  .demo pre {
+    white-space: pre-wrap !important;
+    overflow: visible !important;
+    overflow-wrap: break-word !important;
+    font-size: 7.5pt;
+  }
+}
+
+/* ── Last 4 programs: microscopic squeeze to fit on one page ── */
+#p57, #p58, #p59, #p60 {
+  margin-bottom: 2mm;
+}
+#p57 pre.code, #p58 pre.code, #p59 pre.code, #p60 pre.code {
+  font-size: 7.5pt;
+  line-height: 1.22;
+  padding: 2px 8px;
+}
+#p57 .demo pre, #p58 .demo pre, #p59 .demo pre, #p60 .demo pre {
+  font-size: 6.5pt;
+  line-height: 1.3;
+}
+#p57 .demo, #p58 .demo, #p59 .demo, #p60 .demo {
+  padding: 2px 10px 2px 12px;
+}
+#p57 .prog-hdr, #p58 .prog-hdr, #p59 .prog-hdr, #p60 .prog-hdr {
+  padding: 1px 8px;
+}
+#p57 .prog-bn, #p58 .prog-bn, #p59 .prog-bn, #p60 .prog-bn { font-size: 8pt; }
+#p57 .prog-en, #p58 .prog-en, #p59 .prog-en, #p60 .prog-en { font-size: 7pt; }
+.humayun-strip {
+  width: 100%;
+  text-align: right;
+  font-family: var(--fn-mo);
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #3A4560;
+  letter-spacing: .08em;
+  padding: 3px 8mm 3px 0;
+  border-top: 1.5px solid #B0BAD0;
+  margin-top: 1mm;
+}
+@media print {
+  .humayun-strip { color: #2A3450; font-size: 8.5pt; font-weight: 700; }
+}
+.pat-preview {
+  background: var(--demo-bg);
+  border-bottom: 1px solid var(--demo-bd);
+  padding: 6px 10px;
+}
+.pat-preview-grid {
+  display: grid;
+  /* 8 boxes in 4 cols — each col at least 108px so longest label fits */
+  grid-template-columns: repeat(4, minmax(108px, 1fr));
+  gap: 5px;
+}
+.pat-preview-grid.three-col {
+  grid-template-columns: repeat(3, minmax(108px, 1fr));
+  justify-content: center;
+}
+.pat-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 6px;
+}
+.pat-box-label {
+  font-family: var(--fn-mo);
+  font-size: 5.8pt; font-weight: 700; color: #0A0050;
+  margin-bottom: 3px;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: clip;
+  background: linear-gradient(90deg, #FFF8E1 0%, #FFF3CD 100%);
+  border-left: 3px solid #E6A817;
+  border-radius: 3px;
+  padding: 2px 5px;
+  letter-spacing: 0;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pat-box pre {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 7pt; line-height: 1.4;
+  background: transparent; color: #000000;
+  white-space: pre;
+  overflow: visible;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+.pat-note {
+  font-family: var(--fn-bn);
+  font-size: 7pt; color: #1a2030;
+  padding: 2px 10px 2px;
+  margin-bottom: 0;
+}
+.pat-group-label {
+  font-family: var(--fn-mo);
+  font-size: 6pt; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: #5C3AA0; background: #F5F0FF;
+  border-top: 1px dashed #C0A0EE;
+  border-bottom: 1px dashed #C0A0EE;
+  padding: 3px 10px;
+}
+</style>
+</head>
+<body>
+<button class="print-btn" onclick="document.querySelector('.print-notice').style.display='flex'">🖨️ Print / Save as PDF</button>
+
+<div class="print-notice" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 36px;max-width:420px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.4);font-family:'JetBrains Mono',monospace;">
+    <div style="font-size:15pt;font-weight:900;color:#0E2E50;margin-bottom:12px;">⚠️ Before You Print</div>
+    <div style="font-size:9.5pt;color:#1a2030;line-height:1.8;margin-bottom:18px;">
+      To get <strong>exact colors</strong> as shown on screen:<br><br>
+      1. Click <strong>OK</strong> below — print dialog will open.<br>
+      2. In the dialog, click <strong>"More settings"</strong>.<br>
+      3. Tick <strong>"Background graphics"</strong> ✅<br>
+      4. Then click <strong>Print</strong> or <strong>Save as PDF</strong>.
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="document.querySelector('.print-notice').style.display='none';window.print();" style="flex:1;background:#0E2E50;color:#fff;border:none;padding:10px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">OK — Open Print Dialog</button>
+      <button onclick="document.querySelector('.print-notice').style.display='none'" style="flex:0 0 80px;background:#eee;color:#333;border:none;padding:10px;border-radius:6px;font-size:10pt;font-weight:700;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ COVER ══════════════ -->
+<div class="cover-page">
+  <div class="cover-topbar"></div>
+  <div class="cover-main">
+    <div class="cover-univ">Dhaka University of Engineering &amp; Technology</div>
+    <div class="cover-eyebrow">DUET Admission Preparation</div>
+    <div class="cover-rule-line"></div>
+    <div class="cover-title">C &amp; C++<br>Programs</div>
+    <div class="cover-subtitle">মৌলিক প্রোগ্রামসমূহ — পাশাপাশি তুলনা</div>
+    <div class="cover-tags">
+      <span class="cover-tag c-t">C LANGUAGE</span>
+      <span class="cover-tag cpp-t">C++ LANGUAGE</span>
+    </div>
+    <div class="cover-count">60 Programs · Side by Side · Bangla Explanation</div>
+    <div class="cover-count" style="margin-top:4mm;color:#8892A4;letter-spacing:.06em;">Compiled by &nbsp;<span style="color:#1A6ED4;font-weight:700;letter-spacing:.04em;">Humayoun</span></div>
+  </div>
+  <div class="cover-divider"></div>
+  <div class="cover-creds">
+    <div class="cover-creds-label">Student Information</div>
+    <div class="cover-creds-grid">
+      <div class="cred-field"><span class="cred-label">Student Name</span><span class="cred-value"> </span></div>
+      <div class="cred-field"><span class="cred-label">Student ID</span><span class="cred-value"> </span></div>
+      <div class="cred-field"><span class="cred-label">Batch</span><span class="cred-value"> </span></div>
+      <div class="cred-field"><span class="cred-label">Department</span><span class="cred-value"> </span></div>
+      <div class="cred-field"><span class="cred-label">Polytechnic Institute</span><span class="cred-value"> </span></div>
+      <div class="cred-field"><span class="cred-label">Academic Year</span><span class="cred-value"> </span></div>
+    </div>
+  </div>
+  <div class="cover-bottombar">
+    <span class="cover-bottombar-l">Dhaka University of Engineering &amp; Technology</span>
+    <span class="cover-bottombar-r">Humayoun</span>
+  </div>
+</div>
+
+<!-- ══════════════ PROGRAMS ══════════════ -->
+<div class="content">
+
+<!-- 1 Arithmetic Operations -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">গাণিতিক অপারেশন — Arithmetic Operations</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p01">
+  <div class="prog-hdr">
+    <span class="prog-bn">০১. ক্যালকুলেটর — যোগ, বিয়োগ, গুণ ও ভাগ</span>
+    <span class="prog-en">(01. SUM, SUBTRACTION, MULTIPLICATION &amp; DIVISION OF TWO NUMBERS)</span>
+  </div>
+  <div class="demo"><pre>চারটি মৌলিক গাণিতিক অপারেশন: +, −, ×, ÷  —  float ব্যবহার করা হয় দশমিক ফলাফলের জন্য।
+&nbsp;&nbsp;a=10, b=3 → Sum=13.00, Subtraction=7.00, Multiplication=30.00, Division=3.33
+&nbsp;&nbsp;বিশেষ ক্ষেত্র: b=0 হলে ভাগ সম্ভব নয় → if (b!=0) দিয়ে যাচাই করা হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b;
+    <span class="fn">printf</span>(<span class="s">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f %f"</span>, &amp;a, &amp;b);
+    <span class="fn">printf</span>(<span class="s">"Sum = %f\n"</span>, a + b);
+    <span class="fn">printf</span>(<span class="s">"Subtraction = %f\n"</span>, a - b);
+    <span class="fn">printf</span>(<span class="s">"Multiplication = %f\n"</span>, a * b);
+    <span class="kc">if</span> (b != <span class="n">0</span>)
+        <span class="fn">printf</span>(<span class="s">"Division = %f\n"</span>, a / b);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Division not possible (b=0)\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter two numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> a + b <span class="op">&lt;&lt;</span> endl;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Subtraction = "</span> <span class="op">&lt;&lt;</span> a - b <span class="op">&lt;&lt;</span> endl;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Multiplication = "</span> <span class="op">&lt;&lt;</span> a * b <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">if</span> (b != <span class="n">0</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Division = "</span> <span class="op">&lt;&lt;</span> a / b <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Division not possible (b=0)"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 2 Comparisons -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">তুলনামূলক অপারেশন — Comparisons</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p02">
+  <div class="prog-hdr">
+    <span class="prog-bn">০২. দুটি সংখ্যার মধ্যে বড়টি খোঁজা</span>
+    <span class="prog-en">(02. FIND LARGER OF TWO NUMBERS)</span>
+  </div>
+  <div class="demo"><pre>if (a &gt; b) → a বড়।  else if (b &gt; a) → b বড়।  else → দুটো সমান।
+&nbsp;&nbsp;উদাহরণ: a=8, b=3 → "Larger number is: 8"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a=5, b=5 → "Both numbers are equal."</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    <span class="fn">printf</span>(<span class="s">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d"</span>, &amp;a, &amp;b);
+    <span class="kc">if</span> (a &gt; b)
+        <span class="fn">printf</span>(<span class="s">"Larger number is: %d\n"</span>, a);
+    <span class="kc">else if</span> (b &gt; a)
+        <span class="fn">printf</span>(<span class="s">"Larger number is: %d\n"</span>, b);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Both numbers are equal.\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter two numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b;
+    <span class="kc">if</span> (a &gt; b)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Larger number is: "</span> <span class="op">&lt;&lt;</span> a <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else if</span> (b &gt; a)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Larger number is: "</span> <span class="op">&lt;&lt;</span> b <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Both numbers are equal."</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p03">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৩. দুটি সংখ্যার মধ্যে ছোটটি খোঁজা</span>
+    <span class="prog-en">(03. FIND SMALLER OF TWO NUMBERS)</span>
+  </div>
+  <div class="demo"><pre>if (a &lt; b) → a ছোট।  else if (b &lt; a) → b ছোট।  else → দুটো সমান।
+&nbsp;&nbsp;উদাহরণ: a=3, b=8 → "Smaller number is: 3"
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a=5, b=5 → "Both numbers are equal."</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    <span class="fn">printf</span>(<span class="s">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d"</span>, &amp;a, &amp;b);
+    <span class="kc">if</span> (a &lt; b)
+        <span class="fn">printf</span>(<span class="s">"Smaller number is: %d\n"</span>, a);
+    <span class="kc">else if</span> (b &lt; a)
+        <span class="fn">printf</span>(<span class="s">"Smaller number is: %d\n"</span>, b);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Both numbers are equal.\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter two numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b;
+    <span class="kc">if</span> (a &lt; b)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Smaller number is: "</span> <span class="op">&lt;&lt;</span> a <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else if</span> (b &lt; a)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Smaller number is: "</span> <span class="op">&lt;&lt;</span> b <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Both numbers are equal."</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p04">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৪. তিনটি সংখ্যার মধ্যে সবচেয়ে বড় (টার্নারি অপারেটর দিয়ে)</span>
+    <span class="prog-en">(04. FIND LARGEST OF THREE NUMBERS (CONDITIONAL OPERATOR))</span>
+  </div>
+  <div class="demo"><pre>টার্নারি: (শর্ত) ? সত্য-মান : মিথ্যা-মান
+&nbsp;&nbsp;max = (a&gt;b &amp;&amp; a&gt;c) ? a : (b&gt;c ? b : c)
+&nbsp;&nbsp;উদাহরণ: a=4, b=9, c=6 → max = 9</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, c;
+    <span class="fn">printf</span>(<span class="s">"Enter three numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d %d"</span>, &amp;a, &amp;b, &amp;c);
+    <span class="kt">int</span> max = (a &gt; b &amp;&amp; a &gt; c) ? a : (b &gt; c ? b : c);
+    <span class="fn">printf</span>(<span class="s">"Largest number is: %d\n"</span>, max);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, c;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter three numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b <span class="op">&gt;&gt;</span> c;
+    <span class="kt">int</span> max = (a &gt; b &amp;&amp; a &gt; c) ? a : (b &gt; c ? b : c);
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Largest number is: "</span> <span class="op">&lt;&lt;</span> max <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p05">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৫. তিনটি সংখ্যার মধ্যে সবচেয়ে ছোট (টার্নারি অপারেটর দিয়ে)</span>
+    <span class="prog-en">(05. FIND SMALLEST OF THREE NUMBERS (CONDITIONAL OPERATOR))</span>
+  </div>
+  <div class="demo"><pre>টার্নারি: (শর্ত) ? সত্য-মান : মিথ্যা-মান
+&nbsp;&nbsp;min = (a&lt;b &amp;&amp; a&lt;c) ? a : (b&lt;c ? b : c)
+&nbsp;&nbsp;উদাহরণ: a=4, b=9, c=6 → min = 4</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, c;
+    <span class="fn">printf</span>(<span class="s">"Enter three numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d %d"</span>, &amp;a, &amp;b, &amp;c);
+    <span class="kt">int</span> min = (a &lt; b &amp;&amp; a &lt; c) ? a : (b &lt; c ? b : c);
+    <span class="fn">printf</span>(<span class="s">"Smallest number is: %d\n"</span>, min);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, c;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter three numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b <span class="op">&gt;&gt;</span> c;
+    <span class="kt">int</span> min = (a &lt; b &amp;&amp; a &lt; c) ? a : (b &lt; c ? b : c);
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Smallest number is: "</span> <span class="op">&lt;&lt;</span> min <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p06">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৬. তিনটি সংখ্যার গড়</span>
+    <span class="prog-en">(06. AVERAGE OF THREE NUMBERS)</span>
+  </div>
+  <div class="demo"><pre>গড় = (a + b + c) / 3   → float ব্যবহার করা হয় দশমিক পেতে।
+&nbsp;&nbsp;উদাহরণ: a=4, b=8, c=9 → গড় = (4+8+9)/3 = 21/3 = 7.000000</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b, c;
+    <span class="fn">printf</span>(<span class="s">"Enter three numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f %f %f"</span>, &amp;a, &amp;b, &amp;c);
+    <span class="kt">float</span> avg = (a + b + c) / <span class="n">3</span>;
+    <span class="fn">printf</span>(<span class="s">"Average = %f\n"</span>, avg);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b, c;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter three numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b <span class="op">&gt;&gt;</span> c;
+    <span class="kt">float</span> avg = (a + b + c) / <span class="n">3</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Average = "</span> <span class="op">&lt;&lt;</span> avg <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 3 Geometry & Area -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">জ্যামিতি ও ক্ষেত্রফল — Geometry &amp; Area</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p07">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৭. সমকোণী ত্রিভুজের ক্ষেত্রফল</span>
+    <span class="prog-en">(07. AREA OF A RIGHT-ANGLED TRIANGLE)</span>
+  </div>
+  <div class="demo"><pre>সমকোণী ত্রিভুজের ক্ষেত্রফল সূত্র: ক্ষেত্রফল = (ভূমি × উচ্চতা) ÷ 2
+&nbsp;&nbsp;উদাহরণ: ভূমি = 6, উচ্চতা = 4 → ক্ষেত্রফল = (6 × 4) ÷ 2 = 12.00</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> base, height;
+    <span class="fn">printf</span>(<span class="s">"Enter base and height: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f %f"</span>, &amp;base, &amp;height);
+    <span class="kt">float</span> area = <span class="n">0.5</span> * base * height;
+    <span class="fn">printf</span>(<span class="s">"Area of right-angled"</span>
+           <span class="s">" triangle = %f\n"</span>, area);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> base, height;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter base and height: "</span>;
+    cin <span class="op">&gt;&gt;</span> base <span class="op">&gt;&gt;</span> height;
+    <span class="kt">float</span> area = <span class="n">0.5</span> * base * height;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Area of right-angled"</span>
+         <span class="op">&lt;&lt;</span> <span class="s">" triangle = "</span> <span class="op">&lt;&lt;</span> area <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p08">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৮. বিষমবাহু ত্রিভুজের ক্ষেত্রফল (হেরোনের সূত্র)</span>
+    <span class="prog-en">(08. AREA OF A SCALENE TRIANGLE (HERON'S FORMULA))</span>
+  </div>
+  <div class="demo"><pre>হেরোনের সূত্র: তিন বাহু a, b, c জানা থাকলে ক্ষেত্রফল বের করা যায়।
+&nbsp;&nbsp;আধা-পরিসীমা: s = (a + b + c) / 2
+&nbsp;&nbsp;ক্ষেত্রফল   = √(s × (s−a) × (s−b) × (s−c))
+&nbsp;&nbsp;উদাহরণ: a=3, b=4, c=5 → s=6 → area = √(6×3×2×1) = 6.00</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;math.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b, c;
+    <span class="fn">printf</span>(<span class="s">"Enter three sides: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f %f %f"</span>, &amp;a, &amp;b, &amp;c);
+    <span class="kt">float</span> s = (a + b + c) / <span class="n">2</span>;
+    <span class="kt">float</span> area = <span class="fn">sqrt</span>(s * (s - a) * (s - b) * (s - c));
+    <span class="fn">printf</span>(<span class="s">"Area of scalene"</span>
+           <span class="s">" triangle = %f\n"</span>, area);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;cmath&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> a, b, c;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter three sides: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b <span class="op">&gt;&gt;</span> c;
+    <span class="kt">float</span> s = (a + b + c) / <span class="n">2</span>;
+    <span class="kt">float</span> area = <span class="fn">sqrt</span>(s * (s - a) * (s - b) * (s - c));
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Area of scalene"</span>
+         <span class="op">&lt;&lt;</span> <span class="s">" triangle = "</span> <span class="op">&lt;&lt;</span> area <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p09">
+  <div class="prog-hdr">
+    <span class="prog-bn">০৯. বৃত্তের ক্ষেত্রফল</span>
+    <span class="prog-en">(09. AREA OF A CIRCLE)</span>
+  </div>
+  <div class="demo"><pre>বৃত্তের ক্ষেত্রফল সূত্র: A = π × r²
+&nbsp;&nbsp;#define PI 3.1416 দিয়ে π ধ্রুবক সংজ্ঞায়িত করা হয়।
+&nbsp;&nbsp;উদাহরণ: r=7 → A = 3.1416 × 7 × 7 = 153.94</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="p">#define PI 3.1416</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> radius;
+    <span class="fn">printf</span>(<span class="s">"Enter radius: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f"</span>, &amp;radius);
+    <span class="kt">float</span> area = PI * radius * radius;
+    <span class="fn">printf</span>(<span class="s">"Area of circle = %f\n"</span>, area);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="p">#define PI 3.1416</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> radius;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter radius: "</span>;
+    cin <span class="op">&gt;&gt;</span> radius;
+    <span class="kt">float</span> area = PI * radius * radius;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Area of circle = "</span> <span class="op">&lt;&lt;</span> area <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 4 Number Properties -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">সংখ্যার বৈশিষ্ট্য — Number Properties</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p10">
+  <div class="prog-hdr">
+    <span class="prog-bn">১০. ধনাত্মক, ঋণাত্মক নাকি শূন্য</span>
+    <span class="prog-en">(10. CHECK POSITIVE, NEGATIVE, OR ZERO)</span>
+  </div>
+  <div class="demo"><pre>n &gt; 0 → Positive  |  n &lt; 0 → Negative  |  n = 0 → Zero
+&nbsp;&nbsp;উদাহরণ: 5 → Positive  |  -3 → Negative  |  0 → Zero</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">if</span> (n &gt; <span class="n">0</span>)
+        <span class="fn">printf</span>(<span class="s">"Positive\n"</span>);
+    <span class="kc">else if</span> (n &lt; <span class="n">0</span>)
+        <span class="fn">printf</span>(<span class="s">"Negative\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Zero\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">if</span> (n &gt; <span class="n">0</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Positive"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else if</span> (n &lt; <span class="n">0</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Negative"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Zero"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p11">
+  <div class="prog-hdr">
+    <span class="prog-bn">১১. বিজোড় না জোড়</span>
+    <span class="prog-en">(11. CHECK ODD OR EVEN)</span>
+  </div>
+  <div class="demo"><pre>num % 2 == 0 → জোড়  |  num % 2 != 0 → বিজোড়
+&nbsp;&nbsp;উদাহরণ: 4 → Even (4%2=0)  |  7 → Odd (7%2=1)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">if</span> (num % <span class="n">2</span> != <span class="n">0</span>)
+        <span class="fn">printf</span>(<span class="s">"The number is odd."</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"The number is even."</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">if</span> (num % <span class="n">2</span> != <span class="n">0</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"The number is odd."</span>;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"The number is even."</span>;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p12">
+  <div class="prog-hdr">
+    <span class="prog-bn">১২. অধিবর্ষ (লিপ ইয়ার) যাচাই</span>
+    <span class="prog-en">(12. CHECK LEAP YEAR)</span>
+  </div>
+  <div class="demo"><pre>অধিবর্ষ (Leap Year) কেন?
+&nbsp;&nbsp;পৃথিবী সূর্যকে একবার প্রদক্ষিণ করতে ঠিক ৩৬৫ দিন নয়, বরং ৩৬৫ দিন ৫ ঘণ্টা ৪৮ মিনিট ৪৫ সেকেন্ড লাগে।
+&nbsp;&nbsp;প্রতি বছর প্রায় ৬ ঘণ্টা বাকি থাকে → ৪ বছরে ≈ ২৪ ঘণ্টা = ১ দিন।
+&nbsp;&nbsp;তাই প্রতি ৪ বছরে ফেব্রুয়ারিতে ১ দিন যোগ করা হয় → ফেব্রুয়ারি ২৯ দিনের হয়।
+&nbsp;&nbsp;কিন্তু আসলে ৫ ঘণ্টা ৪৮ মিনিট — তাই ১০০ বছরে একটু বেশি হয়।
+&nbsp;&nbsp;তাই ১০০ দিয়ে বিভাজ্য বছর leap year নয়, কিন্তু ৪০০ দিয়ে বিভাজ্য হলে আবার leap year।
+&nbsp;&nbsp;নিয়ম:
+&nbsp;&nbsp;  ✓  year % 4 == 0 এবং year % 100 != 0  → লিপ ইয়ার
+&nbsp;&nbsp;  ✓  year % 400 == 0                     → লিপ ইয়ার (ব্যতিক্রম)
+&nbsp;&nbsp;উদাহরণ: 2024 ✓ লিপ  |  1900 ✗ লিপ নয় (100 দিয়ে বিভাজ্য)  |  2000 ✓ লিপ (400 দিয়ে বিভাজ্য)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> year;
+    <span class="fn">printf</span>(<span class="s">"Enter a year: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;year);
+    <span class="kc">if</span> ((year % <span class="n">4</span> == <span class="n">0</span> &amp;&amp; year % <span class="n">100</span> != <span class="n">0</span>)
+        || (year % <span class="n">400</span> == <span class="n">0</span>))
+        <span class="fn">printf</span>(<span class="s">"Leap year\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not a leap year\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> year;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a year: "</span>;
+    cin <span class="op">&gt;&gt;</span> year;
+    <span class="kc">if</span> ((year % <span class="n">4</span> == <span class="n">0</span> &amp;&amp; year % <span class="n">100</span> != <span class="n">0</span>)
+        || (year % <span class="n">400</span> == <span class="n">0</span>))
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Leap year"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not a leap year"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 5 Temperature Conversions -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">তাপমাত্রা রূপান্তর — Temperature Conversions</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p13">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৩. সেলসিয়াস থেকে ফারেনহাইট</span>
+    <span class="prog-en">(13. CELSIUS TO FAHRENHEIT)</span>
+  </div>
+  <div class="demo"><pre>সেলসিয়াস → ফারেনহাইট:  F = (C × 9/5) + 32
+&nbsp;&nbsp;উদাহরণ: C=0°   → F=32°    (বরফ গলনাঙ্ক)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C=100° → F=212°   (পানি স্ফুটনাঙ্ক)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C=37°  → F=98.6°  (মানবদেহের তাপমাত্রা)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> celsius, fahrenheit;
+    <span class="fn">printf</span>(<span class="s">"Enter temperature in Celsius: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f"</span>, &amp;celsius);
+    fahrenheit = (celsius * <span class="n">9</span> / <span class="n">5</span>) + <span class="n">32</span>;
+    <span class="fn">printf</span>(<span class="s">"Temp in Fahrenheit: %f\n"</span>,
+           fahrenheit);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> celsius, fahrenheit;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter temperature in Celsius: "</span>;
+    cin <span class="op">&gt;&gt;</span> celsius;
+    fahrenheit = (celsius * <span class="n">9</span> / <span class="n">5</span>) + <span class="n">32</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Temp in Fahrenheit: "</span>
+         <span class="op">&lt;&lt;</span> fahrenheit <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p14">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৪. ফারেনহাইট থেকে সেলসিয়াস</span>
+    <span class="prog-en">(14. FAHRENHEIT TO CELSIUS)</span>
+  </div>
+  <div class="demo"><pre>ফারেনহাইট → সেলসিয়াস:  C = (F − 32) × 5/9
+&nbsp;&nbsp;উদাহরণ: F=32°   → C=0°   (বরফ গলনাঙ্ক)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F=212°  → C=100° (পানি স্ফুটনাঙ্ক)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F=98.6° → C=37°  (মানবদেহের তাপমাত্রা)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> fahrenheit, celsius;
+    <span class="fn">printf</span>(<span class="s">"Enter temperature in Fahrenheit: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%f"</span>, &amp;fahrenheit);
+    celsius = (fahrenheit - <span class="n">32</span>) * <span class="n">5</span> / <span class="n">9</span>;
+    <span class="fn">printf</span>(<span class="s">"Temperature in Celsius: %f\n"</span>, celsius);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">float</span> fahrenheit, celsius;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter temperature in Fahrenheit: "</span>;
+    cin <span class="op">&gt;&gt;</span> fahrenheit;
+    celsius = (fahrenheit - <span class="n">32</span>) * <span class="n">5</span> / <span class="n">9</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Temp in Celsius: "</span>
+         <span class="op">&lt;&lt;</span> celsius <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 6 Character Operations -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">অক্ষর অপারেশন — Character Operations</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p15">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৫. বড় হাতের না ছোট হাতের অক্ষর</span>
+    <span class="prog-en">(15. CHECK UPPERCASE OR LOWERCASE)</span>
+  </div>
+  <div class="demo"><pre>'a'–'z' → Lowercase  |  'A'–'Z' → Uppercase  |  অন্যটা → Not an alphabet
+&nbsp;&nbsp;উদাহরণ: 'g' → Lowercase  |  'G' → Uppercase  |  '3' → Not an alphabet</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    <span class="fn">printf</span>(<span class="s">"Enter a character: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%c"</span>, &amp;ch);
+    <span class="kc">if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+        <span class="fn">printf</span>(<span class="s">"Lowercase letter\n"</span>);
+    <span class="kc">else if</span> (ch <span class="op">&gt;=</span> <span class="s">'A'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'Z'</span>)
+        <span class="fn">printf</span>(<span class="s">"Uppercase letter\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not an alphabet letter\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a character: "</span>;
+    cin <span class="op">&gt;&gt;</span> ch;
+    <span class="kc">if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Lowercase letter"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else if</span> (ch <span class="op">&gt;=</span> <span class="s">'A'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'Z'</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Uppercase letter"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not an alphabet letter"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p16">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৬. স্বরবর্ণ না ব্যঞ্জনবর্ণ — if-else দিয়ে</span>
+    <span class="prog-en">(16. CHECK VOWEL OR CONSONANT (IF-ELSE))</span>
+  </div>
+  <div class="demo"><pre>tolower() দিয়ে ছোট হাতে করা হয়, তারপর a/e/i/o/u → Vowel, বাকি → Consonant।
+&nbsp;&nbsp;উদাহরণ: 'A' → tolower → 'a' → Vowel  |  'B' → Consonant  |  '5' → Not an alphabet</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;ctype.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    <span class="fn">printf</span>(<span class="s">"Enter an alphabet: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%c"</span>, &amp;ch);
+    ch = <span class="fn">tolower</span>(ch);
+    <span class="kc">if</span> (ch == <span class="s">'a'</span> || ch == <span class="s">'e'</span> || ch == <span class="s">'i'</span>
+        || ch == <span class="s">'o'</span> || ch == <span class="s">'u'</span>)
+        <span class="fn">printf</span>(<span class="s">"Vowel\n"</span>);
+    <span class="kc">else if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+        <span class="fn">printf</span>(<span class="s">"Consonant\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not an alphabet\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;cctype&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter an alphabet: "</span>;
+    cin <span class="op">&gt;&gt;</span> ch;
+    ch = <span class="fn">tolower</span>(ch);
+    <span class="kc">if</span> (ch == <span class="s">'a'</span> || ch == <span class="s">'e'</span> || ch == <span class="s">'i'</span>
+        || ch == <span class="s">'o'</span> || ch == <span class="s">'u'</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Vowel"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Consonant"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not an alphabet"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="page-pair">
+<div class="prog" id="p17">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৭. স্বরবর্ণ না ব্যঞ্জনবর্ণ — switch-case দিয়ে</span>
+    <span class="prog-en">(17. CHECK VOWEL OR CONSONANT (SWITCH-CASE))</span>
+  </div>
+  <div class="demo"><pre>switch-case: একটি মানের বিপরীতে নির্দিষ্ট case মেলানো হয়। if-else এর চেয়ে পরিষ্কার।
+&nbsp;&nbsp;ch = tolower(ch) → আগে ছোট হাতে রূপান্তর, তারপর case 'a','e','i','o','u' → Vowel
+&nbsp;&nbsp;default: 'a'–'z' হলে Consonant, না হলে Not an alphabet।
+&nbsp;&nbsp;উদাহরণ: 'E' → tolower → 'e' → case 'e' → Vowel  |  'k' → default → Consonant</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;ctype.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    <span class="fn">printf</span>(<span class="s">"Enter an alphabet: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%c"</span>, &amp;ch);
+    ch = <span class="fn">tolower</span>(ch);
+    <span class="kc">switch</span>(ch) {
+        <span class="kc">case</span> <span class="s">'a'</span>:
+        <span class="kc">case</span> <span class="s">'e'</span>:
+        <span class="kc">case</span> <span class="s">'i'</span>:
+        <span class="kc">case</span> <span class="s">'o'</span>:
+        <span class="kc">case</span> <span class="s">'u'</span>:
+            <span class="fn">printf</span>(<span class="s">"Vowel\n"</span>);
+            <span class="kc">break</span>;
+        <span class="kc">default</span>:
+            <span class="kc">if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+                <span class="fn">printf</span>(<span class="s">"Consonant\n"</span>);
+            <span class="kc">else</span>
+                <span class="fn">printf</span>(<span class="s">"Not an alphabet\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;cctype&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">char</span> ch;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter an alphabet: "</span>;
+    cin <span class="op">&gt;&gt;</span> ch;
+    ch = <span class="fn">tolower</span>(ch);
+    <span class="kc">switch</span>(ch) {
+        <span class="kc">case</span> <span class="s">'a'</span>:
+        <span class="kc">case</span> <span class="s">'e'</span>:
+        <span class="kc">case</span> <span class="s">'i'</span>:
+        <span class="kc">case</span> <span class="s">'o'</span>:
+        <span class="kc">case</span> <span class="s">'u'</span>:
+            cout <span class="op">&lt;&lt;</span> <span class="s">"Vowel"</span> <span class="op">&lt;&lt;</span> endl;
+            <span class="kc">break</span>;
+        <span class="kc">default</span>:
+            <span class="kc">if</span> (ch <span class="op">&gt;=</span> <span class="s">'a'</span> &amp;&amp; ch <span class="op">&lt;=</span> <span class="s">'z'</span>)
+                cout <span class="op">&lt;&lt;</span> <span class="s">"Consonant"</span> <span class="op">&lt;&lt;</span> endl;
+            <span class="kc">else</span>
+                cout <span class="op">&lt;&lt;</span> <span class="s">"Not an alphabet"</span> <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 7 Loops -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">লুপ — Loops</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p18">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৮. "Bangladesh" ১০ বার প্রিন্ট (for / while / do-while)</span>
+    <span class="prog-en">(18. PRINT "BANGLADESH" 10 TIMES (FOR / WHILE / DO-WHILE))</span>
+  </div>
+  <div class="demo"><pre>for → শুরু, শর্ত, পরিবর্তন একলাইনে। গণনার জন্য সবচেয়ে উপযুক্ত।
+while → আগে শর্ত দেখে, তারপর চালায়। শর্ত মিথ্যা হলে একবারও চলে না।
+do-while → আগে একবার চালায়, তারপর শর্ত দেখে। অন্তত একবার চলবেই।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="c">// for loop</span>
+    <span class="kc">for</span> (<span class="kt">int</span> i=<span class="n">0</span>; i&lt;<span class="n">10</span>; i++)
+        <span class="fn">printf</span>(<span class="s">"Bangladesh\n"</span>);
+    <span class="c">// while loop</span>
+    <span class="kt">int</span> j=<span class="n">0</span>;
+    <span class="kc">while</span> (j&lt;<span class="n">10</span>) { <span class="fn">printf</span>(<span class="s">"Bangladesh\n"</span>); j++; }
+    <span class="c">// do-while loop</span>
+    <span class="kt">int</span> k=<span class="n">0</span>;
+    <span class="kc">do</span> { <span class="fn">printf</span>(<span class="s">"Bangladesh\n"</span>); k++; }
+    <span class="kc">while</span> (k&lt;<span class="n">10</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="c">// for loop</span>
+    <span class="kc">for</span> (<span class="kt">int</span> i=<span class="n">0</span>; i&lt;<span class="n">10</span>; i++)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Bangladesh"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="c">// while loop</span>
+    <span class="kt">int</span> j=<span class="n">0</span>;
+    <span class="kc">while</span> (j&lt;<span class="n">10</span>) { cout <span class="op">&lt;&lt;</span> <span class="s">"Bangladesh"</span> <span class="op">&lt;&lt;</span> endl; j++; }
+    <span class="c">// do-while loop</span>
+    <span class="kt">int</span> k=<span class="n">0</span>;
+    <span class="kc">do</span> { cout <span class="op">&lt;&lt;</span> <span class="s">"Bangladesh"</span> <span class="op">&lt;&lt;</span> endl; k++; }
+    <span class="kc">while</span> (k&lt;<span class="n">10</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+</div><!-- end .page-pair -->
+
+<div class="prog" id="p19">
+  <div class="prog-hdr">
+    <span class="prog-bn">১৯. ১ থেকে ১০ পর্যন্ত প্রিন্ট (for / while / do-while)</span>
+    <span class="prog-en">(19. PRINT 1 TO 10 (FOR / WHILE / DO-WHILE))</span>
+  </div>
+  <div class="demo"><pre>একই কাজ তিনটি ভিন্ন লুপ দিয়ে — তিনটির আউটপুট একই: 1 2 3 4 5 6 7 8 9 10
+for → for (int i=1; i&lt;=10; i++) { ... }    while → int i=1; while(i&lt;=10){...i++;}
+do-while → int i=1; do { ... i++; } while(i&lt;=10);  — অন্তত একবার চলবেই</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="c">// for loop</span>
+    <span class="kc">for</span> (<span class="kt">int</span> i=<span class="n">1</span>; i&lt;=<span class="n">10</span>; i++)
+        <span class="fn">printf</span>(<span class="s">"%d "</span>, i);
+    <span class="c">// while loop</span>
+    <span class="kt">int</span> j=<span class="n">1</span>;
+    <span class="kc">while</span> (j&lt;=<span class="n">10</span>) { <span class="fn">printf</span>(<span class="s">"%d "</span>, j); j++; }
+    <span class="c">// do-while loop</span>
+    <span class="kt">int</span> k=<span class="n">1</span>;
+    <span class="kc">do</span> { <span class="fn">printf</span>(<span class="s">"%d "</span>, k); k++; }
+    <span class="kc">while</span> (k&lt;=<span class="n">10</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="c">// for loop</span>
+    <span class="kc">for</span> (<span class="kt">int</span> i=<span class="n">1</span>; i&lt;=<span class="n">10</span>; i++)
+        cout <span class="op">&lt;&lt;</span> i <span class="op">&lt;&lt;</span> <span class="s">" "</span>;
+    <span class="c">// while loop</span>
+    <span class="kt">int</span> j=<span class="n">1</span>;
+    <span class="kc">while</span> (j&lt;=<span class="n">10</span>) { cout <span class="op">&lt;&lt;</span> j <span class="op">&lt;&lt;</span> <span class="s">" "</span>; j++; }
+    <span class="c">// do-while loop</span>
+    <span class="kt">int</span> k=<span class="n">1</span>;
+    <span class="kc">do</span> { cout <span class="op">&lt;&lt;</span> k <span class="op">&lt;&lt;</span> <span class="s">" "</span>; k++; }
+    <span class="kc">while</span> (k&lt;=<span class="n">10</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p20">
+  <div class="prog-hdr">
+    <span class="prog-bn">২০. ১ থেকে ১০ পর্যন্ত যোগফল (for লুপ)</span>
+    <span class="prog-en">(20. SUM OF 1 TO 10 (FOR LOOP))</span>
+  </div>
+  <div class="demo"><pre>১ থেকে ১০ পর্যন্ত যোগফল:
+&nbsp;&nbsp;1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 = 55
+&nbsp;&nbsp;পদ্ধতি: sum=0 দিয়ে শুরু, প্রতি ধাপে sum = sum + i করা হয়।
+&nbsp;&nbsp;সূত্র: n(n+1)/2 = 10×11/2 = 55  (লুপ না চালিয়েও পাওয়া যায়)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> sum = <span class="n">0</span>;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++)
+        sum = sum + i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> sum = <span class="n">0</span>;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++)
+        sum = sum + i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 8 Special Numbers -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">বিশেষ সংখ্যা — Special Numbers</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p21">
+  <div class="prog-hdr">
+    <span class="prog-bn">২১. মৌলিক সংখ্যা যাচাই</span>
+    <span class="prog-en">(21. CHECK PRIME NUMBER)</span>
+  </div>
+  <div class="demo"><pre>মৌলিক সংখ্যা: শুধু ১ ও নিজে দিয়ে বিভাজ্য।
+&nbsp;&nbsp;পদ্ধতি: ২ থেকে (num−1) পর্যন্ত ভাগ করে দেখা হয়।
+&nbsp;&nbsp;উদাহরণ: 7 → 2,3,4,5,6 দিয়ে ভাগ হয় না → মৌলিক ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9 → 3 দিয়ে ভাগ হয় → মৌলিক নয় ✗</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, count = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter any positive number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">if</span> (num <span class="op">&lt;=</span> <span class="n">1</span>) {
+        <span class="fn">printf</span>(<span class="s">"Not Prime Number"</span>);
+        <span class="kc">return</span> <span class="n">0</span>;
+    }
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i &lt; num; i++) {
+        <span class="kc">if</span> (num % i == <span class="n">0</span>) {
+            count++;
+            <span class="kc">break</span>;
+        }
+    }
+    <span class="kc">if</span> (count == <span class="n">0</span>)
+        <span class="fn">printf</span>(<span class="s">"Prime Number"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not Prime Number"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, count = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter any positive number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">if</span> (num <span class="op">&lt;=</span> <span class="n">1</span>) {
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not Prime Number"</span>;
+        <span class="kc">return</span> <span class="n">0</span>;
+    }
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i &lt; num; i++) {
+        <span class="kc">if</span> (num % i == <span class="n">0</span>) {
+            count++;
+            <span class="kc">break</span>;
+        }
+    }
+    <span class="kc">if</span> (count == <span class="n">0</span>)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Prime Number"</span>;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not Prime Number"</span>;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p22">
+  <div class="prog-hdr">
+    <span class="prog-bn">২২. পরিপূর্ণ সংখ্যা যাচাই</span>
+    <span class="prog-en">(22. CHECK PERFECT NUMBER)</span>
+  </div>
+  <div class="demo"><pre>পরিপূর্ণ সংখ্যা: নিজ ব্যতীত সকল গুণনীয়কের যোগফল = নিজেই।
+&nbsp;&nbsp;উদাহরণ: 6 → গুণনীয়ক: 1,2,3 → 1+2+3 = 6 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28 → গুণনীয়ক: 1,2,4,7,14 → যোগফল = 28 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12 → গুণনীয়ক যোগ = 16 ≠ 12 ✗</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i &lt; num; i++) {
+        <span class="kc">if</span> (num % i == <span class="n">0</span>)
+            sum = sum + i;
+    }
+    <span class="kc">if</span> (sum == num)
+        <span class="fn">printf</span>(<span class="s">"Perfect Number\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not Perfect Number\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i &lt; num; i++) {
+        <span class="kc">if</span> (num % i == <span class="n">0</span>)
+            sum = sum + i;
+    }
+    <span class="kc">if</span> (sum == num)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Perfect Number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not Perfect Number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p23">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৩. সংখ্যার অঙ্কসমূহের যোগফল</span>
+    <span class="prog-en">(23. SUM OF DIGITS IN AN INTEGER)</span>
+  </div>
+  <div class="demo"><pre>পদ্ধতি: temp%10 → শেষ অঙ্ক বের করে, sum += অঙ্ক, temp/10 → শেষ অঙ্ক বাদ দেয়। temp=0 হলে শেষ হয়।
+&nbsp;&nbsp;1234 এর অঙ্কসমূহের যোগ: sum=0
+&nbsp;&nbsp;ধাপ ১: r=4, sum=4,  temp=123
+&nbsp;&nbsp;ধাপ ২: r=3, sum=7,  temp=12
+&nbsp;&nbsp;ধাপ ৩: r=2, sum=9,  temp=1
+&nbsp;&nbsp;ধাপ ৪: r=1, sum=10, temp=0 → শেষ  →  আউটপুট: 10</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum of digits = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum of digits = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p24">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৪. সংখ্যা উল্টানো</span>
+    <span class="prog-en">(24. REVERSE A NUMBER)</span>
+  </div>
+  <div class="demo"><pre>পদ্ধতি: temp%10 → শেষ অঙ্ক বের করে, sum = sum×10 + অঙ্ক, temp/10 → শেষ অঙ্ক বাদ দেয়।
+&nbsp;&nbsp;1234 উল্টানো: sum=0
+&nbsp;&nbsp;ধাপ ১: r=4, sum=0×10+4=4,    temp=123
+&nbsp;&nbsp;ধাপ ২: r=3, sum=4×10+3=43,   temp=12
+&nbsp;&nbsp;ধাপ ৩: r=2, sum=43×10+2=432, temp=1
+&nbsp;&nbsp;ধাপ ৪: r=1, sum=432×10+1=4321, temp=0 → শেষ  →  আউটপুট: 4321</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum * <span class="n">10</span> + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="fn">printf</span>(<span class="s">"Reversed number = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum * <span class="n">10</span> + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Reversed number = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p25">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৫. প্যালিন্ড্রোম সংখ্যা যাচাই</span>
+    <span class="prog-en">(25. CHECK PALINDROME NUMBER)</span>
+  </div>
+  <div class="demo"><pre>প্যালিন্ড্রোম সংখ্যা কী?
+&nbsp;&nbsp;উল্টালেও একই থাকে এমন সংখ্যা।
+&nbsp;&nbsp;উদাহরণ: 121 → উল্টো → 121 ✓  |  12321 → উল্টো → 12321 ✓  |  123 → উল্টো → 321 ✗
+&nbsp;&nbsp;পদ্ধতি: সংখ্যাটি উল্টে মূল সংখ্যার সাথে সমান কি না যাচাই করা।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum * <span class="n">10</span> + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        <span class="fn">printf</span>(<span class="s">"Palindrome number\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not palindrome number\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum * <span class="n">10</span> + r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Palindrome number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not palindrome number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p26">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৬. আর্মস্ট্রং সংখ্যা যাচাই</span>
+    <span class="prog-en">(26. CHECK ARMSTRONG NUMBER)</span>
+  </div>
+  <div class="demo"><pre>আর্মস্ট্রং সংখ্যা: ৩-অঙ্কের সংখ্যায় প্রতিটি অঙ্কের ঘনের (cube) যোগফল = সংখ্যা।
+&nbsp;&nbsp;উদাহরণ: 153 → 1³+5³+3³ = 1+125+27 = 153 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;370 → 3³+7³+0³ = 27+343+0 = 370 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;123 → 1+8+27 = 36 ≠ 123 ✗</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum + r * r * r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        <span class="fn">printf</span>(<span class="s">"Armstrong number\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not Armstrong number\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        sum = sum + r * r * r;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Armstrong number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not Armstrong number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p27">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৭. স্ট্রং সংখ্যা যাচাই</span>
+    <span class="prog-en">(27. CHECK STRONG NUMBER)</span>
+  </div>
+  <div class="demo"><pre>স্ট্রং সংখ্যা: প্রতিটি অঙ্কের ফ্যাক্টোরিয়ালের যোগফল = সংখ্যা।
+&nbsp;&nbsp;উদাহরণ: 145 → 1! + 4! + 5! = 1 + 24 + 120 = 145 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 → 2! = 2 ✓
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;123 → 1!+2!+3! = 1+2+6 = 9 ≠ 123 ✗</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>, f;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        f = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> r; i++)
+            f = f * i;
+        sum = sum + f;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        <span class="fn">printf</span>(<span class="s">"Strong number\n"</span>);
+    <span class="kc">else</span>
+        <span class="fn">printf</span>(<span class="s">"Not strong number\n"</span>);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num, temp, r, sum = <span class="n">0</span>, f;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    temp = num;
+    <span class="kc">while</span> (temp != <span class="n">0</span>) {
+        r = temp % <span class="n">10</span>;
+        f = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> r; i++)
+            f = f * i;
+        sum = sum + f;
+        temp = temp / <span class="n">10</span>;
+    }
+    <span class="kc">if</span> (sum == num)
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Strong number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">else</span>
+        cout <span class="op">&lt;&lt;</span> <span class="s">"Not strong number"</span> <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 9 GCD, LCM & Factorial -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">গ.সা.গু, ল.সা.গু ও ফ্যাক্টরিয়াল — GCD, LCM &amp; Factorial</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p28">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৮. গ.সা.গু এবং ল.সা.গু</span>
+    <span class="prog-en">(28. GCD AND LCM OF TWO NUMBERS)</span>
+  </div>
+  <div class="demo"><pre>গ.সা.গু (GCD) ও ল.সা.গু (LCM) নির্ণয়:
+&nbsp;&nbsp;Euclidean Algorithm: y != 0 পর্যন্ত x % y এর ভাগশেষ দিয়ে পুনরাবৃত্তি।
+&nbsp;&nbsp;সূত্র: LCM = (a * b) / GCD
+&nbsp;&nbsp;উদাহরণ: a=12, b=18 → GCD=6, LCM=(12*18)/6=36</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, x, y, gcd, lcm;
+    <span class="fn">printf</span>(<span class="s">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d"</span>, &amp;a, &amp;b);
+    x = a; y = b;
+    <span class="kc">while</span> (y != <span class="n">0</span>) {
+        <span class="kt">int</span> temp = y;
+        y = x % y;
+        x = temp;
+    }
+    gcd = x;
+    lcm = (a * b) / gcd;
+    <span class="fn">printf</span>(<span class="s">"GCD = %d\n"</span>, gcd);
+    <span class="fn">printf</span>(<span class="s">"LCM = %d\n"</span>, lcm);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b, x, y, gcd, lcm;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter two numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b;
+    x = a; y = b;
+    <span class="kc">while</span> (y != <span class="n">0</span>) {
+        <span class="kt">int</span> temp = y;
+        y = x % y;
+        x = temp;
+    }
+    gcd = x;
+    lcm = (a * b) / gcd;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"GCD = "</span> <span class="op">&lt;&lt;</span> gcd <span class="op">&lt;&lt;</span> endl;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"LCM = "</span> <span class="op">&lt;&lt;</span> lcm <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p29">
+  <div class="prog-hdr">
+    <span class="prog-bn">২৯. ফ্যাক্টরিয়াল নির্ণয়</span>
+    <span class="prog-en">(29. FACTORIAL OF A NUMBER)</span>
+  </div>
+  <div class="demo"><pre>ফ্যাক্টরিয়াল (!) কী?
+&nbsp;&nbsp;n! = n × (n-1) × (n-2) × ... × 2 × 1
+&nbsp;&nbsp;উদাহরণ: 0! = 1 (সংজ্ঞা অনুযায়ী)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1! = 1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5! = 5 × 4 × 3 × 2 × 1 = 120
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10! = 3,628,800
+&nbsp;&nbsp;লুপে: fact=1, i=1 থেকে n পর্যন্ত → fact = fact × i
+&nbsp;&nbsp;সতর্কতা: সংখ্যা দ্রুত বড় হয়। 13!-এর বেশি int-এ ধরে না।
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long long ব্যবহার করতে হয় (সর্বোচ্চ ≈ 9.2 × 10¹⁸)।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i++)
+        fact = fact * i;
+    <span class="fn">printf</span>(<span class="s">"Factorial = %llu"</span>, fact);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i++)
+        fact = fact * i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Factorial = "</span> <span class="op">&lt;&lt;</span> fact;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 10 Series & Summation -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">সিরিজ ও যোগফল — Series &amp; Summation</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p30">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩০. ফিবোনাচ্চি সিরিজ</span>
+    <span class="prog-en">(30. FIBONACCI SERIES)</span>
+  </div>
+  <div class="demo"><pre>ফিবোনাচ্চি সিরিজ: প্রতিটি পদ = পূর্ববর্তী দুটি পদের যোগফল।
+&nbsp;&nbsp;a=0, b=1, next = a + b
+&nbsp;&nbsp;n=8 হলে আউটপুট: 0 1 1 2 3 5 8 13</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, a = <span class="n">0</span>, b = <span class="n">1</span>, next;
+    <span class="fn">printf</span>(<span class="s">"Enter number of terms: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++) {
+        <span class="fn">printf</span>(<span class="s">"%d "</span>, a);
+        next = a + b;
+        a = b;
+        b = next;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, a = <span class="n">0</span>, b = <span class="n">1</span>, next;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter number of terms: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++) {
+        cout <span class="op">&lt;&lt;</span> a <span class="op">&lt;&lt;</span> <span class="s">" "</span>;
+        next = a + b;
+        a = b;
+        b = next;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p31">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩১. সিরিজ: ১! + ২! + ৩! + ... + n!</span>
+    <span class="prog-en">(31. SERIES: 1! + 2! + 3! + 4! + ... + n! = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১! + ২! + ৩! + ... + n!  — প্রতিটি পদ ফ্যাক্টরিয়াল, সব পদের যোগফল।
+&nbsp;&nbsp;n=5: 1! + 2! + 3! + 4! + 5! = 1 + 2 + 6 + 24 + 120 = 153</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i++) {
+        fact = fact * i;
+        sum = sum + fact;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum = %llu"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i++) {
+        fact = fact * i;
+        sum = sum + fact;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p32">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩২. সিরিজ: ২! + ৪! + ৬! + ... + n!</span>
+    <span class="prog-en">(32. SERIES: 2! + 4! + 6! + ... + n! = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ২! + ৪! + ৬! + ... + n!  — শুধু জোড় পদের ফ্যাক্টরিয়াল যোগ করা হয়।
+&nbsp;&nbsp;n=6: 2! + 4! + 6! = 2 + 24 + 720 = 746</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> num; i = i + <span class="n">2</span>) {
+        fact = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> j = <span class="n">1</span>; j <span class="op">&lt;=</span> i; j++)
+            fact = fact * j;
+        sum = sum + fact;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum = %llu"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> num; i = i + <span class="n">2</span>) {
+        fact = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> j = <span class="n">1</span>; j <span class="op">&lt;=</span> i; j++)
+            fact = fact * j;
+        sum = sum + fact;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p33">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৩. সিরিজ: ১! + ৩! + ৫! + ... + n!</span>
+    <span class="prog-en">(33. SERIES: 1! + 3! + 5! + ... + n! = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১! + ৩! + ৫! + ... + n!  — শুধু বিজোড় পদের ফ্যাক্টরিয়াল যোগ করা হয়।
+&nbsp;&nbsp;n=5: 1! + 3! + 5! = 1 + 6 + 120 = 127</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i = i + <span class="n">2</span>) {
+        fact = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> j = <span class="n">1</span>; j <span class="op">&lt;=</span> i; j++)
+            fact = fact * j;
+        sum = sum + fact;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum = %llu"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num;
+    <span class="kc">unsigned long long</span> fact = <span class="n">1</span>, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a number: "</span>;
+    cin <span class="op">&gt;&gt;</span> num;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> num; i = i + <span class="n">2</span>) {
+        fact = <span class="n">1</span>;
+        <span class="kc">for</span> (<span class="kt">int</span> j = <span class="n">1</span>; j <span class="op">&lt;=</span> i; j++)
+            fact = fact * j;
+        sum = sum + fact;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p34">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৪. সিরিজ: ১ + ২ + ৩ + ... + n</span>
+    <span class="prog-en">(34. SERIES: 1 + 2 + 3 + 4 + ... + n = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১ + ২ + ৩ + ... + n  — সব স্বাভাবিক সংখ্যার যোগফল।
+&nbsp;&nbsp;n=5: 1+2+3+4+5 = 15  |  সূত্র: n(n+1)/2 = 5×6/2 = 15</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p35">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৫. সিরিজ: ১ + ৩ + ৫ + ... + n</span>
+    <span class="prog-en">(35. SERIES: 1 + 3 + 5 + ... + n = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১ + ৩ + ৫ + ... + n  — শুধু বিজোড় সংখ্যার যোগফল।
+&nbsp;&nbsp;n=7: 1 + 3 + 5 + 7 = 16  |  লুপে i=1 থেকে শুরু, i+=2 করে বাড়ানো হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p36">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৬. সিরিজ: ২ + ৪ + ৬ + ৮ + ... + n</span>
+    <span class="prog-en">(36. SERIES: 2 + 4 + 6 + 8 + ... + n = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ২ + ৪ + ৬ + ... + n  — শুধু জোড় সংখ্যার যোগফল।
+&nbsp;&nbsp;n=6: 2 + 4 + 6 = 12  |  লুপে i=2 থেকে শুরু, i+=2 করে বাড়ানো হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p37">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৭. সিরিজ: ১¹ + ২² + ৩³ + ... + nⁿ</span>
+    <span class="prog-en">(37. SERIES: 1¹ + 2² + 3³ + 4⁴ + ... + nⁿ = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১¹ + ২² + ৩³ + ... + nⁿ  — প্রতিটি সংখ্যা নিজেই নিজের ঘাতে উঠানো হয়।
+&nbsp;&nbsp;n=4: 1¹ + 2² + 3³ + 4⁴ = 1 + 4 + 27 + 256 = 288</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;math.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kc">long long</span> sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + (<span class="kc">long long</span>)<span class="fn">pow</span>(i, i);
+    <span class="fn">printf</span>(<span class="s">"Sum = %lld\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="p">#include</span><span class="h"> &lt;cmath&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kc">long long</span> sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + (<span class="kc">long long</span>)<span class="fn">pow</span>(i, i);
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p38">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৮. সিরিজ: ১² + ২² + ৩² + ... + n²</span>
+    <span class="prog-en">(38. SERIES: 1² + 2² + 3² + 4² + ... + n² = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১² + ২² + ৩² + ... + n²  — সব সংখ্যার বর্গের যোগফল।
+&nbsp;&nbsp;n=4: 1² + 2² + 3² + 4² = 1 + 4 + 9 + 16 = 30</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + i * i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + i * i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p39">
+  <div class="prog-hdr">
+    <span class="prog-bn">৩৯. সিরিজ: ১² + ৩² + ৫² + ... + n²</span>
+    <span class="prog-en">(39. SERIES: 1² + 3² + 5² + ... + n² = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১² + ৩² + ৫² + ... + n²  — শুধু বিজোড় সংখ্যার বর্গের যোগফল।
+&nbsp;&nbsp;n=5: 1² + 3² + 5² = 1 + 9 + 25 = 35</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i * i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i * i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p40">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪০. সিরিজ: ২² + ৪² + ৬² + ৮² + ... + n²</span>
+    <span class="prog-en">(40. SERIES: 2² + 4² + 6² + 8² + ... + n² = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ২² + ৪² + ৬² + ... + n²  — শুধু জোড় সংখ্যার বর্গের যোগফল।
+&nbsp;&nbsp;n=6: 2² + 4² + 6² = 4 + 16 + 36 = 56</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i * i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">2</span>; i <span class="op">&lt;=</span> n; i = i + <span class="n">2</span>)
+        sum = sum + i * i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p41">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪১. সিরিজ: ১ + ২ + ৪ + ৮ + ... + 2ⁿ</span>
+    <span class="prog-en">(41. SERIES: 1 + 2 + 4 + 8 + ... + 2ⁿ = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১ + ২ + ৪ + ৮ + ...  — প্রতিটি পদ আগেরটির দ্বিগুণ (২ গুণোত্তর ধারা)।
+&nbsp;&nbsp;n=5 পদ: 1 + 2 + 4 + 8 + 16 = 31  |  term = term × 2 করে বাড়ানো হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>, term = <span class="n">1</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter number of terms: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        sum = sum + term;
+        term = term * <span class="n">2</span>;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>, term = <span class="n">1</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter number of terms: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        sum = sum + term;
+        term = term * <span class="n">2</span>;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p42">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪২. সিরিজ: ১ + ৩ + ৯ + ২৭ + ... + 3ⁿ</span>
+    <span class="prog-en">(42. SERIES: 1 + 3 + 9 + 27 + ... + 3ⁿ = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১ + ৩ + ৯ + ২৭ + ...  — প্রতিটি পদ আগেরটির তিনগুণ (৩ গুণোত্তর ধারা)।
+&nbsp;&nbsp;n=4 পদ: 1 + 3 + 9 + 27 = 40  |  term = term × 3 করে বাড়ানো হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>, term = <span class="n">1</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter number of terms: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        sum = sum + term;
+        term = term * <span class="n">3</span>;
+    }
+    <span class="fn">printf</span>(<span class="s">"Sum = %d\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n, sum = <span class="n">0</span>, term = <span class="n">1</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter number of terms: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; n; i++) {
+        sum = sum + term;
+        term = term * <span class="n">3</span>;
+    }
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p43">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৩. সিরিজ: ১/১ + ১/২ + ১/৩ + ... + ১/n</span>
+    <span class="prog-en">(43. SERIES: 1/1 + 1/2 + 1/3 + ... + 1/n = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১/১ + ১/২ + ১/৩ + ... + ১/n  — হারমোনিক সিরিজ, ভাজক বাড়তে থাকে।
+&nbsp;&nbsp;n=4: 1 + 0.5 + 0.333 + 0.25 ≈ 2.083  |  float ব্যবহার করতে হয়।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kt">double</span> sum = <span class="n">0.0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + <span class="n">1.0</span> / i;
+    <span class="fn">printf</span>(<span class="s">"Sum = %lf\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kt">double</span> sum = <span class="n">0.0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + <span class="n">1.0</span> / i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p44">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৪. সিরিজ: ১/১² + ১/২² + ১/৩² + ... + ১/n²</span>
+    <span class="prog-en">(44. SERIES: 1/1² + 1/2² + 1/3² + ... + 1/n² = ?)</span>
+  </div>
+  <div class="demo"><pre>সিরিজ: ১/১² + ১/২² + ১/৩² + ...  — প্রতিটি পদ 1/(i×i), ভাজক বর্গাকারে বাড়ে।
+&nbsp;&nbsp;n=4: 1 + 0.25 + 0.111 + 0.0625 ≈ 1.424  |  Basel series নামে পরিচিত।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kt">double</span> sum = <span class="n">0.0</span>;
+    <span class="fn">printf</span>(<span class="s">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + <span class="n">1.0</span> / (i * i);
+    <span class="fn">printf</span>(<span class="s">"Sum = %lf\n"</span>, sum);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> n;
+    <span class="kt">double</span> sum = <span class="n">0.0</span>;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> n; i++)
+        sum = sum + <span class="n">1.0</span> / (i * i);
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Sum = "</span> <span class="op">&lt;&lt;</span> sum <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 11 Pattern Programs -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">প্যাটার্ন প্রোগ্রাম — Pattern Programs</span><div class="section-div-line"></div></div>
+
+
+<!-- Group A -->
+<div class="prog" id="p45">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৫. গ্রুপ A — বাম থেকে ক্রমবর্ধমান ত্রিভুজ (n = 5) — টেমপ্লেট (টাইপ ১–৮)</span>
+    <span class="prog-en">(45. GROUP A — ASCENDING LEFT TRIANGLE — GENERAL TEMPLATE (TYPES 1–8))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>*
+* *
+* * *
+* * * *
+* * * * *</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre>#
+# #
+# # #
+# # # #
+# # # # #</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>1
+2 2
+3 3 3
+4 4 4 4
+5 5 5 5 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>1
+1 0
+1 0 1
+1 0 1 0
+1 0 1 0 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>1
+0 0
+1 1 1
+0 0 0 0
+1 1 1 1 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>A
+B B
+C C C
+D D D D
+E E E E E</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>A
+A B
+A B C
+A B C D
+A B C D E</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        }
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        }
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group B -->
+<div class="prog" id="p46">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৬. গ্রুপ B — বাম থেকে ক্রমহ্রাসমান ত্রিভুজ — টেমপ্লেট (টাইপ ৯–১৬)</span>
+    <span class="prog-en">(46. GROUP B — DESCENDING LEFT TRIANGLE TEMPLATE (TYPES 9–16))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>* * * * *
+* * * *
+* * *
+* *
+*</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre># # # # #
+# # # #
+# # #
+# #
+#</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>1 2 3 4 5
+1 2 3 4
+1 2 3
+1 2
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>5 5 5 5 5
+4 4 4 4
+3 3 3
+2 2
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>1 0 1 0 1
+1 0 1 0
+1 0 1
+1 0
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>1 1 1 1 1
+0 0 0 0
+1 1 1
+0 0
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>E E E E E
+D D D D
+C C C
+B B
+A</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>A B C D E
+A B C D
+A B C
+A B
+A</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = n; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        }
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = n; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        }
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group C — Diamond -->
+<div class="prog" id="p47">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৭. গ্রুপ C — ডায়মন্ড আকৃতি — টেমপ্লেট (টাইপ ১৭–২৪)</span>
+    <span class="prog-en">(47. GROUP C — DIAMOND SHAPE TEMPLATE (TYPES 17–24))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>*
+* *
+* * *
+* * * *
+* * * * *
+* * * *
+* * *
+* *
+*</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre>#
+# #
+# # #
+# # # #
+# # # # #
+# # # #
+# # #
+# #
+#</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5
+1 2 3 4
+1 2 3
+1 2
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>1
+2 2
+3 3 3
+4 4 4 4
+5 5 5 5 5
+4 4 4 4
+3 3 3
+2 2
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>1
+1 0
+1 0 1
+1 0 1 0
+1 0 1 0 1
+1 0 1 0
+1 0 1
+1 0
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>1
+0 0
+1 1 1
+0 0 0 0
+1 1 1 1 1
+0 0 0 0
+1 1 1
+0 0
+1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>A
+B B
+C C C
+D D D D
+E E E E E
+D D D D
+C C C
+B B
+A</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>A
+A B
+A B C
+A B C D
+A B C D E
+A B C D
+A B C
+A B
+A</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">for</span> (row = n - <span class="n">1</span>; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">for</span> (row = n - <span class="n">1</span>; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group D — Right-Aligned Ascending -->
+<div class="prog" id="p48">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৮. গ্রুপ D — ডানদিকে সাজানো ক্রমবর্ধমান ত্রিভুজ — টেমপ্লেট (টাইপ ২৫–৩২)</span>
+    <span class="prog-en">(48. GROUP D — RIGHT-ALIGNED ASCENDING TRIANGLE TEMPLATE (TYPES 25–32))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *
+&nbsp;&nbsp;&nbsp;&nbsp;* * *
+&nbsp;&nbsp;* * * *
+* * * * *</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# #
+&nbsp;&nbsp;&nbsp;&nbsp;# # #
+&nbsp;&nbsp;# # # #
+# # # # #</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 2
+&nbsp;&nbsp;&nbsp;&nbsp;1 2 3
+&nbsp;&nbsp;1 2 3 4
+1 2 3 4 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 2
+&nbsp;&nbsp;&nbsp;&nbsp;3 3 3
+&nbsp;&nbsp;4 4 4 4
+5 5 5 5 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 0
+&nbsp;&nbsp;&nbsp;&nbsp;1 0 1
+&nbsp;&nbsp;1 0 1 0
+1 0 1 0 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0
+&nbsp;&nbsp;&nbsp;&nbsp;1 1 1
+&nbsp;&nbsp;0 0 0 0
+1 1 1 1 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B B
+&nbsp;&nbsp;&nbsp;&nbsp;C C C
+&nbsp;&nbsp;D D D D
+E E E E E</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A B
+&nbsp;&nbsp;&nbsp;&nbsp;A B C
+&nbsp;&nbsp;A B C D
+A B C D E</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            <span class="fn">printf</span>(<span class="s">"  "</span>); <span class="c">// ← For creating spaces</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">"  "</span>; <span class="c">// ← For creating spaces</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group E — Right-Aligned Descending -->
+<div class="prog" id="p49">
+  <div class="prog-hdr">
+    <span class="prog-bn">৪৯. গ্রুপ E — ডানদিকে সাজানো ক্রমহ্রাসমান ত্রিভুজ — টেমপ্লেট (টাইপ ৩৩–৪০)</span>
+    <span class="prog-en">(49. GROUP E — RIGHT-ALIGNED DESCENDING TRIANGLE TEMPLATE (TYPES 33–40))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>* * * * *
+&nbsp;&nbsp;* * * *
+&nbsp;&nbsp;&nbsp;&nbsp;* * *
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre># # # # #
+&nbsp;&nbsp;# # # #
+&nbsp;&nbsp;&nbsp;&nbsp;# # #
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# #
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>1 2 3 4 5
+&nbsp;&nbsp;1 2 3 4
+&nbsp;&nbsp;&nbsp;&nbsp;1 2 3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>5 5 5 5 5
+&nbsp;&nbsp;4 4 4 4
+&nbsp;&nbsp;&nbsp;&nbsp;3 3 3
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 2
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>1 0 1 0 1
+&nbsp;&nbsp;1 0 1 0
+&nbsp;&nbsp;&nbsp;&nbsp;1 0 1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>1 1 1 1 1
+&nbsp;&nbsp;0 0 0 0
+&nbsp;&nbsp;&nbsp;&nbsp;1 1 1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>E E E E E
+&nbsp;&nbsp;D D D D
+&nbsp;&nbsp;&nbsp;&nbsp;C C C
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B B
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>A B C D E
+&nbsp;&nbsp;A B C D
+&nbsp;&nbsp;&nbsp;&nbsp;A B C
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A B
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = n; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            <span class="fn">printf</span>(<span class="s">"  "</span>); <span class="c">// ← For creating spaces</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = n; row <span class="op">&gt;=</span> <span class="n">1</span>; row--) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">"  "</span>; <span class="c">// ← For creating spaces</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group F — Rectangle -->
+<div class="prog" id="p50">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫০. গ্রুপ F — আয়তক্ষেত্র / বর্গক্ষেত্র (n×n) — টেমপ্লেট (টাইপ ৪১–৪৮)</span>
+    <span class="prog-en">(50. GROUP F — RECTANGLE / SQUARE (n×n) TEMPLATE (TYPES 41–48))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>* * * * *
+* * * * *
+* * * * *
+* * * * *
+* * * * *</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre># # # # #
+# # # # #
+# # # # #
+# # # # #
+# # # # #</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>1 1 1 1 1
+2 2 2 2 2
+3 3 3 3 3
+4 4 4 4 4
+5 5 5 5 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>1 0 1 0 1
+1 0 1 0 1
+1 0 1 0 1
+1 0 1 0 1
+1 0 1 0 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>1 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>A A A A A
+B B B B B
+C C C C C
+D D D D D
+E E E E E</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>A B C D E
+A B C D E
+A B C D E
+A B C D E
+A B C D E</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group G — Counting Patterns -->
+<div class="prog" id="p51">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫১. গ্রুপ G — গণনা প্যাটার্ন — টেমপ্লেট (টাইপ ৪৯–৫১)</span>
+    <span class="prog-en">(51. GROUP G — COUNTING PATTERNS TEMPLATE (TYPES 49–51))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid three-col">
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", ++count)
+cout &lt;&lt; ++count &lt;&lt; " "</div><pre>1
+2 3
+4 5 6
+7 8 9 10</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", count++)
+cout &lt;&lt; count++ &lt;&lt; " "</div><pre>0
+1 2
+3 4 5
+6 7 8 9</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col*row)
+cout &lt;&lt; col*row &lt;&lt; " "</div><pre>1
+2 4
+3 6 9
+4 8 12 16</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, count = <span class="n">0</span>, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        }
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, count = <span class="n">0</span>, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> row; col++) {
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        }
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- Group H — Centered Pyramid -->
+<div class="prog" id="p52">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫২. গ্রুপ H — কেন্দ্রীভূত পিরামিড — টেমপ্লেট (টাইপ ৫২–৫৯)</span>
+    <span class="prog-en">(52. GROUP H — CENTERED PYRAMID TEMPLATE (TYPES 52–59))</span>
+  </div>
+  <div class="pat-preview">
+    <div class="pat-preview-grid">
+      <div class="pat-box"><div class="pat-box-label">printf("* ")
+cout &lt;&lt; "* "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* * *
+&nbsp;&nbsp;&nbsp;&nbsp;* * * * *
+&nbsp;&nbsp;* * * * * * *
+* * * * * * * * *</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("# ")
+cout &lt;&lt; "# "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# # #
+&nbsp;&nbsp;&nbsp;&nbsp;# # # # #
+&nbsp;&nbsp;# # # # # # #
+# # # # # # # # #</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col)
+cout &lt;&lt; col &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 2 3
+&nbsp;&nbsp;&nbsp;&nbsp;1 2 3 4 5
+&nbsp;&nbsp;1 2 3 4 5 6 7
+1 2 3 4 5 6 7 8 9</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row)
+cout &lt;&lt; row &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 2 2
+&nbsp;&nbsp;&nbsp;&nbsp;3 3 3 3 3
+&nbsp;&nbsp;4 4 4 4 4 4 4
+5 5 5 5 5 5 5 5 5</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", col%2)
+cout &lt;&lt; col%2 &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 0 1
+&nbsp;&nbsp;&nbsp;&nbsp;1 0 1 0 1
+&nbsp;&nbsp;1 0 1 0 1 0 1
+1 0 1 0 1 0 1 0 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%d ", row%2)
+cout &lt;&lt; row%2 &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0
+&nbsp;&nbsp;&nbsp;&nbsp;1 1 1 1 1
+&nbsp;&nbsp;0 0 0 0 0 0 0
+1 1 1 1 1 1 1 1 1</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", row+64)
+cout &lt;&lt; (char)(row+64) &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B B B
+&nbsp;&nbsp;&nbsp;&nbsp;C C C C C
+&nbsp;&nbsp;D D D D D D D
+E E E E E E E E E</pre></div>
+      <div class="pat-box"><div class="pat-box-label">printf("%c ", col+64)
+cout &lt;&lt; (char)(col+64) &lt;&lt; " "</div><pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A B C
+&nbsp;&nbsp;&nbsp;&nbsp;A B C D E
+&nbsp;&nbsp;A B C D E F G
+A B C D E F G H I</pre></div>
+    </div>
+  </div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    <span class="fn">printf</span>(<span class="s">"Enter a value of n: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            <span class="fn">printf</span>(<span class="s">"  "</span>); <span class="c">// ←Double space here.</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> <span class="n">2</span> * row - <span class="n">1</span>; col++)
+            <span class="fn">printf</span>(<span class="s">" "</span>); <span class="c">// ← Change here</span>
+        <span class="fn">printf</span>(<span class="s">"\n"</span>);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> row, col, n;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a value of n: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (row = <span class="n">1</span>; row <span class="op">&lt;=</span> n; row++) {
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> n - row; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">"  "</span>; <span class="c">// ←Double space here.</span>
+        <span class="kc">for</span> (col = <span class="n">1</span>; col <span class="op">&lt;=</span> <span class="n">2</span> * row - <span class="n">1</span>; col++)
+            cout <span class="op">&lt;&lt;</span> <span class="s">" "</span>; <span class="c">// ← Change here</span>
+        cout <span class="op">&lt;&lt;</span> endl;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 12 Recursion -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">রিকার্শন — Recursion</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p53">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৩. রিকার্শন দিয়ে ফ্যাক্টরিয়াল</span>
+    <span class="prog-en">(53. FACTORIAL USING RECURSION)</span>
+  </div>
+  <div class="demo"><pre>রিকার্শন দিয়ে ফ্যাক্টরিয়াল:
+&nbsp;&nbsp;রিকার্শন মানে ফাংশন নিজেই নিজেকে ডাকে, ছোট ছোট ধাপে ভেঙে সমাধান করে।
+&nbsp;&nbsp;fact(5) কীভাবে কাজ করে:
+&nbsp;&nbsp;  fact(5) = 5 × fact(4)
+&nbsp;&nbsp;         = 5 × 4 × fact(3)
+&nbsp;&nbsp;         = 5 × 4 × 3 × fact(2)
+&nbsp;&nbsp;         = 5 × 4 × 3 × 2 × fact(1)
+&nbsp;&nbsp;         = 5 × 4 × 3 × 2 × 1 = 120
+&nbsp;&nbsp;Base case: fact(n &lt;= 1) = 1  ← এখানে রিকার্শন থামে।
+&nbsp;&nbsp;Base case না থাকলে ফাংশন অসীমভাবে নিজেকে ডাকতে থাকত।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">fact</span>(<span class="kt">int</span> n) {
+    <span class="kc">if</span> (n <span class="op">&lt;=</span> <span class="n">1</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> n * <span class="fn">fact</span>(n - <span class="n">1</span>);
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> number, result;
+    <span class="fn">printf</span>(<span class="s">"Enter a positive number: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;number);
+    result = <span class="fn">fact</span>(number);
+    <span class="fn">printf</span>(<span class="s">"%d"</span>, result);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">fact</span>(<span class="kt">int</span> n) {
+    <span class="kc">if</span> (n <span class="op">&lt;=</span> <span class="n">1</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> n * <span class="fn">fact</span>(n - <span class="n">1</span>);
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> number, result;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter a positive number: "</span>;
+    cin <span class="op">&gt;&gt;</span> number;
+    result = <span class="fn">fact</span>(number);
+    cout <span class="op">&lt;&lt;</span> result;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p54">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৪. রিকার্শন দিয়ে ফিবোনাচ্চি সিরিজ</span>
+    <span class="prog-en">(54. FIBONACCI SERIES USING RECURSION)</span>
+  </div>
+  <div class="demo"><pre>রিকার্শন দিয়ে ফিবোনাচ্চি: fibo(n) = fibo(n-1) + fibo(n-2)
+&nbsp;&nbsp;Base cases: fibo(0) = 0,  fibo(1) = 1  ← এখানে রিকার্শন থামে।
+&nbsp;&nbsp;fibo(5) কীভাবে কাজ করে (গাছের মতো ডালপালা ছড়ায়):
+&nbsp;&nbsp;  fibo(5)
+&nbsp;&nbsp;  ├── fibo(4)
+&nbsp;&nbsp;  │   ├── fibo(3) → fibo(2)+fibo(1) = 1+1 = 2
+&nbsp;&nbsp;  │   └── fibo(2) → fibo(1)+fibo(0) = 1+0 = 1  → fibo(4) = 3
+&nbsp;&nbsp;  └── fibo(3) → 2
+&nbsp;&nbsp;  fibo(5) = 3 + 2 = 5 ✓
+&nbsp;&nbsp;আউটপুট (n=7): 0  1  1  2  3  5  8</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">fibo</span>(<span class="kt">int</span> n) {
+    <span class="kc">if</span> (n == <span class="n">0</span>) <span class="kc">return</span> <span class="n">0</span>;
+    <span class="kc">else if</span> (n == <span class="n">1</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> <span class="fn">fibo</span>(n-<span class="n">1</span>) + <span class="fn">fibo</span>(n-<span class="n">2</span>);
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> terms;
+    <span class="fn">printf</span>(<span class="s">"Enter the number of terms: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;terms);
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; terms; i++)
+        <span class="fn">printf</span>(<span class="s">"%d "</span>, <span class="fn">fibo</span>(i));
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">fibo</span>(<span class="kt">int</span> n) {
+    <span class="kc">if</span> (n == <span class="n">0</span>) <span class="kc">return</span> <span class="n">0</span>;
+    <span class="kc">else if</span> (n == <span class="n">1</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> <span class="fn">fibo</span>(n-<span class="n">1</span>) + <span class="fn">fibo</span>(n-<span class="n">2</span>);
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> terms;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter the number of terms: "</span>;
+    cin <span class="op">&gt;&gt;</span> terms;
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">0</span>; i &lt; terms; i++)
+        cout <span class="op">&lt;&lt;</span> <span class="fn">fibo</span>(i) <span class="op">&lt;&lt;</span> <span class="s">" "</span>;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p55">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৫. রিকার্শন দিয়ে ঘাত (পাওয়ার) নির্ণয়</span>
+    <span class="prog-en">(55. CALCULATE POWER USING RECURSION)</span>
+  </div>
+  <div class="demo"><pre>রিকার্শনে পাওয়ার: power(x,y) = x × power(x, y-1)
+&nbsp;&nbsp;Base case: power(x, 0) = 1
+&nbsp;&nbsp;উদাহরণ: power(2,4) = 2×power(2,3) = 2×2×power(2,2)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2×2×2×power(2,1) = 2×2×2×2×power(2,0) = 2×2×2×2×1 = 16</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">power</span>(<span class="kt">int</span> x, <span class="kt">int</span> y) {
+    <span class="kc">if</span> (y == <span class="n">0</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> (x * <span class="fn">power</span>(x, y-<span class="n">1</span>));
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> b, p, c;
+    <span class="fn">printf</span>(<span class="s">"Enter Base and Power: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d"</span>, &amp;b, &amp;p);
+    c = <span class="fn">power</span>(b, p);
+    <span class="fn">printf</span>(<span class="s">"%d"</span>, c);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">power</span>(<span class="kt">int</span> x, <span class="kt">int</span> y) {
+    <span class="kc">if</span> (y == <span class="n">0</span>) <span class="kc">return</span> <span class="n">1</span>;
+    <span class="kc">else return</span> (x * <span class="fn">power</span>(x, y-<span class="n">1</span>));
+}
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> b, p, c;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter Base and Power: "</span>;
+    cin <span class="op">&gt;&gt;</span> b <span class="op">&gt;&gt;</span> p;
+    c = <span class="fn">power</span>(b, p);
+    cout <span class="op">&lt;&lt;</span> c;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 13 Arrays -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">অ্যারে — Arrays</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p56">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৬. অ্যারেতে সর্বোচ্চ মান খোঁজা</span>
+    <span class="prog-en">(56. FIND MAXIMUM IN AN ARRAY)</span>
+  </div>
+  <div class="demo"><pre>পদ্ধতি: max = arr[0] দিয়ে শুরু। প্রতিটি উপাদান max এর চেয়ে বড় হলে max আপডেট করো।
+&nbsp;&nbsp;arr=[5,12,3,20,1]: max=5 → 12>5 → max=12 → 3<12 → 20>12 → max=20 → 1<20
+&nbsp;&nbsp;→  Maximum = 20</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num[<span class="n">100</span>], n, i;
+    <span class="fn">printf</span>(<span class="s">"How many numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++) <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num[i]);
+    <span class="kt">int</span> max = num[<span class="n">0</span>];
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="kc">if</span> (max &lt; num[i]) max = num[i];
+    <span class="fn">printf</span>(<span class="s">"%d\n"</span>, max);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num[<span class="n">100</span>], n, i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"How many numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++) cin <span class="op">&gt;&gt;</span> num[i];
+    <span class="kt">int</span> max = num[<span class="n">0</span>];
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="kc">if</span> (max &lt; num[i]) max = num[i];
+    cout <span class="op">&lt;&lt;</span> max <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p57">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৭. অ্যারেতে সর্বনিম্ন মান খোঁজা</span>
+    <span class="prog-en">(57. FIND MINIMUM IN AN ARRAY)</span>
+  </div>
+  <div class="demo"><pre>পদ্ধতি: min = arr[0] দিয়ে শুরু। প্রতিটি উপাদান min এর চেয়ে ছোট হলে min আপডেট করো।
+&nbsp;&nbsp;arr=[5,12,3,20,1]: min=5 → 12>5 → 3<5 → min=3 → 20>3 → 1<3 → min=1
+&nbsp;&nbsp;→  Minimum = 1</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num[<span class="n">100</span>], n, i;
+    <span class="fn">printf</span>(<span class="s">"How many numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;n);
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++) <span class="fn">scanf</span>(<span class="s">"%d"</span>, &amp;num[i]);
+    <span class="kt">int</span> min = num[<span class="n">0</span>];
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="kc">if</span> (min &gt; num[i]) min = num[i];
+    <span class="fn">printf</span>(<span class="s">"%d\n"</span>, min);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> num[<span class="n">100</span>], n, i;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"How many numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> n;
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++) cin <span class="op">&gt;&gt;</span> num[i];
+    <span class="kt">int</span> min = num[<span class="n">0</span>];
+    <span class="kc">for</span> (i = <span class="n">0</span>; i &lt; n; i++)
+        <span class="kc">if</span> (min &gt; num[i]) min = num[i];
+    cout <span class="op">&lt;&lt;</span> min <span class="op">&lt;&lt;</span> endl;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 14 Miscellaneous -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">বিবিধ — Miscellaneous</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p58">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৮. টেম্প ভেরিয়েবল ছাড়া দুটি সংখ্যা অদলবদল</span>
+    <span class="prog-en">(58. SWAP TWO NUMBERS WITHOUT TEMPORARY VARIABLE)</span>
+  </div>
+  <div class="demo"><pre>তৃতীয় চলক (temp) ছাড়া অদলবদল — গাণিতিক কৌশল:
+&nbsp;&nbsp;a = 5,  b = 3
+&nbsp;&nbsp;a = a + b = 8      (a-তে যোগফল রাখা হলো)
+&nbsp;&nbsp;b = a - b = 8-3=5  (পুরনো a পাওয়া গেল)
+&nbsp;&nbsp;a = a - b = 8-5=3  (পুরনো b পাওয়া গেল)
+&nbsp;&nbsp;ফলাফল: a = 3,  b = 5  ✓</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    <span class="fn">printf</span>(<span class="s">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="s">"%d %d"</span>, &amp;a, &amp;b);
+    a = b + a;
+    b = a - b;
+    a = a - b;
+    <span class="fn">printf</span>(<span class="s">"%d %d"</span>, a, b);
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kt">int</span> a, b;
+    cout <span class="op">&lt;&lt;</span> <span class="s">"Enter two numbers: "</span>;
+    cin <span class="op">&gt;&gt;</span> a <span class="op">&gt;&gt;</span> b;
+    a = b + a;
+    b = a - b;
+    a = a - b;
+    cout <span class="op">&lt;&lt;</span> a <span class="op">&lt;&lt;</span> <span class="s">" "</span> <span class="op">&lt;&lt;</span> b;
+    <span class="kc">return</span> <span class="n">0</span>;
+}</code></pre></div>
+  </div>
+</div>
+
+<!-- 15 Loop Control -->
+<div class="section-div"><div class="section-div-line"></div><span class="section-div-label">লুপ নিয়ন্ত্রণ — Loop Control</span><div class="section-div-line"></div></div>
+
+<div class="prog" id="p59">
+  <div class="prog-hdr">
+    <span class="prog-bn">৫৯. continue স্টেটমেন্ট — ৩ বাদ দিয়ে বাকি প্রিন্ট</span>
+    <span class="prog-en">(59. CONTINUE STATEMENT — SKIP 3, PRINT REST)</span>
+  </div>
+  <div class="demo"><pre>continue কী করে?
+লুপের ভেতরে continue পেলে সেই পুনরাবৃত্তির বাকি অংশ বাদ দিয়ে
+সরাসরি পরের পুনরাবৃত্তিতে চলে যায়।
+উদাহরণ (i==3 হলে skip): আউটপুট → 1 2 4 5 6 7 8 9 10  (3 বাদ)</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++) {
+        <span class="kc">if</span> (i == <span class="n">3</span>) <span class="kc">continue</span>;
+        <span class="fn">printf</span>(<span class="s">"%d "</span>, i);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+} <span class="c">// Output: 1 2 4 5 6 7 8 9 10</span></code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++) {
+        <span class="kc">if</span> (i == <span class="n">3</span>) <span class="kc">continue</span>;
+        cout <span class="op">&lt;&lt;</span> i <span class="op">&lt;&lt;</span> <span class="s">" "</span>;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+} <span class="c">// Output: 1 2 4 5 6 7 8 9 10</span></code></pre></div>
+  </div>
+</div>
+
+<div class="prog" id="p60">
+  <div class="prog-hdr">
+    <span class="prog-bn">৬০. break স্টেটমেন্ট — ৩-এ থামানো</span>
+    <span class="prog-en">(60. BREAK STATEMENT — STOP AT 3)</span>
+  </div>
+  <div class="demo"><pre>break কী করে?
+লুপের ভেতরে break পেলে সম্পূর্ণ লুপ বন্ধ হয়ে বাইরে চলে আসে।
+উদাহরণ (i==3 হলে stop): আউটপুট → 1 2  (3 আসতেই থামে)
+
+continue vs break:
+&nbsp;&nbsp;continue → শুধু এই পুনরাবৃত্তি বাদ, লুপ চলতে থাকে।
+&nbsp;&nbsp;break    → পুরো লুপই বন্ধ।</pre></div>
+  <div class="code-cols">
+    <div class="code-col"><div class="lang-tag c-tag">C</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;stdio.h&gt;</span>
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++) {
+        <span class="kc">if</span> (i == <span class="n">3</span>) <span class="kc">break</span>;
+        <span class="fn">printf</span>(<span class="s">"%d "</span>, i);
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+} <span class="c">// Output: 1 2</span></code></pre></div>
+    <div class="code-col"><div class="lang-tag cpp-tag">C++</div><pre class="code"><code><span class="p">#include</span><span class="h"> &lt;iostream&gt;</span>
+<span class="kc">using namespace</span> std;
+
+<span class="kt">int</span> <span class="fn">main</span>() {
+    <span class="kc">for</span> (<span class="kt">int</span> i = <span class="n">1</span>; i <span class="op">&lt;=</span> <span class="n">10</span>; i++) {
+        <span class="kc">if</span> (i == <span class="n">3</span>) <span class="kc">break</span>;
+        cout <span class="op">&lt;&lt;</span> i <span class="op">&lt;&lt;</span> <span class="s">" "</span>;
+    }
+    <span class="kc">return</span> <span class="n">0</span>;
+} <span class="c">// Output: 1 2</span></code></pre></div>
+  </div>
+</div>
+</div><!-- end .content -->
+<div class="humayun-strip">Humayoun</div>
+</body>
+</html>

@@ -10,6 +10,10 @@ if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
 const assets = [
   'duetcode.svg',
   'manifest.json',
+  'programs.json',
+  'styles.css',
+  'programs.js',
+  'app.js',
   'sw.js',
   'DUET C & C++ Programs.pdf',
 ];

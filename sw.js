@@ -3,6 +3,10 @@ const CACHE_NAME = 'duet-code-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './styles.css',
+  './programs.js',
+  './app.js',
+  './programs.json',
   './manifest.json',
   './duetcode.svg',
   './DUET C & C++ Programs.pdf'
