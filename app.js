@@ -365,9 +365,11 @@
     let codeObserver = null;
     let currentMode = null; // Store current mode to recreate if navigating via back button
     function haptic(ms = 12) {
-      if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(ms);
-      }
+      try {
+        if (window.navigator && typeof window.navigator.vibrate === 'function') {
+          window.navigator.vibrate(ms);
+        }
+      } catch (e) {}
     }
 
     // Core UI manipulation functions
