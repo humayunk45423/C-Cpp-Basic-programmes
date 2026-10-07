@@ -161,325 +161,209 @@
     }
 
     /* ===================== THEME TOKENS (CSS VARIABLES) ===================== */
+    /* ══ PRESET 1: AGENCY PRO (Modern Commercial UI/UX Standard) ══ */
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface2: #1c1d35;
-      /* Blue/purple minimalistic tint */
-      --border: #2d2b4a;
-      /* Light purple line tint */
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --accent2: #d2a8ff;
-      --code-bg: #010409;
-      --surface-trans: rgba(13, 17, 23, 0.85);
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface2: #1e293b;
+      --border: #1f293d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent2: #818cf8;
+      --code-bg: #070a10;
+      --surface-trans: rgba(11, 15, 25, 0.88);
 
       /* Syntax Highlighting Tokens - Dark Mode */
-      --syn-kw: #ff7b72;
-      --syn-str: #a5d6ff;
-      --syn-num: #79c0ff;
-      --syn-cmt: #8b949e;
-      --syn-title: #d2a8ff;
-      --syn-op: #ff7b72;
+      --syn-kw: #f43f5e;
+      --syn-str: #38bdf8;
+      --syn-num: #fbbf24;
+      --syn-cmt: #64748b;
+      --syn-title: #818cf8;
+      --syn-op: #f43f5e;
 
       --font-code: 'JetBrains Mono', monospace;
       --font-ui: 'Outfit', sans-serif;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      --radius: 32px;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+      --radius: 16px;
       --code-size: 14px;
-      --star: #a78bfa;
-      --star-rgb: 167, 139, 250;
+      --star: #818cf8;
+      --star-rgb: 129, 140, 248;
     }
 
     [data-theme="light"] {
-      --bg: #f6f8fa;
+      --bg: #f8fafc;
       --surface: #ffffff;
-      --surface2: #e9e8f5;
-      --surface-trans: rgba(255, 255, 255, 0.82);
-      /* Blue/purple minimalistic tint */
-      --border: #d4cdec;
-      /* Light purple line tint */
-      --text: #1f2328;
-      --muted: #57606a;
-      --accent: #0969da;
-      --accent2: #8250df;
-      --code-bg: #f6f8fa;
+      --surface2: #f1f5f9;
+      --surface-trans: rgba(248, 250, 252, 0.92);
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent2: #6366f1;
+      --code-bg: #f1f5f9;
 
       /* Syntax Highlighting Tokens - Light Mode */
-      --syn-kw: #cf222e;
-      --syn-str: #0a3069;
-      --syn-num: #0550ae;
-      --syn-cmt: #6e7781;
-      --syn-title: #8250df;
-      --syn-op: #cf222e;
+      --syn-kw: #e11d48;
+      --syn-str: #0284c7;
+      --syn-num: #d97706;
+      --syn-cmt: #94a3b8;
+      --syn-title: #6366f1;
+      --syn-op: #e11d48;
 
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-      --radius: 32px;
+      --shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      --radius: 16px;
       --font-ui: 'Outfit', sans-serif;
-      --star: #8250df;
-      --star-rgb: 130, 80, 223;
+      --star: #6366f1;
+      --star-rgb: 99, 102, 241;
     }
 
     /* =====================================================================
-       THEME PRESET SYSTEM
-       Each preset owns ALL tokens + light variant via compound selector.
-       --radius = shape personality. --font-ui = type personality.
+       THEME PRESET SYSTEM (Exactly 3 Curated Modes)
+       1. Modern Standard (Modern Commercial Studio — :root / [data-theme="light"])
+       2. Geek Terminal (Hacker Matrix · Cyber Green · 0px Pointy Squares)
+       3. Classic Monolith (Pure Black & White · High Contrast · 0px Pointy Squares)
        ===================================================================== */
 
-    /* ── MODERN MINIMAL: default :root / [data-theme="light"] — no block needed ── */
-
-    /* ══ WOOD FINISH — 60% walnut / 30% oak / 10% amber ══════════════════ */
-    [data-preset="wood"] {
-      --bg:            #1c1007;
-      --surface:       #2e1e0f;
-      --surface2:      #3f2c18;
-      --surface-trans: rgba(28,16,7,0.94);
-      --border:        #5a3a1a;
-      --text:          #f0ddb8;
-      --muted:         #9a7850;
-      --accent:        #c8913a;
-      --accent2:       #e8b86a;
-      --code-bg:       #120b04;
-      --shadow:        0 8px 28px rgba(0,0,0,0.65), 0 2px 0 rgba(200,145,58,0.08);
-      --radius:        16px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #c8913a;
-      --star-rgb:      200,145,58;
-      --syn-kw:        #d46a30;
-      --syn-str:       #90c860;
-      --syn-num:       #c8b040;
-      --syn-cmt:       #604830;
-      --syn-title:     #e8b86a;
-      --syn-op:        #d46a30;
-    }
-    [data-preset="wood"][data-theme="light"] {
-      --bg:            #f5ead4;
-      --surface:       #fdf3e0;
-      --surface2:      #e8d8b8;
-      --surface-trans: rgba(245,234,212,0.95);
-      --border:        #b8884a;
-      --text:          #2a1806;
-      --muted:         #7a5828;
-      --accent:        #8a4e10;
-      --accent2:       #b86820;
-      --code-bg:       #fdf6e6;
-      --shadow:        0 4px 16px rgba(80,40,0,0.16);
-      --radius:        16px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #8a4e10;
-      --star-rgb:      138,78,16;
-      --syn-kw:        #8a2010;
-      --syn-str:       #3a6010;
-      --syn-num:       #6a5010;
-      --syn-cmt:       #806848;
-      --syn-title:     #8a4e10;
-      --syn-op:        #8a2010;
-    }
-
-    /* ══ VIBRANT COLORFUL — 60% deep indigo / 30% violet / 10% hot-pink+cyan ══ */
-    [data-preset="vibrant"] {
-      --bg:            #0a0118;
-      --surface:       #150230;
-      --surface2:      #220450;
-      --surface-trans: rgba(10,1,24,0.94);
-      --border:        #5500bb;
-      --text:          #f2eaff;
-      --muted:         #9966cc;
-      --accent:        #ff1060;
-      --accent2:       #00e8ff;
-      --code-bg:       #060012;
-      --shadow:        0 8px 40px rgba(120,0,255,0.4), 0 2px 12px rgba(255,16,96,0.25);
-      --radius:        24px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #ff1060;
-      --star-rgb:      255,16,96;
-      --syn-kw:        #ff1060;
-      --syn-str:       #00e8ff;
-      --syn-num:       #ffd000;
-      --syn-cmt:       #5522aa;
-      --syn-title:     #cc88ff;
-      --syn-op:        #ff6820;
-    }
-    [data-preset="vibrant"][data-theme="light"] {
-      --bg:            #f8f0ff;
-      --surface:       #ffffff;
-      --surface2:      #eedeff;
-      --surface-trans: rgba(248,240,255,0.95);
-      --border:        #bb44ee;
-      --text:          #1a0030;
-      --muted:         #7722aa;
-      --accent:        #cc0050;
-      --accent2:       #0088bb;
-      --code-bg:       #f4eaff;
-      --shadow:        0 4px 24px rgba(150,0,200,0.2);
-      --radius:        24px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #cc0050;
-      --star-rgb:      204,0,80;
-      --syn-kw:        #cc0050;
-      --syn-str:       #006688;
-      --syn-num:       #886600;
-      --syn-cmt:       #7722aa;
-      --syn-title:     #8800cc;
-      --syn-op:        #aa3300;
-    }
-
-    /* ══ CLASSIC — 60% dark navy / 30% slate / 10% steel blue — shape: 6px sharp ══ */
-    /* ══ CLASSIC — ash gray + warm brown. Zero radius. Rectangular everything. ══ */
-    [data-preset="classic"] {
-      --bg:            #1a1a1a;
-      --surface:       #242424;
-      --surface2:      #2e2e2e;
-      --surface-trans: rgba(26,26,26,0.96);
-      --border:        #5c4a38;
-      --text:          #d8d0c8;
-      --muted:         #7a6e62;
-      --accent:        #c8a878;
-      --accent2:       #e0c090;
-      --code-bg:       #111111;
-      --shadow:        0 4px 12px rgba(0,0,0,0.6);
+    /* ══ PRESET 2: GEEK TERMINAL — Matrix Phosphor Green · Sharp 0px Pointy ══ */
+    [data-preset="geek"] {
+      --bg:            #040806;
+      --surface:       #0a120e;
+      --surface2:      #0f1f17;
+      --surface-trans: rgba(4, 8, 6, 0.94);
+      --border:        #153322;
+      --text:          #e6fffa;
+      --muted:         #5a856f;
+      --accent:        #00ff66;
+      --accent2:       #10b981;
+      --code-bg:       #020403;
+      --shadow:        0 0 20px rgba(0, 255, 102, 0.08), 0 8px 24px rgba(0, 0, 0, 0.8);
       --radius:        0px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #c8a878;
-      --star-rgb:      200,168,120;
-      --syn-kw:        #c0392b;
-      --syn-str:       #c8a878;
-      --syn-num:       #a08060;
-      --syn-cmt:       #5a5048;
-      --syn-title:     #e0c090;
-      --syn-op:        #c0392b;
+      --font-ui:       'JetBrains Mono', monospace;
+      --star:          #00ff66;
+      --star-rgb:      0, 255, 102;
+      --syn-kw:        #00ff66;
+      --syn-str:       #38bdf8;
+      --syn-num:       #34d399;
+      --syn-cmt:       #406b55;
+      --syn-title:     #a7f3d0;
+      --syn-op:        #00ff66;
+    }
+    [data-preset="geek"][data-theme="light"] {
+      --bg:            #f2f7f4;
+      --surface:       #ffffff;
+      --surface2:      #e2ede6;
+      --surface-trans: rgba(242, 247, 244, 0.95);
+      --border:        #bbf7d0;
+      --text:          #062e1e;
+      --muted:         #3b7058;
+      --accent:        #059669;
+      --accent2:       #10b981;
+      --code-bg:       #e8f3ec;
+      --shadow:        0 4px 14px rgba(6, 95, 70, 0.1);
+      --radius:        0px;
+      --font-ui:       'JetBrains Mono', monospace;
+      --star:          #059669;
+      --star-rgb:      5, 150, 105;
+      --syn-kw:        #059669;
+      --syn-str:       #0284c7;
+      --syn-num:       #0d9488;
+      --syn-cmt:       #6b9080;
+      --syn-title:     #047857;
+      --syn-op:        #059669;
+    }
+
+    /* ══ PRESET 3: CLASSIC MONOLITH — Pure Black & White · High Contrast · Sharp 0px Pointy ══ */
+    [data-preset="classic"] {
+      --bg:            #000000;
+      --surface:       #0d0d0d;
+      --surface2:      #1a1a1a;
+      --surface-trans: rgba(0, 0, 0, 0.95);
+      --border:        #2a2a2a;
+      --text:          #ffffff;
+      --muted:         #888888;
+      --accent:        #ffffff;
+      --accent2:       #d4d4d4;
+      --code-bg:       #050505;
+      --shadow:        0 0 0 1px #2a2a2a, 0 8px 24px rgba(0, 0, 0, 0.9);
+      --radius:        0px;
+      --font-ui:       'JetBrains Mono', monospace;
+      --star:          #ffffff;
+      --star-rgb:      255, 255, 255;
+      --syn-kw:        #ffffff;
+      --syn-str:       #d4d4d4;
+      --syn-num:       #a3a3a3;
+      --syn-cmt:       #555555;
+      --syn-title:     #e5e5e5;
+      --syn-op:        #ffffff;
     }
     [data-preset="classic"][data-theme="light"] {
-      --bg:            #e8e4de;
-      --surface:       #f0ece6;
-      --surface2:      #ddd8d0;
-      --surface-trans: rgba(232,228,222,0.96);
-      --border:        #a8906a;
-      --text:          #1e1a16;
-      --muted:         #6a5e50;
-      --accent:        #7a5830;
-      --accent2:       #9a7040;
-      --code-bg:       #e0dbd4;
-      --shadow:        0 4px 12px rgba(0,0,0,0.14);
-      --radius:        0px;
-      --font-ui:       'Outfit', sans-serif;
-      --star:          #7a5830;
-      --star-rgb:      122,88,48;
-      --syn-kw:        #8a2010;
-      --syn-str:       #7a5830;
-      --syn-num:       #6a4820;
-      --syn-cmt:       #807060;
-      --syn-title:     #7a5830;
-      --syn-op:        #8a2010;
-    }
-
-    /* ══ CLASSIC RETRO — amber phosphor CRT. Readable. No scanlines. ══ */
-    [data-preset="retro"] {
-      --bg:            #0a0800;
-      --surface:       #140f00;
-      --surface2:      #1e1800;
-      --surface-trans: rgba(10,8,0,0.97);
-      --border:        #4a3800;
-      --text:          #ffb000;
-      --muted:         #7a5800;
-      --accent:        #ffb000;
-      --accent2:       #ffd060;
-      --code-bg:       #070500;
-      --shadow:        0 0 16px rgba(255,176,0,0.08), 0 8px 28px rgba(0,0,0,0.9);
+      --bg:            #ffffff;
+      --surface:       #ffffff;
+      --surface2:      #f0f0f0;
+      --surface-trans: rgba(255, 255, 255, 0.95);
+      --border:        #000000;
+      --text:          #000000;
+      --muted:         #555555;
+      --accent:        #000000;
+      --accent2:       #333333;
+      --code-bg:       #f5f5f5;
+      --shadow:        0 0 0 1.5px #000000;
       --radius:        0px;
       --font-ui:       'JetBrains Mono', monospace;
-      --star:          #ffb000;
-      --star-rgb:      255,176,0;
-      --syn-kw:        #ffb000;
-      --syn-str:       #ffd060;
-      --syn-num:       #ffb000;
-      --syn-cmt:       #5a4400;
-      --syn-title:     #ffd060;
-      --syn-op:        #ffb000;
-    }
-    [data-preset="retro"][data-theme="light"] {
-      --bg:            #fdf5d8;
-      --surface:       #fffae8;
-      --surface2:      #f0e8b8;
-      --surface-trans: rgba(253,245,216,0.97);
-      --border:        #c8a030;
-      --text:          #3a2800;
-      --muted:         #7a6020;
-      --accent:        #8a5c00;
-      --accent2:       #b07800;
-      --code-bg:       #f8eecc;
-      --shadow:        0 4px 12px rgba(100,60,0,0.14);
-      --radius:        0px;
-      --font-ui:       'JetBrains Mono', monospace;
-      --star:          #8a5c00;
-      --star-rgb:      138,92,0;
-      --syn-kw:        #8a5c00;
-      --syn-str:       #6a4400;
-      --syn-num:       #7a5000;
-      --syn-cmt:       #a08040;
-      --syn-title:     #8a5c00;
-      --syn-op:        #8a5c00;
-    }
-    /* Retro: mono font-family ONLY — no size/spacing/layout changes */
-    [data-preset="retro"] body,
-    [data-preset="retro"] .hero-title,
-    [data-preset="retro"] .hero-sub,
-    [data-preset="retro"] .card-label,
-    [data-preset="retro"] .card-desc,
-    [data-preset="retro"] .topbar-badge,
-    [data-preset="retro"] .home-footer {
-      font-family: 'JetBrains Mono', monospace !important;
-    }
-    /* Retro: compensate mono width so hero-title stays single line */
-    [data-preset="retro"] .hero-title {
-      font-size: clamp(20px, 5.5vw, 30px) !important;
-      letter-spacing: -0.02em !important;
-    }
-    /* Retro: amber phosphor glow on key text */
-    [data-preset="retro"] .hero-title,
-    [data-preset="retro"] .card-label,
-    [data-preset="retro"] .topbar-badge {
-      text-shadow: 0 0 6px rgba(255,176,0,0.5), 0 0 16px rgba(255,176,0,0.15);
-    }
-    [data-preset="retro"] .home-search {
-      border-color: #4a3800 !important;
-      caret-color: #ffb000;
+      --star:          #000000;
+      --star-rgb:      0, 0, 0;
+      --syn-kw:        #000000;
+      --syn-str:       #333333;
+      --syn-num:       #555555;
+      --syn-cmt:       #888888;
+      --syn-title:     #111111;
+      --syn-op:        #000000;
     }
 
-    /* ── NUCLEAR: zero ALL border-radius for classic + retro (elements only, not pseudo) ── */
+    /* ── POINTY SQUARES (0px Radius) for Geek & Classic ── */
     [data-preset="classic"] *,
-    [data-preset="retro"] * {
+    [data-preset="geek"] * {
       border-radius: 0 !important;
     }
 
-    /* ── VIBRANT: subtle color halos on cards ── */
-    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(1) {
-      box-shadow: 0 0 0 1px rgba(255,16,96,0.3), 0 8px 32px rgba(255,16,96,0.2) !important;
-    }
-    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(2) {
-      box-shadow: 0 0 0 1px rgba(0,232,255,0.3), 0 8px 32px rgba(0,232,255,0.2) !important;
-    }
-    [data-preset="vibrant"] .mode-grid .mode-card:nth-child(3) {
-      box-shadow: 0 0 0 1px rgba(255,208,0,0.3), 0 8px 32px rgba(100,0,255,0.25) !important;
-    }
-    [data-preset="vibrant"] .hero-title span {
-      background: linear-gradient(90deg, #ff1060, #cc88ff, #00e8ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    /* ── MONOSPACE TYPOGRAPHY for Geek & Classic ── */
+    [data-preset="classic"] body,
+    [data-preset="classic"] .hero-title,
+    [data-preset="classic"] .hero-sub,
+    [data-preset="classic"] .card-label,
+    [data-preset="classic"] .card-desc,
+    [data-preset="classic"] .topbar-badge,
+    [data-preset="classic"] .home-footer,
+    [data-preset="geek"] body,
+    [data-preset="geek"] .hero-title,
+    [data-preset="geek"] .hero-sub,
+    [data-preset="geek"] .card-label,
+    [data-preset="geek"] .card-desc,
+    [data-preset="geek"] .topbar-badge,
+    [data-preset="geek"] .home-footer {
+      font-family: 'JetBrains Mono', monospace !important;
     }
 
-    /* ── WOOD: subtle noise grain via SVG data URI ── */
-    [data-preset="wood"] #home::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      background-size: 300px 300px;
+    /* Geek terminal glow on key text */
+    [data-preset="geek"] .hero-title,
+    [data-preset="geek"] .card-label,
+    [data-preset="geek"] .topbar-badge {
+      text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+    }
+    [data-preset="geek"] .home-search {
+      border-color: #153322 !important;
+      caret-color: #00ff66;
+    }
+
+    /* Classic Monolith clean inputs */
+    [data-preset="classic"] .home-search {
+      border-color: #2a2a2a !important;
+      caret-color: #ffffff;
+    }
+    [data-preset="classic"][data-theme="light"] .home-search {
+      border-color: #000000 !important;
+      caret-color: #000000;
     }
 
     /* Dynamic Font Sizing via Variables */
@@ -1197,9 +1081,9 @@
       border-color: var(--accent);
     }
 
-    /* Classic & retro: ripple stays square — matches nuclear border-radius:0 */
+    /* Classic & Geek: ripple stays square — matches 0px border-radius */
     [data-preset="classic"] .theme-toggle-btn::before,
-    [data-preset="retro"] .theme-toggle-btn::before {
+    [data-preset="geek"] .theme-toggle-btn::before {
       border-radius: 0 !important;
       animation: theme-ripple-square 2.6s ease-out infinite;
     }
@@ -1208,15 +1092,15 @@
       70%  { opacity: 0.08; transform: translate(-50%, -50%) scale(2.2); border-radius: 0; }
       100% { opacity: 0;    transform: translate(-50%, -50%) scale(2.5); border-radius: 0; }
     }
-    /* Classic & retro: icon containers go square, matching nuclear border-radius:0 */
+    /* Classic & Geek: icon containers go square */
     [data-preset="classic"] .card-icon,
-    [data-preset="retro"] .card-icon,
+    [data-preset="geek"] .card-icon,
     [data-preset="classic"] .dl-icon,
-    [data-preset="retro"] .dl-icon,
+    [data-preset="geek"] .dl-icon,
     [data-preset="classic"] .theme-toggle-btn,
-    [data-preset="retro"] .theme-toggle-btn,
+    [data-preset="geek"] .theme-toggle-btn,
     [data-preset="classic"] .theme-preset-btn,
-    [data-preset="retro"] .theme-preset-btn {
+    [data-preset="geek"] .theme-preset-btn {
       border-radius: 0 !important;
     }
 
@@ -9514,28 +9398,53 @@ int main() {
     }
 
     // ================================================
-    // THEME PRESETS — panel injected at <body> level
-    // to escape all stacking contexts (contain:strict, z-index, etc.)
+    // THEME PRESETS — Exactly 3 Curated Modes
+    // 1. Modern Standard  2. Geek Terminal  3. Classic Monolith
     // ================================================
-    const PRESETS = ['modern','wood','vibrant','classic','retro'];
+    const PRESETS = ['modern', 'geek', 'classic'];
 
     // Build and inject panel once at body level
     (function buildPresetPanel() {
       const html = `
         <div id="presetBackdrop" style="display:none;position:fixed;inset:0;z-index:2147483640;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
-        <div id="themePresetPanel" style="display:none;position:fixed;z-index:2147483647;width:min(300px,calc(100vw - 28px));background:#161b22;border:1px solid #30363d;border-radius:20px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,0.8);flex-direction:column;gap:8px;font-family:'Outfit',sans-serif;">
-          <div id="presetPanelHeader" style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8b949e;padding:0 2px 4px;border-bottom:1px solid #30363d;">Theme Preset</div>
+        <div id="themePresetPanel" style="display:none;position:fixed;z-index:2147483647;width:min(300px,calc(100vw - 28px));background:#111827;border:1px solid #1f293d;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,0.8);flex-direction:column;gap:8px;font-family:'Outfit',sans-serif;">
+          <div id="presetPanelHeader" style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#94a3b8;padding:0 2px 4px;border-bottom:1px solid #1f293d;">Theme Preset</div>
           <div id="presetTiles" style="display:flex;flex-direction:column;gap:6px;"></div>
         </div>`;
       document.body.insertAdjacentHTML('beforeend', html);
 
-      // Tiles data
+      // Tiles data — 3 distinct color theory & layout personalities
       const tiles = [
-        { key:'modern',  name:'Modern Minimal',   desc:'Clean · Pill-shaped · Blue-purple', bg:'linear-gradient(135deg,#0d1117,#1c1d35)', btnBg:'#58a6ff', btnR:'8px', dotBg:'#d2a8ff', dotGlow:'' },
-        { key:'wood',    name:'Wood Finish',       desc:'Walnut · Organic · Amber grain',    bg:'linear-gradient(160deg,#1c1007,#3f2c18)', btnBg:'#c8913a', btnR:'4px', dotBg:'#e8b86a', dotGlow:'' },
-        { key:'vibrant', name:'Vibrant Colorful',  desc:'Indigo · Electric · 60-30-10 pop', bg:'linear-gradient(135deg,#0a0118,#220450)', btnBg:'linear-gradient(90deg,#ff1060,#00e8ff)', btnR:'6px', dotBg:'#ffd000', dotGlow:'0 0 4px #ff1060' },
-        { key:'classic', name:'Classic',           desc:'Ash gray · Warm brown · Rectangular', bg:'linear-gradient(135deg,#1a1a1a,#2e2e2e)', btnBg:'#c8a878', btnR:'0',   dotBg:'#e0c090', dotGlow:'' },
-        { key:'retro',   name:'Classic Retro',     desc:'CRT · Amber phosphor · No radius',  bg:'#0a0800',                                 btnBg:'#ffb000', btnR:'0',   dotBg:'#ffd060', dotGlow:'0 0 6px #ffb000' },
+        { 
+          key: 'modern',  
+          name: 'Modern Standard',       
+          desc: 'Commercial UI · Indigo & Slate · Studio UX', 
+          bg: 'linear-gradient(135deg,#0b0f19,#1e293b)', 
+          btnBg: '#3b82f6', 
+          btnR: '8px', 
+          dotBg: '#818cf8', 
+          dotGlow: '0 0 6px rgba(129,140,248,0.5)' 
+        },
+        { 
+          key: 'geek',    
+          name: 'Geek Terminal',   
+          desc: 'Matrix Hacker · Cyber Green · 0px Pointy',    
+          bg: '#040806', 
+          btnBg: '#00ff66', 
+          btnR: '0',   
+          dotBg: '#00ff66', 
+          dotGlow: '0 0 6px #00ff66' 
+        },
+        { 
+          key: 'classic', 
+          name: 'Classic Monolith', 
+          desc: 'Pure Black & White · High Contrast · 0px Pointy', 
+          bg: '#000000', 
+          btnBg: '#ffffff', 
+          btnR: '0',   
+          dotBg: '#ffffff', 
+          dotGlow: '0 0 4px #ffffff' 
+        },
       ];
 
       const tilesEl = document.getElementById('presetTiles');
@@ -9660,7 +9569,7 @@ int main() {
         if (preset !== 'modern') root.setAttribute('data-preset', preset);
         safeSave('duet-preset', preset);
         syncPresetActiveState();
-        const labels = { modern:'Modern Minimal', wood:'Wood Finish', vibrant:'Vibrant Colorful', classic:'Classic', retro:'Classic Retro' };
+        const labels = { modern:'Modern Standard', geek:'Geek Terminal', classic:'Classic Monolith' };
         showToast(T_ICON('ic-palette') + '<span>' + (labels[preset] || preset) + '</span>', root.getAttribute('data-theme') || 'dark');
         requestAnimationFrame(() => requestAnimationFrame(() => flash.classList.remove('active')));
       }, 160);
