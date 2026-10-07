@@ -2657,18 +2657,21 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      padding: 10px 20px 10px 16px;
+      padding: 9px 18px 9px 14px;
       border-radius: 30px;
       font-weight: 800;
       font-size: 13px;
       z-index: 99999;
       opacity: 0;
       white-space: nowrap;
+      max-width: calc(100vw - 32px);
+      box-sizing: border-box;
       box-shadow: var(--shadow);
       transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
       pointer-events: none;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
     }
 
