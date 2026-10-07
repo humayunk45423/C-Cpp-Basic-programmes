@@ -5,7 +5,6 @@ const ASSETS_TO_CACHE = [
   './styles.css',
   './programs.js',
   './app.js',
-  './programs.json',
   './manifest.json',
   './duetcode.svg',
   './DUET C & C++ Programs.pdf'
