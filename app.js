@@ -1215,6 +1215,11 @@
       if (safeGet('duet-swipe-seen')) return;
       const hint = document.getElementById('swipe-hint');
       if (!hint) return;
+      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+      const textSpan = hint.querySelector('span');
+      if (textSpan) {
+        textSpan.textContent = isTouch ? 'Swipe up for next program' : 'Scroll down for next program';
+      }
       hint.classList.add('show');
       setTimeout(() => { hint.classList.remove('show'); }, 3000);
       safeSave('duet-swipe-seen', '1');
