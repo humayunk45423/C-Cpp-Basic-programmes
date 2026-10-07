@@ -1,4 +1,3 @@
-// DUET Code Service Worker — 100% Offline Cache Engine
 const CACHE_NAME = 'duet-code-v1';
 const ASSETS_TO_CACHE = [
   './',

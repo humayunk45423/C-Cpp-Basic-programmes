@@ -1,4 +1,4 @@
-    /* ===================== RESET & PRO-LEVEL OPTIMIZATION ===================== */
+
     *,
     *::before,
     *::after {
@@ -12,9 +12,6 @@
       text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* ===================== THEME TOKENS (CSS VARIABLES) ===================== */
-    /* ══ PRESET 1: AGENCY PRO (Modern Commercial UI/UX Standard) ══ */
     :root {
       --bg: #0b0f19;
       --surface: #111827;
@@ -26,8 +23,6 @@
       --accent2: #818cf8;
       --code-bg: #070a10;
       --surface-trans: rgba(11, 15, 25, 0.88);
-
-      /* Syntax Highlighting Tokens - Dark Mode */
       --syn-kw: #f43f5e;
       --syn-str: #38bdf8;
       --syn-num: #fbbf24;
@@ -55,8 +50,6 @@
       --accent: #2563eb;
       --accent2: #6366f1;
       --code-bg: #f1f5f9;
-
-      /* Syntax Highlighting Tokens - Light Mode */
       --syn-kw: #e11d48;
       --syn-str: #0284c7;
       --syn-num: #d97706;
@@ -70,15 +63,6 @@
       --star: #6366f1;
       --star-rgb: 99, 102, 241;
     }
-
-    /* =====================================================================
-       THEME PRESET SYSTEM (Exactly 3 Curated Modes)
-       1. Modern Standard (Modern Commercial Studio — :root / [data-theme="light"])
-       2. Geek Terminal (Hacker Matrix · Cyber Green · 0px Pointy Squares)
-       3. Classic Monolith (Pure Black & White · High Contrast · 0px Pointy Squares)
-       ===================================================================== */
-
-    /* ══ PRESET 2: GEEK TERMINAL — Matrix Phosphor Green · Sharp 0px Pointy ══ */
     [data-preset="geek"] {
       --bg:            #040806;
       --surface:       #0a120e;
@@ -173,14 +157,10 @@
       --syn-title:     #111111;
       --syn-op:        #000000;
     }
-
-    /* ── POINTY SQUARES (0px Radius) for Geek & Classic ── */
     [data-preset="classic"] *,
     [data-preset="geek"] * {
       border-radius: 0 !important;
     }
-
-    /* ── MONOSPACE TYPOGRAPHY for Geek & Classic ── */
     [data-preset="classic"] body,
     [data-preset="classic"] .hero-title,
     [data-preset="classic"] .hero-sub,
@@ -197,8 +177,6 @@
     [data-preset="geek"] .home-footer {
       font-family: 'JetBrains Mono', monospace !important;
     }
-
-    /* Geek terminal glow on key text */
     [data-preset="geek"] .hero-title,
     [data-preset="geek"] .card-label,
     [data-preset="geek"] .topbar-badge {
@@ -208,8 +186,6 @@
       border-color: #153322 !important;
       caret-color: #00ff66;
     }
-
-    /* Classic Monolith clean inputs */
     [data-preset="classic"] .home-search {
       border-color: #2a2a2a !important;
       caret-color: #ffffff;
@@ -218,8 +194,6 @@
       border-color: #000000 !important;
       caret-color: #000000;
     }
-
-    /* Dynamic Font Sizing via Variables */
     [data-font="sm"] {
       --code-size: 11.5px;
     }
@@ -231,12 +205,6 @@
     [data-font="lg"] {
       --code-size: 16.5px;
     }
-
-
-    /* ===================== FLAT / IDE INDENT TOGGLE ===================== */
-    /* Flat mode is handled entirely in JS (flattenCode fn) — no CSS needed */
-
-    /* ===================== THEME FLASH OVERLAY ===================== */
     #theme-flash {
       position: fixed;
       inset: 0;
@@ -251,10 +219,6 @@
     #theme-flash.active {
       opacity: 1;
     }
-
-    /* ===================== 10/10 UI ENHANCEMENTS ===================== */
-
-    /* ── HERO: mobile-only tight overrides (desktop handled by 900px+ media query) ── */
     @media(max-width: 899px) {
     .home-hero-band {
       padding: 0 16px 12px !important;
@@ -285,8 +249,6 @@
       display: none !important;
     }
     }
-
-    /* ── SEARCH: tinted background + accent icon ── */
     .home-search {
       background: rgba(88, 166, 255, 0.04) !important;
       border-color: rgba(88, 166, 255, 0.2) !important;
@@ -302,21 +264,11 @@
       opacity: 0.7 !important;
       left: 28px !important;
     }
-
-    /* ── CARD GRID: tighter ── */
     .mode-grid,
     .action-grid {
       gap: 10px !important;
       padding: 0 14px 8px !important;
     }
-
-    /* ── 60/30/10 UX RULE — Modern Minimal home
-       60% = bg/surface (neutral dark)
-       30% = cards/containers (surface elevation, NO color tints)
-       10% = accent ONLY on: hero span, CTA desc text, focus rings, footer link
-    ── */
-
-    /* Cards: flat neutral — no colored gradient tints */
     .mode-grid .mode-card:nth-child(1) {
       background: var(--surface) !important;
       border-color: var(--border) !important;
@@ -329,8 +281,6 @@
       background: var(--surface) !important;
       border-color: var(--border) !important;
     }
-
-    /* Card desc: muted, not accent-colored */
     .mode-grid .mode-card:nth-child(1) .card-desc { color: var(--muted) !important; }
     .mode-grid .mode-card:nth-child(2) .card-desc { color: var(--muted) !important; }
     .mode-grid .mode-card:nth-child(3) .card-desc {
@@ -341,12 +291,8 @@
       color: var(--accent) !important;
       font-weight: 600 !important;
     }
-
-    /* Card icons: neutral tint, single accent color via var */
     .mode-grid .mode-card:nth-child(1) .card-icon { color: var(--accent2) !important; }
     .mode-grid .mode-card:nth-child(2) .card-icon { color: var(--accent) !important; }
-
-    /* Hover: only border brightens — no colored glow */
     .mode-grid .mode-card:nth-child(1):hover {
       box-shadow: var(--shadow) !important;
       border-color: var(--accent2) !important;
@@ -359,8 +305,6 @@
       box-shadow: var(--shadow) !important;
       border-color: var(--accent) !important;
     }
-
-    /* Arrow chevrons: neutral */
     .mode-grid .mode-card:nth-child(1)::after {
       background-color: rgba(255,255,255,0.04) !important;
       border-color: var(--border) !important;
@@ -376,8 +320,6 @@
       border-color: var(--border) !important;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") !important;
     }
-
-    /* Light mode: same flat neutral */
     [data-theme="light"] .mode-grid .mode-card:nth-child(1) {
       background: var(--surface) !important;
       border-color: var(--border) !important;
@@ -390,8 +332,6 @@
       background: var(--surface) !important;
       border-color: var(--border) !important;
     }
-
-    /* Icon boxes: neutral bg */
     .mode-card .card-icon {
       width: 40px !important;
       height: 40px !important;
@@ -414,12 +354,8 @@
       background: rgba(255,255,255,0.05) !important;
       border-color: var(--border) !important;
     }
-
-    /* ── Scale on tap ── */
     .mode-card:active { transform: scale(0.98) !important; transition-duration: 0.06s !important; }
     .download-card:active { transform: scale(0.99) !important; transition-duration: 0.06s !important; }
-
-    /* ── Download cards distinct glows ── */
     .dl-icon {
       width: 44px !important;
       height: 44px !important;
@@ -435,8 +371,6 @@
     }
     .dl-pdf:hover { box-shadow: var(--shadow) !important; border-color: var(--accent) !important; }
     .dl-apk:hover { box-shadow: var(--shadow) !important; border-color: var(--accent2) !important; }
-
-    /* ── Section labels ── */
     .mode-grid::before {
       content: 'Browse';
       display: block;
@@ -464,11 +398,7 @@
       opacity: 0.6;
       padding: 0 2px;
     }
-
-    /* ── card-desc hierarchy ── */
     .mode-card .card-desc { font-size: 11.5px !important; opacity: 0.9; }
-
-    /* ── Footer — styled pill ── */
     .home-footer {
       font-size: 12px !important;
       padding: 6px 20px max(8px, env(safe-area-inset-bottom, 8px)) !important;
@@ -481,8 +411,6 @@
       background: none;
       font-weight: 800 !important;
     }
-
-    /* ── Search focus/hover ── */
     .home-search:focus {
       border-color: var(--accent) !important;
       box-shadow: 0 0 0 3px rgba(var(--star-rgb), 0.12) !important;
@@ -491,9 +419,6 @@
       border-color: var(--border) !important;
     }
 
-    /* ===================== END 10/10 UI ENHANCEMENTS ===================== */
-
-    /* ===================== INTERACTIVE ELEMENT TRANSITIONS ===================== */
     .mode-card {
       transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
         border-color 0.18s ease,
@@ -518,9 +443,6 @@
     .fabs {
       transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1), transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    /* ===================== EXTREME PERFORMANCE TUNING ===================== */
-    /* 1. Eliminate 300ms tap delay on mobile for all interactive elements */
     a,
     button,
     input,
@@ -550,8 +472,6 @@
     .overlay {
       contain: layout paint;
     }
-
-    /* ===================== BASE ===================== */
     body {
       font-family: var(--font-ui);
       background-color: var(--bg);
@@ -560,8 +480,6 @@
       height: 100dvh;
       overflow: hidden;
     }
-
-    /* Desktop body: scrollbar styling handled per-element */
 
     ::-webkit-scrollbar {
       width: 5px;
@@ -580,8 +498,6 @@
     ::-webkit-scrollbar-thumb:hover {
       background: var(--muted);
     }
-
-    /* ===================== HOME SCREEN ===================== */
     #home {
       position: fixed;
       inset: 0;
@@ -602,8 +518,6 @@
       transform: translateY(-18px) scale(0.99);
       pointer-events: none;
     }
-
-    /* ── Hero band wrapper ── */
     .home-hero-band {
       width: 100%;
       display: flex;
@@ -630,8 +544,6 @@
       letter-spacing: 0.03em;
       user-select: none;
     }
-
-    /* Left-side code decor — desktop only */
     .hero-band-code-decor-left {
       display: none;
       position: absolute;
@@ -690,8 +602,6 @@
       flex-shrink: 1;
       min-width: 0;
     }
-
-    /* ===================== THEME PRESET BUTTON ===================== */
     .theme-preset-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -715,14 +625,11 @@
     }
     .theme-preset-btn:active { transform: scale(0.9); }
     .theme-preset-btn svg { width: 18px; height: 18px; display: block; flex-shrink: 0; }
-
-    /* ── Preset panel modal system ── */
     .preset-panel-backdrop {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 10010;
-      /* Blocks all interaction beneath — no scroll-through */
       background: rgba(0,0,0,0.55);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
@@ -733,8 +640,6 @@
       display: block;
       opacity: 1;
     }
-
-    /* ── Preset panel: hardcoded dark — immune to ALL presets/themes ── */
     .theme-preset-panel {
       position: fixed;
       top: 58px;
@@ -769,8 +674,6 @@
       padding: 0 2px 4px;
       border-bottom: 1px solid var(--border);
     }
-
-    /* ── 5 preset tiles in a 1-col list ── */
     .preset-tiles {
       display: flex;
       flex-direction: column;
@@ -805,8 +708,6 @@
       background: var(--accent);
       box-shadow: 0 0 6px var(--accent);
     }
-
-    /* Visual preview — shows color + shape personality */
     .preset-preview {
       width: 44px;
       height: 36px;
@@ -820,7 +721,6 @@
       position: absolute;
       inset: 0;
     }
-    /* Mini "button" shape inside preview shows the radius personality */
     .preset-preview-btn {
       position: absolute;
       bottom: 5px;
@@ -850,8 +750,6 @@
       color: var(--muted);
       margin-top: 1px;
     }
-
-    /* Topbar right cluster */
     .topbar-right {
       display: flex;
       align-items: center;
@@ -933,8 +831,6 @@
     [data-theme="light"] .theme-toggle-btn::before {
       border-color: var(--accent);
     }
-
-    /* Classic & Geek: ripple stays square — matches 0px border-radius */
     [data-preset="classic"] .theme-toggle-btn::before,
     [data-preset="geek"] .theme-toggle-btn::before {
       border-radius: 0 !important;
@@ -945,7 +841,6 @@
       70%  { opacity: 0.08; transform: translate(-50%, -50%) scale(2.2); border-radius: 0; }
       100% { opacity: 0;    transform: translate(-50%, -50%) scale(2.5); border-radius: 0; }
     }
-    /* Classic & Geek: icon containers go square */
     [data-preset="classic"] .card-icon,
     [data-preset="geek"] .card-icon,
     [data-preset="classic"] .dl-icon,
@@ -956,7 +851,6 @@
     [data-preset="geek"] .theme-preset-btn {
       border-radius: 0 !important;
     }
-
 
     .hero {
       width: 100%;
@@ -994,8 +888,6 @@
       margin-top: 6px;
       max-width: 100%;
     }
-
-    /* On desktop, sub gets centered via hero's text-align:center */
     @media(min-width: 900px) {
       .hero-sub {
         font-size: 16px;
@@ -1013,13 +905,9 @@
       box-sizing: border-box;
       align-content: stretch;
     }
-
-    /* Make each mode-card fill its grid cell vertically */
     .mode-card {
       height: 100%;
     }
-
-    /* On desktop, the 3rd full-span card should be its own column not spanning */
     @media(min-width: 900px) {
       .mode-card.full {
         grid-column: auto;
@@ -1060,13 +948,9 @@
       gap: 16px;
       padding: 24px 18px;
     }
-
-    /* Give inner text div right padding so the ::after arrow doesn't overlap */
     .mode-card>div:not(.card-icon) {
       padding-right: 28px;
     }
-
-    /* Tap arrow indicator on each card */
     .mode-card::after {
       content: '';
       position: absolute;
@@ -1090,8 +974,6 @@
       border-color: var(--accent);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2358a6ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E");
     }
-
-    /* ── Container query: mode-grid is the container, cards scale to IT ── */
     .mode-grid {
       container-type: inline-size;
       container-name: mode-grid;
@@ -1103,8 +985,6 @@
       align-items: center;
       flex-shrink: 0;
     }
-
-    /* Default comfortable sizes */
     .card-icon svg {
       width: 26px ;
       height: 26px;
@@ -1143,8 +1023,6 @@
     [data-theme="light"] .card-desc.lang-green {
       color: #8250df;
     }
-
-    /* Container query: card text scales fluidly — 4 step breakpoints → single clamp() */
     @container mode-grid (min-width: 340px) {
       .card-icon svg {
         width: clamp(34px, 5.5cqi, 42px);
@@ -1182,16 +1060,9 @@
       flex: 1;
       display: flex;
     }
-
-    /* Download cards must fill their box */
     .download-card {
       flex: 1;
     }
-
-
-
-
-    /* ===================== DESKTOP CARD SPECIFIC HOVER GLOWS ===================== */
     @media(min-width: 900px) {
       .mode-card:nth-child(1):hover {
         border-color: #d2a8ff;
@@ -1259,8 +1130,6 @@
       pointer-events: auto;
       transform: translateX(0);
     }
-
-    /* ===================== SNAP CARDS ===================== */
     .snap {
       width: 100vw;
       height: 100dvh;
@@ -1290,11 +1159,7 @@
         padding: 24px 32px;
       }
     }
-
-    /* ===================== RESPONSIVE — TABLET (600px+) ===================== */
     @media(min-width: 600px) {
-
-      /* Home screen: more breathing room */
       #home {
         padding: 0;
       }
@@ -1315,8 +1180,6 @@
         padding: 20px 18px;
         gap: 10px;
       }
-
-      /* Code view: bigger topbar text */
       .card-topbar {
         padding: 15px 22px;
       }
@@ -1334,11 +1197,7 @@
         padding: 6px 12px;
       }
     }
-
-    /* ===================== RESPONSIVE — DESKTOP (900px+) ===================== */
     @media(min-width: 900px) {
-
-      /* Home screen — centered column container */
       #home {
         display: flex;
         flex-direction: column;
@@ -1451,8 +1310,6 @@
         justify-content: center !important;
         margin-top: 14px !important;
       }
-
-      /* Desktop Search Bar — aligned with exact 1040px container */
       .home-search-wrap {
         width: 100% !important;
         max-width: 1040px !important;
@@ -1476,8 +1333,6 @@
         top: 50% !important;
         transform: translateY(-50%) !important;
       }
-
-      /* 3 Browse Cards: Equal Columns, Uniform Heights & Symmetry (1040px container) */
       .mode-grid {
         display: grid !important;
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -1635,8 +1490,6 @@
         width: 100%;
         max-width: 1040px;
       }
-
-      /* Code view */
       .card-topbar {
         padding: 16px 24px;
       }
@@ -1657,8 +1510,6 @@
       .code-scroll {
         padding: 20px 24px;
       }
-
-      /* FABs */
       .fabs {
         bottom: 32px;
         right: 32px;
@@ -1670,9 +1521,6 @@
         width: 100%;
       }
     }
-
-
-    /* ===================== RESPONSIVE — LARGE DESKTOP (1280px+) ===================== */
     @media(min-width: 1280px) {
       .home-hero-band {
         padding: 52px 0 38px;
@@ -1736,8 +1584,6 @@
         right: 40px;
       }
     }
-
-    /* ===================== DESKTOP DOT-GRID BACKGROUND TEXTURE ===================== */
     @media(min-width: 900px) {
       #home::before {
         content: '';
@@ -1753,8 +1599,6 @@
         position: relative;
         z-index: 1;
       }
-
-      /* Search wrap above cards so dropdown floats over mode-grid/action-grid */
       #home>.home-search-wrap {
         z-index: 50;
       }
@@ -1768,8 +1612,6 @@
         background-image: radial-gradient(circle, rgba(9, 105, 218, 0.06) 1px, transparent 1px);
       }
     }
-
-    /* ===================== TALL SCREENS — squeeze less aggressively ===================== */
     @media(min-height: 750px) and (max-width: 600px) {
       .home-topbar {
         padding: 18px 0 20px;
@@ -1789,8 +1631,6 @@
         gap: 12px;
       }
     }
-
-    /* ===================== SHORT SCREENS — extra compact ===================== */
     @media(max-height: 640px) and (max-width: 600px) {
       .home-topbar {
         padding: 10px 0 10px;
@@ -1850,9 +1690,6 @@
       width: 100%;
       margin: 0 auto;
     }
-
-
-    /* ── Sheet: drag handle — centered pill above title row ── */
     .sheet-drag-handle {
       width: 36px;
       height: 4px;
@@ -1863,7 +1700,6 @@
       position: relative;
       transition: background 0.15s, box-shadow 0.15s;
     }
-    /* Big invisible tap zone around the tiny pill */
     .sheet-drag-handle::after {
       content: '';
       position: absolute;
@@ -1873,8 +1709,6 @@
       background: var(--accent);
       box-shadow: 0 0 0 4px rgba(88,166,255,0.25);
     }
-
-    /* ── Sheet list: cleaner number chips ── */
     .sheet-list li .prog-num {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -1889,7 +1723,6 @@
       font-family: var(--font-code);
       flex-shrink: 0;
     }
-    /* ===================== BACK BUTTON on card topbar ===================== */
     .card-back-btn {
       display: flex;
       align-items: center;
@@ -1910,8 +1743,6 @@
       will-change: transform;
       position: relative;
     }
-
-    /* Elite: Invisible 48px hit-box for small navigation icons */
     .card-back-btn::after {
       content: '';
       position: absolute;
@@ -1999,8 +1830,6 @@
       will-change: transform;
       position: relative;
     }
-
-    /* Elite: Invisible 48px hit-box for bookmarking */
     .bm-btn::after {
       content: '';
       position: absolute;
@@ -2063,12 +1892,9 @@
       justify-content: center;
       white-space: pre;
       text-align: left;
-      /* Fix: zero spacing so space chars == * chars in width → symmetric pyramids */
       letter-spacing: 0;
       word-spacing: 0;
     }
-
-    /* Bangla prose explanation — for non-pattern programs */
     .pattern.bn-expl {
       display: block;
       width: 100%;
@@ -2097,8 +1923,6 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-
-    /* Elite Search Highlight */
     .search-hl {
       background-color: rgba(var(--star-rgb), 0.25);
       color: var(--star);
@@ -2109,9 +1933,6 @@
     [data-theme="light"] .search-hl {
       background-color: rgba(var(--star-rgb), 0.15);
     }
-
-
-
 
     .panes {
       display: flex;
@@ -2276,8 +2097,6 @@
       font-variant-ligatures: none !important;
       font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0 !important;
     }
-
-    /* Elite Custom Scrollbar for Code Panes (Desktop) */
     .code-scroll::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -2299,8 +2118,6 @@
       font-variant-ligatures: none !important;
       font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0 !important;
     }
-
-    /* ===================== CSS VARIABLE SYNTAX HIGHLIGHTING ===================== */
     .hljs-keyword,
     .hljs-type,
     .hljs-literal {
@@ -2340,8 +2157,6 @@
     .hljs-operator {
       color: var(--syn-op);
     }
-
-    /* ===================== FABs ===================== */
     .fabs {
       position: fixed;
       bottom: 20px;
@@ -2376,16 +2191,13 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      /* GPU layer — eliminates repaint on every frame */
       will-change: transform;
       transform: translateZ(0);
-      /* Only transition transform and border/color — no box-shadow (expensive) */
       transition:
         transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
         border-color 0.14s ease,
         color 0.14s ease,
         background-color 0.14s ease;
-      /* Instant touch response */
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
@@ -2395,22 +2207,16 @@
       color: var(--accent);
       transform: translateY(-3px) translateZ(0);
     }
-
-    /* Active fires immediately without waiting for hover — feels snappy on mobile */
     .fab:active {
       transform: scale(0.86) translateZ(0);
       transition: transform 0.07s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    /* ---- Always-fixed bottom two buttons ---- */
     .fabs-fixed {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
     }
-
-    /* ---- Toggle button ---- */
     #fabToggle {
       background-color: var(--surface);
       border: 1.5px solid var(--accent);
@@ -2442,8 +2248,6 @@
     #fabToggle.open .toggle-icon {
       transform: rotate(180deg);
     }
-
-    /* ---- Collapsible container — height controlled by JS only ---- */
     .fabs-collapsible {
       display: flex;
       flex-direction: column;
@@ -2456,8 +2260,6 @@
       flex-shrink: 0;
       will-change: opacity, transform;
     }
-
-    /* Base hidden state — set by JS init */
     .fab-collapsible.fc-hidden {
       opacity: 0;
       transform: translateY(10px) scale(0.82) translateZ(0);
@@ -2469,8 +2271,6 @@
       transform: translateY(0) scale(1) translateZ(0);
       pointer-events: auto;
     }
-
-    /* ===================== DOWNLOAD CARDS ===================== */
     .download-card {
       width: 100%;
       flex: 1;
@@ -2516,8 +2316,6 @@
     [data-theme="light"] .dl-pdf::before {
       background: linear-gradient(135deg, rgba(0, 86, 179, 0.05), transparent);
     }
-
-    /* APK card — purple palette to differentiate from PDF blue */
     .dl-apk {
       border: 1px solid rgba(210, 168, 255, 0.4);
     }
@@ -2598,8 +2396,6 @@
         font-size: 17px;
       }
     }
-
-    /* ===================== BOTTOM SHEET ===================== */
     .overlay {
       position: fixed;
       inset: 0;
@@ -2698,13 +2494,9 @@
       flex-shrink: 0;
       gap: 14px;
     }
-
-    /* pill row — centered */
     .sheet-drag-handle {
       align-self: center;
     }
-
-    /* title + close row */
     .sheet-hdr-row {
       display: flex;
       align-items: center;
@@ -2764,9 +2556,6 @@
       overflow-y: auto;
       min-height: 0;
     }
-
-    /* ===================== TOAST ===================== */
-    /* Toast — colors set imperatively in JS to always match current theme */
     #toast {
       position: fixed;
       bottom: 24px;
@@ -2792,8 +2581,6 @@
       opacity: 1;
       pointer-events: none;
     }
-
-    /* On desktop when sheet is open, shift toast left so it's not behind the panel */
     @media(min-width: 900px) {
       #toast {
         transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, left 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -2833,8 +2620,6 @@
       .sheet {
         transition: none !important;
       }
-
-      /* Skip loader animation entirely */
       #startup-loader {
         display: none !important;
       }
@@ -2847,10 +2632,6 @@
         0%, 100% { opacity: 0; }
       }
     }
-
-
-
-    /* ===================== PULL TO RELOAD ===================== */
     #ptr-wrap {
       position: fixed;
       top: 0;
@@ -2905,8 +2686,6 @@
     #ptr-spinner.loading svg {
       animation: ptr-spin 0.7s linear infinite;
     }
-
-    /* ===================== SHEET SEARCH BAR ===================== */
     .sheet-search-wrap {
       padding: 14px 16px 10px;
       flex-shrink: 0;
@@ -2981,8 +2760,6 @@
       justify-content: center;
       min-height: 200px;
     }
-
-    /* Bookmark Tooltip (Onboarding) */
     .bm-tip {
       position: absolute;
       top: calc(100% + 12px);
@@ -3013,8 +2790,6 @@
       border: 6px solid transparent;
       border-bottom-color: var(--accent);
     }
-
-    /* Swipe Hint */
     #swipe-hint {
       position: fixed;
       bottom: 40px;
@@ -3047,9 +2822,6 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
-
-    /* ===================== BOOKMARK STAR IN SHEET LIST ===================== */
-    /* Mode badge inside bookmark list */
     .bm-mode-badge {
       display: inline-flex;
       align-items: center;
@@ -3093,10 +2865,6 @@
       color: #d2a8ff;
     }
 
-    /* bookmarked rows: NO row highlight — only the star icon changes */
-
-    /* Remove bookmark button in bookmark tab */
-    /* ===================== SKELETON LOADER ===================== */
     .skeleton-wrap {
       display: flex;
       flex-direction: column;
@@ -3165,10 +2933,6 @@
       transform: scale(0.9);
       transition-duration: 0.07s;
     }
-
-    /* card bookmark button — defined once below near .card-bookmark-btn section */
-
-    /* ===================== PROGRESS BAR ===================== */
     #progress-bar {
       position: fixed;
       top: 0;
@@ -3186,8 +2950,6 @@
     #progress-bar.visible {
       opacity: 1;
     }
-
-    /* ===================== HOME SEARCH BAR ===================== */
     .home-search-wrap {
       width: 100%;
       max-width: 600px;
@@ -3213,8 +2975,6 @@
       box-sizing: border-box;
       -webkit-appearance: none;
     }
-
-    /* ===================== KEYBOARD FOCUS INDICATORS (WCAG) ===================== */
     [role="button"]:focus-visible,
     .fab:focus-visible,
     .theme-toggle-btn:focus-visible,
@@ -3268,8 +3028,6 @@
       display: flex;
       align-items: center;
     }
-
-    /* Quick-results dropdown */
     #home-search-results {
       position: absolute;
       top: calc(100% + 6px);
@@ -3285,8 +3043,6 @@
       display: none;
       animation: results-in 0.18s cubic-bezier(0.34, 1.4, 0.64, 1) both;
     }
-
-    /* ===================== ELITE UI: SKELETON LOADERS ===================== */
     .skeleton-wrap {
       padding: 16px;
       display: flex;
@@ -3382,8 +3138,6 @@
       text-transform: uppercase;
       opacity: 0.7;
     }
-
-    /* ===================== LINE NUMBERS ===================== */
     .code-scroll pre {
       display: flex;
     }
@@ -3403,20 +3157,15 @@
       white-space: pre;
       border-right: 1px solid var(--border);
       margin-right: 14px;
-      /* Hidden by default — shown when [data-linenums="on"] */
       display: none;
       width: 0;
       overflow: hidden;
     }
-
-    /* When line numbers are enabled */
     [data-linenums="on"] .line-nums {
       display: block;
       width: auto;
       overflow: visible;
     }
-
-    /* ===================== SWIPE HINT (first visit) ===================== */
     #swipe-hint {
       position: fixed;
       bottom: 90px;
@@ -3460,8 +3209,6 @@
         transform: translateY(6px);
       }
     }
-
-    /* ===================== STAGGERED HOME CARD ENTRANCE ===================== */
     .mode-card {
       animation: card-in 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
     }
@@ -3477,8 +3224,6 @@
     .mode-grid .mode-card:nth-child(3) {
       animation-delay: 0.19s;
     }
-
-    /* Download card stagger */
     .pdf-box {
       animation: card-in 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) 0.26s forwards;
       opacity: 0;
@@ -3500,8 +3245,6 @@
         transform: translateY(0) scale(1);
       }
     }
-
-    /* Hero entrance */
     .hero {
       animation: hero-in 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) 0s forwards;
     }
@@ -3517,8 +3260,6 @@
         transform: translateY(0);
       }
     }
-
-    /* ===================== BOOKMARK STAR ON CARD TOPBAR ===================== */
     .card-bookmark-btn {
       background: transparent;
       border: none;
@@ -3547,12 +3288,9 @@
       color: #d2a8ff;
       filter: drop-shadow(0 0 5px rgba(210, 168, 255, 0.6));
     }
-
-    /* ===================== HOME CHIPS (Recent + Bookmarks) ===================== */
     .home-chips-row {
       display: flex;
       flex-wrap: nowrap;
-      /* Always single line */
       gap: 8px;
       margin-top: 4px;
       margin-bottom: 4px;
@@ -3574,20 +3312,16 @@
       color: var(--accent);
       cursor: pointer;
       min-width: 0;
-      /* Allow shrinking */
       overflow: hidden;
       transition: background 0.15s, transform 0.15s;
       animation: chip-in 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) 0.35s forwards;
     }
-
-    /* Text inside recent chip truncates gracefully when space is tight */
     .last-viewed-chip span {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 0;
       max-width: 180px;
-      /* Prevents it pushing bookmark chip off-screen */
     }
 
     .last-viewed-chip:hover {
@@ -3598,11 +3332,8 @@
     .last-viewed-chip:active {
       transform: scale(0.97);
     }
-
-    /* Bookmarks chip — purple gradient glow twin */
     .home-bm-chip {
       display: none;
-      /* shown by JS when bookmarks exist */
       align-items: center;
       gap: 6px;
       background: linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(210, 168, 255, 0.14) 100%);
@@ -3614,9 +3345,7 @@
       color: #d2a8ff;
       cursor: pointer;
       flex-shrink: 0;
-      /* Never collapse — stays fixed width */
       white-space: nowrap;
-      /* Text never wraps */
       transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
       box-shadow: 0 0 10px rgba(210, 168, 255, 0.12);
       animation: chip-in 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) 0.45s forwards;
@@ -3637,8 +3366,6 @@
       border-color: rgba(130, 80, 223, 0.3);
       background: linear-gradient(135deg, rgba(9, 105, 218, 0.08) 0%, rgba(130, 80, 223, 0.1) 100%);
     }
-
-    /* Empty state — both chips dimmed when no data */
     .last-viewed-chip.chip-empty,
     .home-bm-chip.chip-empty {
       opacity: 0.45;
@@ -3658,8 +3385,6 @@
       letter-spacing: 0.01em;
     }
     .home-first-hint.hidden { display: none; }
-
-    /* Desktop: centre the chips row to match centred hero layout */
     @media(min-width: 900px) {
       .home-chips-row {
         justify-content: center;
@@ -3668,8 +3393,6 @@
       .last-viewed-chip span {
         max-width: 260px;
       }
-
-      /* More room on desktop */
     }
 
     @keyframes chip-in {
@@ -3683,8 +3406,6 @@
         transform: scale(1);
       }
     }
-
-    /* ===================== SHEET TABS (All / Bookmarks) ===================== */
     .sheet-tabs {
       display: flex;
       gap: 0;
@@ -3711,16 +3432,12 @@
       color: var(--accent);
       border-bottom-color: var(--accent);
     }
-
-    /* Active program highlight in sheet list */
     .sheet-list li.active-program {
       background: rgba(88, 166, 255, 0.08);
       color: var(--accent);
       border-left: 2px solid var(--accent);
       padding-left: 22px;
     }
-
-    /* ===================== RESPONSIVE updates for new elements ===================== */
     @media(min-width: 600px) {
       .home-search-wrap {
         margin-bottom: 16px;
@@ -3738,8 +3455,6 @@
         max-width: 700px;
       }
     }
-
-    /* ===================== LOADING SCREEN ===================== */
     #startup-loader {
       position: fixed;
       inset: 0;
@@ -3783,14 +3498,11 @@
         opacity: 1;
       }
     }
-
-    /* Scramble loader text — same width as bar via flex */
     .loader-label-wrap {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
-      /* width is controlled by JS after text is measured */
     }
 
     .loader-scramble-text {
@@ -3839,16 +3551,12 @@
       }
     }
 
-    /* ===================== MOBILE RESPONSIVE (≤599px only — desktop untouched) ===================== */
-
     /*
   Strategy:
   - #home uses flex-direction: column — we push .home-footer to the bottom with margin-top: auto
   - All sizing uses proportional scaling so every element shrinks together symmetrically
   - Desktop (600px+) is completely unaffected — every rule is inside max-width: 599px
 */
-
-    /* ── HOME: make footer always stick to bottom of viewport on mobile ── */
     @media (max-width: 599px) {
       #home {
         display: flex;
@@ -3859,8 +3567,6 @@
         overflow-y: auto;
         padding: 0 0 0;
       }
-
-      /* Spacer that absorbs leftover space so footer is pushed down */
       .home-footer {
         margin-top: auto;
         width: 100%;
@@ -3869,13 +3575,9 @@
         flex-shrink: 0;
         text-align: center;
       }
-
-      /* Safe area for notch / home indicator */
       .home-footer {
         padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
       }
-
-      /* ── Hero band ── */
       .home-hero-band {
         padding: 0 14px 14px;
         margin-bottom: 14px;
@@ -3918,8 +3620,6 @@
         margin-top: 10px;
         margin-bottom: 6px;
       }
-
-      /* ── Card icon & text — forced comfortable mobile sizes ── */
       .card-icon svg {
         width: 36px;
         height: 36px;
@@ -3937,8 +3637,6 @@
       .card-desc {
         font-size: 14px;
       }
-
-      /* ── Download icon & text — forced comfortable mobile sizes ── */
       .dl-icon {
         width: 42px;
         height: 42px;
@@ -3951,8 +3649,6 @@
       .dl-sub {
         font-size: 13px;
       }
-
-      /* ── Mode grid: always 2 columns, even spacing ── */
       .mode-grid {
         width: 100%;
         max-width: 100%;
@@ -3981,8 +3677,6 @@
         padding: 0 16px;
         box-sizing: border-box;
       }
-
-      /* ── Download action grid: single column ── */
       .action-grid {
         width: 100%;
         max-width: 100%;
@@ -4008,8 +3702,6 @@
         flex: none;
         height: 80px;
       }
-
-      /* ── Search bar ── */
       .home-search-wrap {
         padding: 0 14px;
         margin-bottom: 14px;
@@ -4017,8 +3709,6 @@
         max-width: 100%;
         box-sizing: border-box;
       }
-
-      /* ── Code view snap cards ── */
       .snap {
         padding: 8px;
       }
@@ -4061,8 +3751,6 @@
         font-size: clamp(12.5px, 3.4vw, 14.5px);
         line-height: 1.75;
       }
-
-      /* ── FABs ── */
       .fabs {
         bottom: 16px;
         right: 16px;
@@ -4078,8 +3766,6 @@
         width: 28px;
         height: 28px;
       }
-
-      /* ── Sheet ── */
       .sheet-list li {
         padding: 12px 20px;
         gap: 10px;
@@ -4093,8 +3779,6 @@
         padding: 10px 14px 8px;
       }
     }
-
-    /* ── Very small phones (≤380px): scale everything down proportionally ── */
     @media (max-width: 380px) {
       .home-hero-band {
         padding: 0 12px 12px;
@@ -4104,8 +3788,6 @@
       .home-topbar {
         padding: 8px 0 10px;
       }
-
-      /* Topbar controls */
       .topbar-badge {
         font-size: 10px;
         height: 34px;
@@ -4119,8 +3801,6 @@
         height: 34px;
         border-radius: min(var(--radius, 10px), 10px);
       }
-
-      /* Hero */
       .hero-title {
         font-size: clamp(24px, 7.5vw, 30px);
         margin-bottom: 5px;
@@ -4130,8 +3810,6 @@
         font-size: 12px;
         line-height: 1.5;
       }
-
-      /* Mode grid */
       .mode-grid {
         padding: 0 12px;
         gap: 12px;
@@ -4171,8 +3849,6 @@
       .mode-card>div:not(.card-icon) {
         padding-right: 22px;
       }
-
-      /* Download cards */
       .action-grid {
         padding: 0 12px;
         gap: 12px;
@@ -4198,8 +3874,6 @@
       .dl-sub {
         font-size: 11.5px;
       }
-
-      /* Search */
       .home-search-wrap {
         padding: 0 12px;
         margin-bottom: 12px;
@@ -4214,15 +3888,11 @@
       .home-search-icon {
         left: 26px;
       }
-
-      /* Footer */
       .home-footer {
         font-size: 11px;
         padding: 8px 12px;
         padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
       }
-
-      /* FABs */
       .fabs {
         bottom: 12px;
         right: 12px;
@@ -4233,8 +3903,6 @@
         width: 42px;
         height: 42px;
       }
-
-      /* Code view */
       .snap {
         padding: 6px;
       }
@@ -4294,8 +3962,6 @@
       [data-font="md"] {
         --code-size: 12px;
       }
-
-      /* Sheet */
       .sheet-hdr {
         padding: 12px 16px;
       }
@@ -4318,8 +3984,6 @@
         left: 20px;
       }
     }
-
-    /* ── Landscape phones (short + wide): compress vertically ── */
     @media (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
       .home-hero-band {
         padding: 0 16px 8px;
@@ -4401,8 +4065,6 @@
         line-height: 1.6;
       }
     }
-
-    /* ── Safe area for FABs and toast (all sizes) ── */
     @supports (padding: env(safe-area-inset-bottom)) {
       @media (max-width: 599px) {
         .fabs {
@@ -4419,18 +4081,13 @@
         }
       }
     }
-
-    /* ===================== DESKTOP SINGLE-MODE CODE CONSTRAINT ===================== */
     @media(min-width: 900px) {
 
       #app[data-mode="C"] .card,
       #app[data-mode="CPP"] .card {
         max-width: 1200px;
-        /* Big enough for IDE feel, but not infinitely stretched */
         margin: 0 auto;
       }
-
-      /* Scale up fonts significantly for desktop so code isn't tiny */
       [data-font="sm"] {
         --code-size: 21px;
       }
@@ -4460,19 +4117,12 @@
         font-size: var(--code-size);
       }
     }
-
-    /* ===== DUET LOGO — dark/light theme adaptive ===== */
-    /* Always keep the background squircle white */
     .logo-adaptive .st0 {
       fill: #FFFFFF !important;
     }
-
-    /* Dark mode (default): Foreground text/graphics are Theme Blue */
     .logo-adaptive path:not(.st0) {
       fill: var(--accent) !important;
     }
-
-    /* Light mode: Foreground text/graphics are Black */
     [data-theme="light"] .logo-adaptive path:not(.st0) {
       fill: var(--text) !important;
     }

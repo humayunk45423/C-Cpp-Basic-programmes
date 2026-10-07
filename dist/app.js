@@ -1,8 +1,4 @@
 
-
-    // ================================================
-    // INDENT TOGGLE (IDE style ↔ Flat / no-indent)
-    // ================================================
     let currentIndent = safeGet('duet-indent') || 'ide'; // 'ide' | 'flat'
  
     function flattenCode(code) {
@@ -11,15 +7,12 @@
  
     function applyIndentToAll() {
       const all = Array.from(document.querySelectorAll('.code-scroll code'));
-      // Elite: Only highlight visible/nearby cards immediately, defer others
       all.forEach((el, i) => {
         const original = el.dataset.original;
         if (!original) return;
         el.classList.remove('hljs');
         delete el.dataset.highlighted;
         el.textContent = (currentIndent === 'flat') ? flattenCode(original) : original;
-        
-        // Elite: Refresh line numbers to match the new text transformation
         const lineNums = el.previousElementSibling;
         if (lineNums && lineNums.classList.contains('line-nums')) {
            const lineCount = el.textContent.split('\n').length;
@@ -59,10 +52,6 @@
         if (el2) el2.innerHTML = `<use href="${iconId}"/>`;
       });
     })();
-
-    // ================================================
-    // THEME LOGIC
-    // ================================================
     const ICON_SUN = '<svg width="22px" height="22px"><use href="#ic-sun"/></svg>';
     const ICON_MOON = '<svg width="22px" height="22px"><use href="#ic-moon"/></svg>';
 
@@ -79,19 +68,14 @@
     function fontToast(label) { return T_ICON('ic-font') + '<span>Text: ' + label + '</span>'; }
     // Layout toast helper
     function layoutToast(label) { return T_ICON(label === 'Stacked' ? 'ic-stacked' : 'ic-split') + '<span>' + label + '</span>'; }
-
-    // ===================== STORAGE HELPERS =====================
     function safeSave(key, val) {
       try { localStorage.setItem(key, val); } catch(e) { console.warn('Storage failed', e); }
     }
     function safeGet(key) {
       try { return localStorage.getItem(key); } catch(e) { return null; }
     }
-
-    // ================================================
     // THEME PRESETS — Exactly 3 Curated Modes
     // 1. Modern Standard  2. Geek Terminal  3. Classic Monolith
-    // ================================================
     const PRESETS = ['modern', 'geek', 'classic'];
 
     // Build and inject panel once at body level
@@ -324,10 +308,6 @@
       document.getElementById('themeBtn').setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
       document.getElementById('themeFab').innerHTML = icon;
     })();
-
-    // ================================================
-    // FONT SIZE SCALES
-    // ================================================
     const FONTS = ['sm', 'md', 'lg'];
     // Fab labels show CURRENT size clearly
     const FONT_FAB_LABELS = ['Aa·S', 'Aa·M', 'Aa·L'];
@@ -364,10 +344,6 @@
         applyFontFab();
       }
     })();
-
-    // ================================================
-    // LAYOUT TOGGLE (Compare Mode Only)
-    // ================================================
     let currentLayout = 'row';
 
     function toggleLayout() {
@@ -386,14 +362,8 @@
       const label = currentLayout === 'col' ? 'Stacked' : 'Side by Side';
       showToast(layoutToast(label));
     }
-
-    // ================================================
-    // NAVIGATION, HISTORY API & INTERSECTION OBSERVER
-    // ================================================
     let codeObserver = null;
     let currentMode = null; // Store current mode to recreate if navigating via back button
-
-    // Elite: Haptic feedback utility
     function haptic(ms = 12) {
       if (window.navigator && window.navigator.vibrate) {
         window.navigator.vibrate(ms);
@@ -563,8 +533,6 @@
           buildPrograms(state.mode);
           document.getElementById('layoutFab').style.display = state.mode === 'BOTH' ? 'flex' : 'none';
         }
-
-        // Elite: Snap to last viewed index for this mode every time we return to App UI
         const lv = getLastViewed();
         if (lv && lv.mode === (state.mode || currentMode)) {
           let attempts = 0;
@@ -602,8 +570,6 @@
       document.getElementById('app').scrollTop = 0;
       document.getElementById('layoutFab').style.display = mode === 'BOTH' ? 'flex' : 'none';
       history.pushState({ screen: 'app', mode: mode }, '', window.location.pathname + window.location.search);
-
-      // Elite: Inject skeleton loader immediately for perceived speed
       const container = document.getElementById('prog-container');
       container.innerHTML = `
         <div class="skeleton-wrap">
@@ -625,7 +591,6 @@
       dismissToast();
       
       if (state && (state.screen === 'menu' || state.screen === 'app')) {
-        // Elite: Decisive double-back for deep navigation history
         history.go(state.screen === 'menu' ? -2 : -1);
       } else {
         showHomeUI();
@@ -652,8 +617,6 @@
       const sheetTitles = { C: 'C Programs', CPP: 'C++ Programs', BOTH: 'C & C++ Comparison' };
       document.getElementById('sheetTitle').textContent = sheetTitles[mode];
       if (codeObserver) codeObserver.disconnect();
-
-      // Elite: Batch Rendering (Chunking)
       // We render 15 programs at a time to keep the main thread free for animations.
       const BATCH_SIZE = 15;
       let currentIdx = 0;
@@ -756,7 +719,6 @@
               ? rawLines.map(l => l.slice(minIndent)).join('\n')
               : rawLines.join('\n');
             const inner = document.createElement('span');
-            // Fix: CENTERED pyramids use "X " (char+space = 2-char units) but indent
             // uses single spaces → double leading spaces ONLY for CENTERED PYRAMID patterns.
             const isCenteredPyramid = title.toUpperCase().includes('CENTERED PYRAMID');
             let displayText = normalized;
@@ -874,10 +836,6 @@
 
       return pane;
     }
-
-    // ================================================
-    // COPY UTILITY 
-    // ================================================
     function copyCode(code, btn) {
       const CHECK = T_ICON('ic-check') + '<span>Copied!</span>';
       const COPY = T_ICON('ic-copy') + '<span>Copy</span>';
@@ -908,18 +866,10 @@
       document.body.removeChild(ta);
       if (ok) cb(); else showToast(TOAST_COPYFAIL);
     }
-
-    // ================================================
-    // BOTTOM SHEET MENU (History Linked)
-    // ================================================
     function toggleMenu() {
       const sheet = document.getElementById('sheet');
       sheet.classList.contains('show') ? closeMenu() : openMenuSheet();
     }
-
-    // ================================================
-    // FAB PANEL TOGGLE — interrupt-safe, no transitionend
-    // ================================================
     (function () {
       var _fabOpen = false;   // true = expanded
       var _fabBusy = false;   // mid-animation lock
@@ -1110,10 +1060,6 @@
         closeMenuUI();
       }
     }
-
-    // ================================================
-    // PDF DOWNLOAD — no override needed; let native <a download> handle it
-    // ================================================
     function handlePdfClick(e, anchor) {
       // Native anchor click handles download; only intercept if href is missing
       if (!anchor.href || anchor.href === window.location.href) {
@@ -1121,10 +1067,6 @@
         showToast(TOAST_PDFMISS);
       }
     }
-
-    // ================================================
-    // TOAST UTILITY
-    // ================================================
     let toastTimer = null;
     function showToast(html, theme) {
       const t = document.getElementById('toast');
@@ -1144,10 +1086,6 @@
       toastTimer = null;
       document.getElementById('toast').classList.remove('show');
     }
-
-    // ================================================
-    // BOOKMARKS — stores [{idx, mode}] with mode tracking
-    // ================================================
     function _bmMigrate(raw) {
       // Migrate old format (array of numbers) to new [{idx,mode}] format
       if (!Array.isArray(raw)) return [];
@@ -1226,10 +1164,6 @@
       const text = `DUET Code Study List:\n${list}\n\nGenerated via DUET Code App.`;
       copyCode(text, document.querySelector('#menuList .copy-btn'));
     };
-
-    // ================================================
-    // LAST VIEWED — remember which program + mode was last open
-    // ================================================
     function saveLastViewed(mode, idx) {
       safeSave('duet-last', JSON.stringify({ mode, idx }));
       updateLastViewedChip();
@@ -1252,12 +1186,10 @@
         chip.classList.add('chip-empty');
       }
     }
-    // ================================================
     // SNAP SCROLL HELPER — instant jump to exact snap point
     // scrollIntoView({behavior:'smooth'}) fights scroll-snap-type and
     // lands between cards. We disable scroll-behavior briefly, set
     // scrollTop directly (which snaps instantly), then restore.
-    // ================================================
     function _snapTo(idx) {
       const app = document.getElementById('app');
       const el  = document.getElementById('s' + idx);
@@ -1327,10 +1259,6 @@
         setTimeout(() => { app.style.scrollBehavior = ''; }, 800);
       }
     }
-
-    // ================================================
-    // PROGRESS BAR
-    // ================================================
     function initProgressBar(appEl) {
       const bar = document.getElementById('progress-bar');
       if (!bar) return;
@@ -1351,10 +1279,6 @@
       }
       appEl.addEventListener('scroll', update, { passive: true });
     }
-
-    // ================================================
-    // LINE NUMBERS TOGGLE
-    // ================================================
     (function initLineNums() {
       // Restore saved state — default is 'off'
       const saved = safeGet('duet-linenums') || 'off';
@@ -1389,10 +1313,6 @@
       const label = next === 'on' ? 'Line numbers on' : 'Line numbers off';
       showToast(T_ICON('ic-indent') + `<span>${label}</span>`);
     };
-
-    // ================================================
-    // SWIPE HINT (show once on first visit to code view)
-    // ================================================
     function showSwipeHintOnce() {
       if (safeGet('duet-swipe-seen')) return;
       const hint = document.getElementById('swipe-hint');
@@ -1401,10 +1321,6 @@
       setTimeout(() => { hint.classList.remove('show'); }, 3000);
       safeSave('duet-swipe-seen', '1');
     }
-
-    // ================================================
-    // DEBOUNCE UTILITY (Performance)
-    // ================================================
     function debounce(func, wait) {
       let timeout;
       return function (...args) {
@@ -1412,8 +1328,6 @@
         timeout = setTimeout(() => func.apply(this, args), wait);
       };
     }
-
-    // Elite: Scoring Fuzzy Search
     function fuzzyMatch(text, q) {
       text = text.toLowerCase();
       q = q.toLowerCase();
@@ -1427,8 +1341,6 @@
       }
       return score;
     }
-
-    // Elite: Visual Search Highlighting
     function highlightMatch(text, q) {
       if (!q) return text;
       // Escape for HTML rendering
@@ -1436,10 +1348,6 @@
       const regex = new RegExp(`(${q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
       return esc.replace(regex, '<mark class="search-hl">$1</mark>');
     }
-
-    // ================================================
-    // HOME SEARCH
-    // ================================================
     (function initHomeSearch() {
       const input = document.getElementById('homeSearch');
       const results = document.getElementById('home-search-results');
@@ -1500,10 +1408,6 @@
       };
       trySnap();
     };
-
-    // ================================================
-    // SHEET TABS (All / Bookmarks)
-    // ================================================
     let _sheetTab = 'all';
     window.switchSheetTab = function (tab) {
       if (_sheetTab !== tab) haptic(8);
@@ -1540,8 +1444,6 @@
         // In bookmark tab: show one entry per bookmark (may have same idx in different modes)
         items.forEach(li => { li.style.display = 'none'; });
         const listEl = document.getElementById('menuList');
-        
-        // Elite: Detect if we have zero search results
         let totalSearchFound = 0;
 
         // Remove old bm-extra entries
@@ -1669,10 +1571,6 @@
         }
       }
     };
-
-    // ================================================
-    // INIT LAST VIEWED CHIP & PRELOADS
-    // ================================================
     document.addEventListener('DOMContentLoaded', () => { 
       updateLastViewedChip(); 
       updateHomeBmChip();
@@ -1681,14 +1579,9 @@
         const firstHint = document.getElementById('home-first-hint');
         if (firstHint) firstHint.classList.add('hidden');
       }
-      // Elite: Proactively start loading highlight.js while user is on Home page
       // so it's ready before they even tap a mode.
       setTimeout(() => { if (typeof _loadHljs === 'function') _loadHljs('C', () => {}); }, 1500);
     });
-
-    // ================================================
-    // KEYBOARD: Global Shortcuts & Accessibility
-    // ================================================
     document.addEventListener('keydown', e => {
       // 1. Accessibility: Enter or Space key on focused mode-cards
       if (e.key === 'Enter' || e.key === ' ') {
@@ -1729,7 +1622,6 @@
 
     // OVERRIDE buildPrograms to inject line numbers,
     // bookmark buttons, last-viewed tracking, swipe hint
-    // ================================================
     const _origBuildPrograms = buildPrograms;
     buildPrograms = function (mode) {
       _origBuildPrograms(mode);
@@ -1770,10 +1662,6 @@
     window.addEventListener('resize', setVH, { passive: true });
 
     // FAB init handled by toggleFabs IIFE above
-
-    // ================================================
-    // KEYBOARD NAVIGATION 
-    // ================================================
     document.addEventListener('keydown', e => {
       const app = document.getElementById('app');
       if (!app.classList.contains('show')) return;
@@ -1785,10 +1673,6 @@
       if (e.key === 'Home') { e.preventDefault(); app.scrollTo({ top: 0, behavior: 'smooth' }); }
       if (e.key === 'End') { e.preventDefault(); app.scrollTo({ top: app.scrollHeight, behavior: 'smooth' }); }
     });
-
-    // ================================================
-    // SEARCH IN JUMP MENU
-    // ================================================
     (function initMenuSearch() {
       function setup() {
         const menuSearchEl = document.getElementById('menuSearch');
@@ -1816,7 +1700,6 @@
       if (s) { s.value = ''; s.dispatchEvent(new Event('input')); }
     }
 
-
     // ── A11y: Ensure mode cards are keyboard accessible ──
     document.querySelectorAll('.mode-card').forEach(card => {
       if (!card.getAttribute('role')) card.setAttribute('role', 'button');
@@ -1832,10 +1715,6 @@
       if (live) { live.textContent = ''; setTimeout(() => { live.textContent = msg; }, 50); }
     }
     window._announcePageChange = announcePageChange;
-
-    // ================================================
-    // PULL-TO-RELOAD — native app feel
-    // ================================================
     (function () {
       const home = document.getElementById('home');
       const wrap = document.getElementById('ptr-wrap');
@@ -1869,8 +1748,6 @@
         const isReleasing = progress >= 1;
         const wasReleasing = spinner.classList.contains('releasing');
         spinner.classList.toggle('releasing', isReleasing);
-        
-        // Elite: Tactile click when reaching threshold
         if (isReleasing && !wasReleasing) haptic(20);
       }, { passive: true });
 
@@ -1896,8 +1773,6 @@
         }
         delta = 0;
       });
-
-      // Fix: handle touch cancel (phone calls, system interrupts) to avoid stuck state
       home.addEventListener('touchcancel', () => {
         if (!pulling) return;
         pulling = false;
@@ -1908,10 +1783,6 @@
         spinner.style.opacity = '0';
       });
     })();
-
-    // ================================================
-    // LOADING SCREEN LOGIC
-    // ================================================
     document.addEventListener('DOMContentLoaded', () => {
       try { updateHomeBmChip(); } catch (e) { }
       try { updateLastViewedChip(); } catch (e) { }
@@ -1979,10 +1850,6 @@
       if (textEl) textEl.textContent = scramble(0); // start scrambled
       setTimeout(tick, 50);
     });
-
-    // ============================================================
-    // FOCUS TRAP for bottom sheet (accessibility)
-    // ============================================================
     // Add .is-desktop class to body for cleaner CSS targeting
     (function () {
       function setDesktop() {
