@@ -8,9 +8,12 @@ if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
 
 // Files to copy into dist alongside the minified HTML
 const assets = [
+  'duetcode.svg',
+  'manifest.json',
+  'sw.js',
   'DUET Admission C.pdf',
   'DUET Admission Cpp.pdf',
-  'DUET — C & C++ Programs Combined.pdf',
+  'DUET C & C++ Programs.pdf',
   'duet-admission-c-programs.pdf',
   'duet-admission-cpp-programs.pdf',
 ];
