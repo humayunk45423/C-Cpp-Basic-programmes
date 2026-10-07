@@ -871,177 +871,35 @@
       sheet.classList.contains('show') ? closeMenu() : openMenuSheet();
     }
     (function () {
-      var _fabOpen = false;   // true = expanded
-      var _fabBusy = false;   // mid-animation lock
-      var _fabTimer = null;    // cleanup timeout handle
-      var ANIM_MS = 220;     // must match CSS transition duration on .fab-collapsible
-      var HEIGHT_MS = 200;     // height animation duration
-      // stagger delays (ms) for each button index 0-3
-      var DELAYS_OPEN = [360, 300, 240, 180, 120, 60, 0];   // bottom-first when expanding
-      var DELAYS_CLOSE = [0, 60, 120, 180, 240, 300, 360];  // top-first when collapsing (reversed)
+      var _fabOpen = false;
 
-      function getFabs() {
-        return Array.from(document.querySelectorAll('#fabsCollapsible .fab-collapsible'))
-          .filter(el => el.style.display !== 'none');
-      }
-
-      function setHeight(wrap, px) {
-        wrap.style.transition = 'height ' + HEIGHT_MS + 'ms ease';
-        wrap.style.height = px + 'px';
-      }
-
-      function clearTimers() {
-        if (_fabTimer) { clearTimeout(_fabTimer); _fabTimer = null; }
-      }
-
-      function abortAnim(wrap, fabs) {
-        // Snap everything to current computed position instantly, kill transitions
-        var currentH = wrap.offsetHeight;
-        wrap.style.transition = 'none';
-        wrap.style.height = currentH + 'px';
-        fabs.forEach(function (el) {
-          var cs = window.getComputedStyle(el);
-          el.style.transition = 'none';
-          el.style.opacity = cs.opacity;
-          el.style.transform = cs.transform;
-        });
-        // Force reflow to commit
-        wrap.offsetHeight;
-      }
-
-      // Expose collapse-only function — called by showHomeUI to reset state on every home return
       window.collapseFabs = function () {
-        var wrap = document.getElementById('fabsCollapsible');
+        if (!_fabOpen) return;
+        var fabs = document.getElementById('fabs');
         var btn = document.getElementById('fabToggle');
-        var fabs = getFabs();
-        if (!wrap || !_fabOpen) return; // already collapsed, nothing to do
-        clearTimers();
-        if (_fabBusy) abortAnim(wrap, fabs);
+        if (!fabs) return;
         _fabOpen = false;
-        _fabBusy = true;
-        btn.classList.remove('open');
-        // Lock current height, then stagger-fade out buttons, then collapse height
-        wrap.style.transition = 'none';
-        wrap.style.height = wrap.scrollHeight + 'px';
-        wrap.offsetHeight;
-        fabs.forEach(function (el, i) {
-          var delay = DELAYS_CLOSE[i] !== undefined ? DELAYS_CLOSE[i] : 0;
-          setTimeout(function () {
-            el.style.transition = 'opacity ' + ANIM_MS + 'ms ease, transform ' + ANIM_MS + 'ms ease';
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(10px) scale(0.82)';
-            el.style.pointerEvents = 'none';
-          }, delay);
-        });
-        var heightDelay = DELAYS_CLOSE[0] + ANIM_MS;
-        setTimeout(function () { setHeight(wrap, 0); }, heightDelay);
-        var totalMs = heightDelay + HEIGHT_MS + 30;
-        _fabTimer = setTimeout(function () {
-          wrap.style.transition = 'none';
-          wrap.style.height = '0px';
-          _fabBusy = false;
-        }, totalMs);
+        fabs.classList.remove('open');
+        if (btn) {
+          btn.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'Open settings menu');
+        }
       };
 
       window.toggleFabs = function () {
         haptic(5);
-        var wrap = document.getElementById('fabsCollapsible');
+        var fabs = document.getElementById('fabs');
         var btn = document.getElementById('fabToggle');
-        var fabs = getFabs();
-        if (!wrap || !fabs.length) return;
-
-        clearTimers();
-        if (_fabBusy) abortAnim(wrap, fabs);
-
-        _fabBusy = true;
+        if (!fabs) return;
         _fabOpen = !_fabOpen;
-        btn.classList.toggle('open', _fabOpen);
-        btn.setAttribute('aria-expanded', _fabOpen);
-        btn.setAttribute('aria-label', _fabOpen ? 'Close settings menu' : 'Open settings menu');
-
-        if (_fabOpen) {
-          // --- EXPAND ---
-          // Make sure buttons start from hidden position (no transition yet)
-          fabs.forEach(function (el) {
-            el.style.transition = 'none';
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(10px) scale(0.82)';
-            el.style.pointerEvents = 'none';
-            el.classList.remove('fc-hidden', 'fc-visible');
-          });
-
-          // Measure full natural height
-          wrap.style.transition = 'none';
-          wrap.style.height = 'auto';
-          var fullH = wrap.scrollHeight;
-          wrap.style.height = '0px';
-          wrap.offsetHeight; // reflow
-
-          // Animate height open
-          setHeight(wrap, fullH);
-
-          // Stagger each button in
-          fabs.forEach(function (el, i) {
-            var delay = DELAYS_OPEN[i] !== undefined ? DELAYS_OPEN[i] : 0;
-            setTimeout(function () {
-              el.style.transition = 'opacity ' + ANIM_MS + 'ms ease, transform ' + ANIM_MS + 'ms ease';
-              el.style.opacity = '1';
-              el.style.transform = 'translateY(0) scale(1)';
-              el.style.pointerEvents = 'auto';
-            }, delay);
-          });
-
-          var totalMs = HEIGHT_MS + Math.max.apply(null, DELAYS_OPEN) + ANIM_MS + 30;
-          _fabTimer = setTimeout(function () {
-            wrap.style.transition = 'none';
-            wrap.style.height = 'auto';
-            _fabBusy = false;
-          }, totalMs);
-
-        } else {
-          // --- COLLAPSE ---
-          // Lock current height before animating
-          wrap.style.transition = 'none';
-          wrap.style.height = wrap.scrollHeight + 'px';
-          wrap.offsetHeight; // reflow
-
-          // Stagger each button out
-          fabs.forEach(function (el, i) {
-            var delay = DELAYS_CLOSE[i] !== undefined ? DELAYS_CLOSE[i] : 0;
-            setTimeout(function () {
-              el.style.transition = 'opacity ' + ANIM_MS + 'ms ease, transform ' + ANIM_MS + 'ms ease';
-              el.style.opacity = '0';
-              el.style.transform = 'translateY(10px) scale(0.82)';
-              el.style.pointerEvents = 'none';
-            }, delay);
-          });
-
-          // Start collapsing height after first button has started fading (add small buffer)
-          var heightDelay = DELAYS_CLOSE[0] + ANIM_MS;
-          setTimeout(function () { setHeight(wrap, 0); }, heightDelay);
-
-          var totalMs = heightDelay + HEIGHT_MS + 30;
-          _fabTimer = setTimeout(function () {
-            wrap.style.transition = 'none';
-            wrap.style.height = '0px';
-            _fabBusy = false;
-          }, totalMs);
+        fabs.classList.toggle('open', _fabOpen);
+        if (btn) {
+          btn.classList.toggle('open', _fabOpen);
+          btn.setAttribute('aria-expanded', String(_fabOpen));
+          btn.setAttribute('aria-label', _fabOpen ? 'Close settings menu' : 'Open settings menu');
         }
       };
-
-      // Init — start collapsed, buttons hidden
-      document.addEventListener('DOMContentLoaded', function () {
-        var wrap = document.getElementById('fabsCollapsible');
-        if (!wrap) return;
-        wrap.style.transition = 'none';
-        wrap.style.height = '0px';
-        getFabs().forEach(function (el) {
-          el.style.transition = 'none';
-          el.style.opacity = '0';
-          el.style.transform = 'translateY(10px) scale(0.82)';
-          el.style.pointerEvents = 'none';
-        });
-      });
     })();
 
     function openMenuSheet() {
@@ -1452,9 +1310,9 @@
         // Header for bookmark tab with Export button
         const hdr = document.createElement('li');
         hdr.dataset.bmExtra = '1';
-        hdr.style.cssText = 'padding:12px 16px 8px;display:flex;justify-content:space-between;align-items:center;background:var(--surface);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border)';
-        hdr.innerHTML = `<span style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${bm.length} Saved</span>
-          <button class="copy-btn" style="padding:4px 8px;font-size:10px" onclick="exportBookmarks()">
+        hdr.className = 'bm-header';
+        hdr.innerHTML = `<span class="bm-count">${bm.length} Saved</span>
+          <button class="copy-btn" onclick="exportBookmarks()">
             <svg width="11" height="11" style="vertical-align:-1px;margin-right:4px"><use href="#ic-copy"/></svg>Copy Study List
           </button>`;
         listEl.appendChild(hdr);
@@ -1469,7 +1327,7 @@
           const li = document.createElement('li');
           li.dataset.bmExtra = '1';
           li.dataset.score = score;
-          li.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;position:relative;';
+          li.className = 'bm-item';
 
           // Navigate on row click (except remove button)
           li.onclick = (e) => {
@@ -1527,8 +1385,8 @@
           };
 
           li.innerHTML = `
-            <span class="prog-num" style="flex-shrink:0">${idx + 1}</span>
-            <span class="prog-title" style="flex:1;font-size:13px;font-weight:600">${highlightMatch(title, q)}</span>
+            <span class="prog-num">${idx + 1}</span>
+            <span class="prog-title">${highlightMatch(title, q)}</span>
             <span class="bm-mode-badge">${modeLabel}</span>`;
           li.appendChild(removeBtn);
           listEl.appendChild(li);
