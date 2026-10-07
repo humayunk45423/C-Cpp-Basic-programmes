@@ -745,9 +745,7 @@
           // Show explanation for ALL programs (Bangla + pattern demos)
           if (pattern && pattern.trim()) {
             const pat = document.createElement('div');
-            const isVisualPattern = title.toUpperCase().includes('PATTERN') ||
-                                    title.toUpperCase().includes('PYRAMID') ||
-                                    title.toUpperCase().includes('TRIANGLE');
+            const isVisualPattern = title.toUpperCase().startsWith('PATTERN');
             pat.className = isVisualPattern ? 'pattern' : 'pattern bn-expl';
             const rawLines = pattern.split('\n').map(l => l.trimEnd());
             const nonEmpty = rawLines.filter(l => l.trim());

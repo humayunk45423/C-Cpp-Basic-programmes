@@ -2078,13 +2078,16 @@
       line-height: 1.85;
       letter-spacing: 0.015em;
       color: var(--text);
-      background: var(--surface2, rgba(255, 255, 255, 0.03));
+      background-color: var(--code-bg);
       border-bottom: 1px solid var(--border);
       padding: clamp(12px, 1.3vw, 18px) clamp(16px, 2.2vw, 32px);
       white-space: pre-wrap;
       word-break: break-word;
       overflow-x: hidden;
       text-align: left;
+    }
+    [data-theme="light"] .pattern.bn-expl {
+      background-color: var(--surface);
     }
     .pattern.bn-expl > span {
       display: block;
