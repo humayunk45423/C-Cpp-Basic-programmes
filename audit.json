@@ -1,6 +1,6 @@
 {
   "audit_date": "2026-10-08",
-  "target_url": "https://humayounkobir.vercel.app",
+  "target_url": "https://duetcode.vercel.app",
   "gates_evaluated": 27,
   "status": "passed",
   "core_web_vitals": {

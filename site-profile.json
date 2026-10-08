@@ -1,9 +1,9 @@
 {
   "site_name": "DUET Code — C & C++ Admission Programs",
   "short_name": "DUET Code",
-  "canonical_origin": "https://humayounkobir.vercel.app",
+  "canonical_origin": "https://duetcode.vercel.app",
   "author": "Humayoun Kobir",
-  "author_url": "https://humayounkobir.vercel.app",
+  "author_url": "https://duetcode.vercel.app",
   "github_repo": "https://github.com/humayunk45423/C-Cpp-Basic-programmes",
   "target_audience": "DUET (Dhaka University of Engineering & Technology) admission candidates, Diploma engineering students, Polytechnic diploma graduates, B.Sc in CSE/EEE/ETE aspirants, C & C++ beginner students",
   "primary_entity": "DUET Admission C & C++ Programming Syllabus",
@@ -42,7 +42,7 @@
     {
       "label": "Offline Status",
       "value": "100% Client-Side Local Execution (No server dependencies)",
-      "source_url": "https://humayounkobir.vercel.app",
+      "source_url": "https://duetcode.vercel.app",
       "verified_on": "2026-10-08"
     }
   ]

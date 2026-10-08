@@ -1,6 +1,6 @@
 # DUET Code — C & C++ Basic Admission Programs
 
-> Canonical URL: https://humayounkobir.vercel.app
+> Canonical URL: https://duetcode.vercel.app
 > Repository: https://github.com/humayunk45423/C-Cpp-Basic-programmes
 > Maintainer: Humayoun Kobir
 > Verified Date: 2026-10-08

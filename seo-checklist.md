@@ -1,6 +1,6 @@
 # Master SEO Release Gates Checklist (R1–R27)
 
-All release gates have been audited and verified for `https://humayounkobir.vercel.app`:
+All release gates have been audited and verified for `https://duetcode.vercel.app`:
 
 - [x] **R1. Zero Keyword Stuffing:** Natural prose and semantic direct answers; no keyword lists or hidden spam.
 - [x] **R2. Comprehensive Content:** 111 complete, compiler-tested programs with dual C/C++ code and explanations.

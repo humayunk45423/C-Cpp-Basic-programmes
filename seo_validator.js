@@ -34,7 +34,7 @@ eval(programsJs.replace('const data =', 'global.data ='));
 check('R2', 'Comprehensive Content Depth', global.data.length >= 100, `Found ${global.data.length} programs`);
 
 // R3: Clean Links
-check('R3', 'Sitemap File Exists & Valid', sitemap.includes('<loc>https://humayounkobir.vercel.app/</loc>'));
+check('R3', 'Sitemap File Exists & Valid', sitemap.includes('<loc>https://duetcode.vercel.app/</loc>'));
 
 // R4: Fact Verification
 check('R4', 'Fact Source & Verification Date', siteProfile && siteProfile.facts.every(f => f.verified_on && f.source_url));

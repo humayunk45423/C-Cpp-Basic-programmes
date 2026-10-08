@@ -1,6 +1,6 @@
 # SEO & Technical Architecture Audit Report
 
-**Target Domain:** `https://humayounkobir.vercel.app`  
+**Target Domain:** `https://duetcode.vercel.app`  
 **Application:** DUET Code — C & C++ Basic Admission Programs  
 **Author & Maintainer:** Humayoun Kobir  
 **Audit Standard:** Universal Masterpiece SEO Specification (Gates R1–R27)

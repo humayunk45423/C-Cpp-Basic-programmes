@@ -293,5 +293,6 @@ The repository is pre-configured for static hosting platforms like Vercel, Netli
 
 ## Author
 
-- **Developer**: [Humayun Kobir](https://humayounkobir.vercel.app)
+- **Developer**: [Humayun Kobir](https://github.com/humayunk45423)
+- **Live Website**: [DUET Code](https://duetcode.vercel.app)
 - **GitHub**: [humayunk45423](https://github.com/humayunk45423)

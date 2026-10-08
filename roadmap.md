@@ -1,6 +1,6 @@
 # SEO Execution Roadmap & Content Strategy
 
-**Site:** `https://humayounkobir.vercel.app`  
+**Site:** `https://duetcode.vercel.app`  
 **Target Keyword Scope:** DUET Admission C & C++ Programming, Polytechnic C Language, Pattern Printing, Series Summation.
 
 ---
@@ -8,7 +8,7 @@
 ## 1. Content Architecture
 
 ```
-https://humayounkobir.vercel.app/ (Canonical Home Page & Program Explorer)
+https://duetcode.vercel.app/ (Canonical Home Page & Program Explorer)
 ├── #mode-c (C Language Syllabus Programs 01–60 + Patterns 01–59)
 ├── #mode-cpp (C++ Language Syllabus Programs 01–60 + Patterns 01–59)
 ├── #mode-both (Side-by-Side Dual Language Interactive Comparison)
