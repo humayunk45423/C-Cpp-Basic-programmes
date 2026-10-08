@@ -45,6 +45,7 @@
 
       --font-code: 'JetBrains Mono', monospace;
       --font-ui: 'Outfit', sans-serif;
+      --font-bn: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
       --radius: 16px;
       --code-size: 14px;
@@ -454,8 +455,8 @@
     /* ══ SEO Syllabus Guide & FAQ Section ══ */
     .seo-guide-section {
       width: 100%;
-      max-width: 900px;
-      margin: 18px auto 8px;
+      max-width: 1040px;
+      margin: 18px auto 24px;
       padding: 0 14px;
       box-sizing: border-box;
       text-align: left;
@@ -463,115 +464,221 @@
     .seo-guide-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 22px;
+      border-radius: var(--radius, 16px);
+      padding: 28px 24px 32px;
       box-shadow: var(--shadow);
       margin-bottom: 14px;
+      box-sizing: border-box;
     }
     .seo-guide-card h2 {
-      font-size: clamp(18px, 4vw, 22px);
+      font-size: clamp(20px, 4vw, 24px);
       font-weight: 800;
       color: var(--text);
-      line-height: 1.3;
-      margin-bottom: 4px;
-      letter-spacing: -0.01em;
+      line-height: 1.28;
+      margin-bottom: 6px;
+      letter-spacing: -0.015em;
     }
     .seo-guide-card .seo-lead {
-      font-size: 13.5px;
+      font-family: var(--font-bn) !important;
+      font-size: 15px;
       color: var(--accent);
-      font-weight: 700;
-      margin-bottom: 16px;
-      line-height: 1.4;
+      font-weight: 600;
+      margin-bottom: 18px;
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
     .seo-direct-answer {
       font-size: 14px;
       color: var(--text);
       line-height: 1.65;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .seo-direct-answer p {
       margin-bottom: 12px;
     }
     .seo-direct-answer strong {
       color: var(--accent);
+      font-weight: 700;
     }
     .seo-direct-answer-bn {
+      font-family: var(--font-bn) !important;
       color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.65;
+      font-size: 14px;
+      line-height: 1.7;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
     .seo-facts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 10px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
     }
     .seo-fact-card {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 13px 15px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .seo-fact-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(var(--star-rgb), 0.35);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+    .seo-fact-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--accent);
     }
     .seo-fact-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
     }
     .seo-fact-val {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text);
       line-height: 1.35;
     }
+
+    /* Visual dividers and section headers */
+    .seo-section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 24px 0 20px;
+    }
+    .seo-section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .seo-section-tag {
+      align-self: flex-start;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(var(--star-rgb), 0.10);
+      border: 1px solid rgba(var(--star-rgb), 0.22);
+      padding: 2.5px 8.5px;
+      border-radius: 999px;
+    }
+    .seo-section-heading {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .seo-heading-bn {
+      font-family: var(--font-bn) !important;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 5 Core Syllabus Modules */
     .seo-syllabus-modules {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 10px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
     }
     .seo-module-pill {
       background: var(--surface2);
       border: 1px solid var(--border);
+      border-top: 2.5px solid var(--accent);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 14px 14px 16px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      height: 100%;
+      box-sizing: border-box;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .seo-module-pill:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .seo-mod-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .seo-mod-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(var(--star-rgb), 0.12);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .seo-mod-range {
+      font-family: var(--font-code);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      opacity: 0.85;
     }
     .seo-module-title {
       font-size: 13.5px;
       font-weight: 700;
       color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 6px;
     }
     .seo-module-desc {
-      font-size: 12px;
+      font-family: var(--font-bn) !important;
+      font-size: 12.5px;
+      line-height: 1.55;
       color: var(--muted);
-      line-height: 1.45;
+      flex-grow: 1;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
+
+    /* FAQ accordion */
     .seo-faq-wrap {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
     .seo-faq-item {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      transition: border-color 0.18s ease;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
     .seo-faq-item[open] {
       border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
     }
     .seo-faq-question {
-      padding: 12px 16px;
-      font-size: 13.5px;
-      font-weight: 700;
+      font-family: var(--font-ui), var(--font-bn) !important;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 600;
       color: var(--text);
       cursor: pointer;
       display: flex;
@@ -579,6 +686,8 @@
       justify-content: space-between;
       user-select: none;
       list-style: none;
+      gap: 12px;
+      -webkit-font-smoothing: antialiased;
     }
     .seo-faq-question::-webkit-details-marker {
       display: none;
@@ -596,17 +705,23 @@
       content: '−';
     }
     .seo-faq-answer {
-      padding: 0 16px 14px;
-      font-size: 13px;
+      font-family: var(--font-ui), var(--font-bn) !important;
+      padding: 0 18px 16px;
+      font-size: 13.5px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.65;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       margin-top: 2px;
       padding-top: 10px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    [data-theme="light"] .seo-faq-answer {
+      border-top-color: rgba(0, 0, 0, 0.05);
     }
     @media(max-width: 600px) {
       .seo-guide-card {
-        padding: 18px 14px;
+        padding: 20px 16px 24px;
       }
       .seo-facts-grid {
         grid-template-columns: 1fr;
@@ -1684,6 +1799,22 @@
         width: 100%;
         max-width: 1040px;
       }
+
+      /* Desktop alignment for SEO Syllabus Guide: exactly matches 1040px download buttons */
+      .seo-guide-section {
+        max-width: 1040px !important;
+        margin: 0 auto 40px !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+      }
+      .seo-facts-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 14px !important;
+      }
+      .seo-syllabus-modules {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+      }
       .card-topbar {
         padding: 16px 24px;
       }
@@ -1755,6 +1886,19 @@
       .action-grid {
         max-width: 1060px !important;
         gap: 20px !important;
+      }
+
+      .seo-guide-section {
+        max-width: 1060px !important;
+        margin: 0 auto 48px !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+      }
+      .seo-facts-grid {
+        gap: 16px !important;
+      }
+      .seo-syllabus-modules {
+        gap: 14px !important;
       }
 
       .code-scroll {
@@ -2093,7 +2237,7 @@
       display: block;
       width: 100%;
       box-sizing: border-box;
-      font-family: 'Noto Sans Bengali', var(--font-ui), sans-serif;
+      font-family: var(--font-bn);
       font-size: clamp(13.5px, 0.95vw + 7.5px, 17px);
       line-height: 1.85;
       letter-spacing: 0.015em;
