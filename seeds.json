@@ -1,0 +1,36 @@
+{
+  "entities": [
+    "duet", "duet admission", "duet gazipur", "polytechnic", "diploma engineering",
+    "bteb", "cse admission", "c programming", "cpp", "c++", "c language", "c plus plus"
+  ],
+  "entities_bn": [
+    "ডুয়েট", "ডুয়েট ভর্তি পরীক্ষা", "ডুয়েট গাজীপুর", "পলিটেকনিক", "ডিপ্লোমা ইঞ্জিনিয়ারিং",
+    "বিটিইবি", "সি প্রোগ্রামিং", "সি প্লাস প্লাস", "সি++", "সি ভাষা"
+  ],
+  "objects": [
+    "programs", "code", "basic programs", "syllabus", "admission questions", "pattern programs",
+    "series sum", "loops", "recursion", "arrays", "pointers", "pdf", "book", "apk", "app", "notes", "solutions"
+  ],
+  "objects_bn": [
+    "প্রোগ্রাম", "কোড", "বেসিক প্রোগ্রাম", "সিলেবাস", "ভর্তি প্রশ্ন", "প্যাটার্ন প্রোগ্রাম",
+    "ধারা যোগফল", "লুপ", "রিকRecursive", "অ্যারে", "পয়েন্টার", "পিডিএফ", "বই", "অ্যান্ড্রয়েড অ্যাপ", "নোট", "সমাধান"
+  ],
+  "actions": [
+    "download", "learn", "study", "compare", "practice", "copy", "read", "view", "run", "prepare", "solve"
+  ],
+  "actions_bn": [
+    "ডাউনলোড", "শিখুন", "পড়ুন", "তুলনা করুন", "অনুশীলন", "কপি", "দেখুন", "প্রস্তুতি", "সমাধান"
+  ],
+  "attributes": [
+    "free", "offline", "complete", "all 111", "side by side", "with explanation", "bangla",
+    "easy", "best", "verified", "step by step", "latest 2026", "official syllabus"
+  ],
+  "attributes_bn": [
+    "ফ্রি", "অফলাইন", "সম্পূর্ণ", "১১১ টি", "পাশাপাশি", "ব্যাখ্যা সহ", "বাংলা",
+    "সহজ", "সেরা", "যাচাইকৃত", "ধাপে ধাপে", "লেটেস্ট ২০২৬", "অফিসিয়াল সিলেবাস"
+  ],
+  "questions": [
+    "how to learn", "what is", "best website for", "kivabe", "ki", "kothay pabo", "kemon kore",
+    "কীভাবে", "কোথায় পাব", "কিভাবে শিখব"
+  ]
+}

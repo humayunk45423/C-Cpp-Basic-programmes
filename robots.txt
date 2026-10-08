@@ -1,0 +1,6 @@
+# Robots.txt for DUET Code (https://humayounkobir.vercel.app)
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://humayounkobir.vercel.app/sitemap.xml

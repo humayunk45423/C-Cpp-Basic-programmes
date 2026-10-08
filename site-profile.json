@@ -1,0 +1,49 @@
+{
+  "site_name": "DUET Code — C & C++ Admission Programs",
+  "short_name": "DUET Code",
+  "canonical_origin": "https://humayounkobir.vercel.app",
+  "author": "Humayoun Kobir",
+  "author_url": "https://humayounkobir.vercel.app",
+  "github_repo": "https://github.com/humayunk45423/C-Cpp-Basic-programmes",
+  "target_audience": "DUET (Dhaka University of Engineering & Technology) admission candidates, Diploma engineering students, Polytechnic diploma graduates, B.Sc in CSE/EEE/ETE aspirants, C & C++ beginner students",
+  "primary_entity": "DUET Admission C & C++ Programming Syllabus",
+  "secondary_entities": [
+    "Dhaka University of Engineering & Technology (DUET), Gazipur",
+    "Bangladesh Technical Education Board (BTEB) Diploma Engineering",
+    "C Programming Language (ANSI C)",
+    "C++ Programming Language (ISO C++)",
+    "111 Complete Syllabus Programs & Pattern Printing",
+    "DUET Admission Test Question Pattern & Syllabus",
+    "DUET Code Offline Android Application (APK)"
+  ],
+  "languages_supported": ["en", "bn", "en-BD", "bn-BD"],
+  "primary_features": [
+    "111 Fully verified C & C++ programs covering entire syllabus",
+    "Side-by-side & stacked C vs C++ dual-pane comparison",
+    "59 ASCII pattern printing variations with preview matrices",
+    "Series summation, recursion, arrays, pointers, matrices, conditionals",
+    "100% Offline Progressive Web App (PWA) + downloadable Android APK",
+    "Complete downloadable 111-program PDF eBook",
+    "3 Curated Theme Presets (Modern Standard, Geek Terminal, Classic Monolith)"
+  ],
+  "facts": [
+    {
+      "label": "Total Verified Programs",
+      "value": "111 Programs (222 compilable C & C++ implementations)",
+      "source_url": "https://github.com/humayunk45423/C-Cpp-Basic-programmes",
+      "verified_on": "2026-10-08"
+    },
+    {
+      "label": "Compiler Standard Tested",
+      "value": "MinGW GCC & G++ 14.2.0 (Zero errors, zero warnings)",
+      "source_url": "https://github.com/humayunk45423/C-Cpp-Basic-programmes",
+      "verified_on": "2026-10-08"
+    },
+    {
+      "label": "Offline Status",
+      "value": "100% Client-Side Local Execution (No server dependencies)",
+      "source_url": "https://humayounkobir.vercel.app",
+      "verified_on": "2026-10-08"
+    }
+  ]
+}

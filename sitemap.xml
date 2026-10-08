@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Main Interactive Web Application -->
+  <url>
+    <loc>https://humayounkobir.vercel.app/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://humayounkobir.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://humayounkobir.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="en-BD" href="https://humayounkobir.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="bn-BD" href="https://humayounkobir.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://humayounkobir.vercel.app/"/>
+    <image:image>
+      <image:loc>https://humayounkobir.vercel.app/duetcode.svg</image:loc>
+      <image:title>DUET Code Logo — C &amp; C++ Programs</image:title>
+      <image:caption>DUET Admission C &amp; C++ Syllabus Programs &amp; Study Guide</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Downloadable Complete 111-Program PDF eBook -->
+  <url>
+    <loc>https://humayounkobir.vercel.app/DUET%20C%20%26%20C%2B%2B%20Programs.pdf</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

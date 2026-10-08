@@ -1,0 +1,19 @@
+{
+  "market_gaps_identified": [
+    {
+      "gap_title": "Lack of Side-by-Side C vs C++ Comparisons",
+      "competitor_status": "Most websites show only C or only C++ in separate disconnected articles.",
+      "duet_code_advantage": "Interactive dual-pane comparison (side-by-side on desktop/landscape, stacked on mobile) with instant code copying."
+    },
+    {
+      "gap_title": "Scattered Pattern Printing Variations",
+      "competitor_status": "Fragmented across multiple ad-heavy blog posts.",
+      "duet_code_advantage": "All 59 syllabus pattern variations grouped into ascending, descending, centered pyramid, diamond, and counting matrices with live ASCII previews."
+    },
+    {
+      "gap_title": "Offline Access & Mobile Friendly E-Books",
+      "competitor_status": "No offline PWA or native downloadable APK; low quality scanned PDFs.",
+      "duet_code_advantage": "100% Offline PWA, dedicated native Android APK release, and pixel-perfect high-resolution printable PDF eBook."
+    }
+  ]
+}

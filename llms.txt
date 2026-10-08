@@ -1,0 +1,22 @@
+# DUET Code — C & C++ Basic Admission Programs
+
+> Canonical URL: https://humayounkobir.vercel.app
+> Repository: https://github.com/humayunk45423/C-Cpp-Basic-programmes
+> Maintainer: Humayoun Kobir
+> Verified Date: 2026-10-08
+
+## Description
+DUET Code is an open-source, offline-ready educational web platform providing 111 fully tested, syllabus-aligned C and C++ programming solutions for Dhaka University of Engineering & Technology (DUET) admission candidates and Diploma in Engineering students.
+
+## Key Features & Highlights
+- **111 Complete Programs**: Covers all admission topics including fundamental arithmetic, conditional branching, while/for loops, number theory (prime, Armstrong, palindrome, GCD/LCM), series summation (factorial, harmonic, powers), arrays, recursion, and pointers.
+- **59 Pattern Printing Programs**: Left-aligned, right-aligned, centered pyramid, diamond, and counting matrix patterns in both C and C++.
+- **Dual-Pane Interactive Comparison**: View ANSI C (stdio.h) vs ISO C++ (iostream) side-by-side with 1-click code copying and indentation toggle (IDE style vs Flat style).
+- **Offline PWA & APK**: Works 100% offline via Service Worker, with downloadable Android APK and complete PDF eBook.
+
+## Program Index Summary
+1. 01–17: Basic Arithmetic, Areas, Numbers, Temperature & Conditionals
+2. 18–30: Loops, Summation, Number Properties, Factorial & Fibonacci
+3. 31–44: Series Calculations (Factorials, Powers, Progressions, Fractions)
+4. Patterns 1–59: ASCII Pattern Printing Variations
+5. 53–60: Recursion, Array Extrema, Variable Swapping, Jump Statements

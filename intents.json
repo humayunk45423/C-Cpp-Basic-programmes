@@ -1,0 +1,84 @@
+{
+  "clusters": [
+    {
+      "id": "c1_syllabus_programs",
+      "intent": "informational_transactional",
+      "name_en": "DUET Admission C & C++ Programs Syllabus",
+      "name_bn": "ডুয়েট ভর্তি পরীক্ষা সি ও সি++ প্রোগ্রামিং সিলেবাস",
+      "target_url": "https://humayounkobir.vercel.app/",
+      "primary_keywords": [
+        "duet admission c program",
+        "duet c programming syllabus",
+        "duet cpp programs",
+        "duet admission question c programming",
+        "duet admission c plus plus syllabus"
+      ]
+    },
+    {
+      "id": "c2_pattern_printing",
+      "intent": "educational_reference",
+      "name_en": "C & C++ Pattern Printing Programs (59 Variants)",
+      "name_bn": "সি ও সি++ প্যাটার্ন প্রিন্টিং প্রোগ্রাম সমূহ",
+      "target_url": "https://humayounkobir.vercel.app/#patterns",
+      "primary_keywords": [
+        "c program pattern printing",
+        "c++ pattern printing programs with solution",
+        "triangle star pattern c programming",
+        "centered pyramid star pattern c program",
+        "diamond pattern in c and cpp"
+      ]
+    },
+    {
+      "id": "c3_series_and_loops",
+      "intent": "educational_solution",
+      "name_en": "C & C++ Series Summation & Loop Programs",
+      "name_bn": "সি ও সি++ ধারা যোগফল ও লুপ প্রোগ্রামিং",
+      "target_url": "https://humayounkobir.vercel.app/#series",
+      "primary_keywords": [
+        "series sum in c programming",
+        "factorial series program in c",
+        "fibonacci series c and c++ program",
+        "prime number palindrome armstrong c program"
+      ]
+    },
+    {
+      "id": "c4_pdf_ebook_download",
+      "intent": "transactional_download",
+      "name_en": "Download DUET C & C++ 111 Programs PDF Book",
+      "name_bn": "ডুয়েট সি ও সি++ ১১১ প্রোগ্রাম পিডিএফ বই ডাউনলোড",
+      "target_url": "https://humayounkobir.vercel.app/DUET%20C%20%26%20C%2B%2B%20Programs.pdf",
+      "primary_keywords": [
+        "duet c programming pdf download",
+        "duet c and c++ admission pdf book",
+        "c programming basic programs pdf bangla",
+        "duet polytechnic c program sheet pdf"
+      ]
+    },
+    {
+      "id": "c5_offline_apk_download",
+      "intent": "transactional_mobile",
+      "name_en": "DUET Code Android Offline App (APK)",
+      "name_bn": "ডুয়েট কোড অফলাইন অ্যান্ড্রয়েড অ্যাপ ডাউনলোড",
+      "target_url": "https://github.com/humayunk45423/C-Cpp-Basic-programmes/releases/download/1.2/DUET.Code.1.2.apk",
+      "primary_keywords": [
+        "duet code apk download",
+        "c programming offline app for duet",
+        "duet c program android app",
+        "polytechnic c language offline apk"
+      ]
+    },
+    {
+      "id": "c6_comparison_side_by_side",
+      "intent": "comparative_study",
+      "name_en": "C vs C++ Side-by-Side Code Difference & Comparison",
+      "name_bn": "সি এবং সি++ পাশাপাশি কোড তুলনা ও পার্থক্য",
+      "target_url": "https://humayounkobir.vercel.app/#compare",
+      "primary_keywords": [
+        "c vs cpp side by side code",
+        "difference between c and c++ program",
+        "printf vs cout c and cpp code comparison",
+        "c and c++ syntax comparison table"
+      ]
+    }
+  ]
+}

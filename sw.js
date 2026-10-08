@@ -1,4 +1,4 @@
-const CACHE_NAME = 'duet-code-v1';
+const CACHE_NAME = 'duet-code-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -44,7 +44,8 @@ self.addEventListener('fetch', event => {
           networkResponse.status === 200 &&
           (event.request.url.startsWith(self.location.origin) ||
            event.request.url.includes('fonts.googleapis.com') ||
-           event.request.url.includes('fonts.gstatic.com'))
+           event.request.url.includes('fonts.gstatic.com') ||
+           event.request.url.includes('cdnjs.cloudflare.com'))
         ) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then(cache => {
