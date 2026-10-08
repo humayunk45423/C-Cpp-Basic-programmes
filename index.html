@@ -234,11 +234,18 @@
     })();
   </script>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261009-4">
   
   <script>
-    if ('serviceWorker' in navigator)
-      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}), {once:true});
+    if ('serviceWorker' in navigator) {
+      if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(r => r.unregister());
+        });
+      } else {
+        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}), {once:true});
+      }
+    }
   </script>
 </head>
 

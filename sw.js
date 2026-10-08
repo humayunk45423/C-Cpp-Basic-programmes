@@ -37,6 +37,23 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
+  // Navigation requests (HTML documents) are network-first with offline cache fallback
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseToCache));
+        }
+        return networkResponse;
+      }).catch(() => {
+        return caches.match('./index.html').then(res => res || caches.match(event.request));
+      })
+    );
+    return;
+  }
+
+  // Static assets: cache-first with network fallback & background caching
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
@@ -57,11 +74,7 @@ self.addEventListener('fetch', event => {
           });
         }
         return networkResponse;
-      }).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
+      }).catch(() => {});
     })
   );
 });
