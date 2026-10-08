@@ -1,19 +1,24 @@
 {
   "entities": [
     "duet", "duet admission", "duet gazipur", "polytechnic", "diploma engineering",
-    "bteb", "cse admission", "c programming", "cpp", "c++", "c language", "c plus plus"
+    "bteb", "cse admission", "c programming", "cpp", "c++", "c language", "c plus plus",
+    "basic c", "basic cpp", "duet programms", "c programms", "cpp programms"
   ],
   "entities_bn": [
     "ডুয়েট", "ডুয়েট ভর্তি পরীক্ষা", "ডুয়েট গাজীপুর", "পলিটেকনিক", "ডিপ্লোমা ইঞ্জিনিয়ারিং",
-    "বিটিইবি", "সি প্রোগ্রামিং", "সি প্লাস প্লাস", "সি++", "সি ভাষা"
+    "বিটিইবি", "সি প্রোগ্রামিং", "সি প্লাস প্লাস", "সি++", "সি ভাষা",
+    "ডুয়েট প্রোগ্রাম", "ডুয়েট সিলেবাস সি প্রোগ্রাম", "ডুয়েট সিলেবাস সি প্লাস প্লাস প্রোগ্রাম",
+    "ডুয়েট সিলেবাস সি ও সি প্লাস প্লাস প্রোগ্রাম", "ডুয়েট প্রোগ্রাম সিলেবাস"
   ],
   "objects": [
     "programs", "code", "basic programs", "syllabus", "admission questions", "pattern programs",
-    "series sum", "loops", "recursion", "arrays", "pointers", "pdf", "book", "apk", "app", "notes", "solutions"
+    "series sum", "loops", "recursion", "arrays", "pointers", "pdf", "book", "apk", "app", "notes",
+    "solutions", "syllabus of program", "programming syllabus", "syllbeus", "syllabus c and c plus plus",
+    "syllabus c and c++", "admission syllabus of program"
   ],
   "objects_bn": [
     "প্রোগ্রাম", "কোড", "বেসিক প্রোগ্রাম", "সিলেবাস", "ভর্তি প্রশ্ন", "প্যাটার্ন প্রোগ্রাম",
-    "ধারা যোগফল", "লুপ", "রিকRecursive", "অ্যারে", "পয়েন্টার", "পিডিএফ", "বই", "অ্যান্ড্রয়েড অ্যাপ", "নোট", "সমাধান"
+    "ধারা যোগফল", "লুপ", "রিকার্শন", "অ্যারে", "পয়েন্টার", "পিডিএফ", "বই", "অ্যান্ড্রয়েড অ্যাপ", "নোট", "সমাধান"
   ],
   "actions": [
     "download", "learn", "study", "compare", "practice", "copy", "read", "view", "run", "prepare", "solve"

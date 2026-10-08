@@ -88,7 +88,42 @@ seeds.entities_bn.forEach(ent => {
   addRow(`ডিপ্লোমা সি প্রোগ্রাম ${pdf}`, 'c4_pdf_ebook_download', 'bn');
 });
 
-// 7. Banglish / Romanized Bengali Queries
+// 7. Exact High-Priority Target Phrases & Common Typos
+const exactTargetPhrases = [
+  ['duet syllabus of program', 'c1_syllabus_programs', 'en'],
+  ['duet programms', 'c1_syllabus_programs', 'en'],
+  ['duet programs', 'c1_syllabus_programs', 'en'],
+  ['c programms', 'c1_syllabus_programs', 'en'],
+  ['cpp programms', 'c1_syllabus_programs', 'en'],
+  ['c++ program', 'c1_syllabus_programs', 'en'],
+  ['basic c programms', 'c1_syllabus_programs', 'en'],
+  ['basic cpp program', 'c1_syllabus_programs', 'en'],
+  ['basic c programs', 'c1_syllabus_programs', 'en'],
+  ['basic c', 'c1_syllabus_programs', 'en'],
+  ['basic cpp', 'c1_syllabus_programs', 'en'],
+  ['duet programming syllbeus', 'c1_syllabus_programs', 'en'],
+  ['duet programming syllabus', 'c1_syllabus_programs', 'en'],
+  ['duet syllabus c and c plus plus', 'c1_syllabus_programs', 'en'],
+  ['duet syllabus c and c++', 'c1_syllabus_programs', 'en'],
+  ['duet admission syllabus of program', 'c1_syllabus_programs', 'en'],
+  ['duet admission syllabus c and c plus plus', 'c1_syllabus_programs', 'en'],
+  ['duet admission syllabus c and c++', 'c1_syllabus_programs', 'en'],
+  ['duet admission c program list', 'c1_syllabus_programs', 'en'],
+  ['duet polytechnic c syllabus', 'c1_syllabus_programs', 'en'],
+  ['ডুয়েট সিলেবাস সি প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট সিলেবাস সি প্লাস প্লাস প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট সিলেবাস সি ও সি প্লাস প্লাস প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট প্রোগ্রাম সিলেবাস', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট ভর্তি পরীক্ষা সি প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট সি প্রোগ্রামিং সমাধান', 'c1_syllabus_programs', 'bn'],
+  ['ডিপ্লোমা সি প্রোগ্রামিং সিলেবাস', 'c1_syllabus_programs', 'bn'],
+  ['পলিটেকনিক সি ও সি++ প্রোগ্রাম', 'c1_syllabus_programs', 'bn'],
+  ['ডুয়েট ১১১ প্রোগ্রাম পিডিএফ', 'c4_pdf_ebook_download', 'bn']
+];
+exactTargetPhrases.forEach(([q, cluster, lang]) => addRow(q, cluster, lang));
+
+// 8. Banglish / Romanized Bengali Queries
 const banglishCombinations = [
   'duet bhorti c program',
   'duet c programming boi pdf',

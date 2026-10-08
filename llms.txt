@@ -5,8 +5,15 @@
 > Maintainer: Humayoun Kobir
 > Verified Date: 2026-10-08
 
-## Description
-DUET Code is an open-source, offline-ready educational web platform providing 111 fully tested, syllabus-aligned C and C++ programming solutions for Dhaka University of Engineering & Technology (DUET) admission candidates and Diploma in Engineering students.
+## Description & Target Syllabus
+DUET Code is the official, community-verified educational platform for the complete **DUET admission syllabus of C and C++ programs** (ডুয়েট ভর্তি পরীক্ষা সি ও সি++ প্রোগ্রামিং সিলেবাস). It provides 111 basic C and C++ (C Plus Plus) programming solutions covering arithmetic, loops, mathematical series summation, 59 pattern printing matrices, and recursion for Dhaka University of Engineering & Technology (DUET) admission candidates and BTEB Polytechnic Diploma in Engineering students.
+
+## Common Search Queries & Topics
+- DUET syllabus of program / DUET programs / DUET admission syllabus c and c++
+- Basic C programs / Basic C++ program / C vs C++ side-by-side
+- 59 ASCII pattern printing programs with solution
+- ডুয়েট সিলেবাস সি প্রোগ্রাম / ডুয়েট সিলেবাস সি প্লাস প্লাস প্রোগ্রাম
+- ডুয়েট প্রোগ্রাম সিলেবাস / ডুয়েট ভর্তি সি প্রোগ্রামিং সমাধান
 
 ## Key Features & Highlights
 - **111 Complete Programs**: Covers all admission topics including fundamental arithmetic, conditional branching, while/for loops, number theory (prime, Armstrong, palindrome, GCD/LCM), series summation (factorial, harmonic, powers), arrays, recursion, and pointers.

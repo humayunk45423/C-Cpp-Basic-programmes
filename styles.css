@@ -451,6 +451,171 @@
       border-color: var(--border) !important;
     }
 
+    /* ══ SEO Syllabus Guide & FAQ Section ══ */
+    .seo-guide-section {
+      width: 100%;
+      max-width: 900px;
+      margin: 18px auto 8px;
+      padding: 0 14px;
+      box-sizing: border-box;
+      text-align: left;
+    }
+    .seo-guide-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .seo-guide-card h2 {
+      font-size: clamp(18px, 4vw, 22px);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .seo-guide-card .seo-lead {
+      font-size: 13.5px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .seo-direct-answer {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .seo-direct-answer p {
+      margin-bottom: 12px;
+    }
+    .seo-direct-answer strong {
+      color: var(--accent);
+    }
+    .seo-direct-answer-bn {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .seo-facts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .seo-fact-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .seo-fact-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .seo-fact-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .seo-syllabus-modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .seo-module-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .seo-module-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .seo-module-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .seo-faq-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .seo-faq-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.18s ease;
+    }
+    .seo-faq-item[open] {
+      border-color: var(--accent);
+    }
+    .seo-faq-question {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      list-style: none;
+    }
+    .seo-faq-question::-webkit-details-marker {
+      display: none;
+    }
+    .seo-faq-question::after {
+      content: '+';
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+      transition: transform 0.2s ease;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .seo-faq-item[open] .seo-faq-question::after {
+      content: '−';
+    }
+    .seo-faq-answer {
+      padding: 0 16px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      margin-top: 2px;
+      padding-top: 10px;
+    }
+    @media(max-width: 600px) {
+      .seo-guide-card {
+        padding: 18px 14px;
+      }
+      .seo-facts-grid {
+        grid-template-columns: 1fr;
+      }
+      .seo-syllabus-modules {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .mode-card {
       transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
         border-color 0.18s ease,
