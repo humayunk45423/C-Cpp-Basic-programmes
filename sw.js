@@ -1,4 +1,4 @@
-const CACHE_NAME = 'duet-code-v4';
+const CACHE_NAME = 'duet-code-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS_TO_CACHE = [
   './app.js',
   './manifest.json',
   './duetcode.svg',
+  './favicon.ico',
   './apple-touch-icon.png',
   './icon-192.png',
   './icon-512.png',
